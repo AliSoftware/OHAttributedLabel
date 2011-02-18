@@ -61,7 +61,9 @@
 -(void)setFontName:(NSString*)fontName size:(CGFloat)size range:(NSRange)range {
 	// kCTFontAttributeName
 	CTFontRef aFont = CTFontCreateWithName((CFStringRef)fontName, size, NULL);
+	if (!aFont) return;
 	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
+	CFRelease(aFont);
 }
 -(void)setFontFamily:(NSString*)fontFamily size:(CGFloat)size bold:(BOOL)isBold italic:(BOOL)isItalic range:(NSRange)range {
 	// kCTFontFamilyNameAttribute + kCTFontTraitsAttribute
@@ -72,8 +74,12 @@
 						  trait,kCTFontTraitsAttribute,nil];
 	
 	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)attr);
+	if (!desc) return;
 	CTFontRef aFont = CTFontCreateWithFontDescriptor(desc, size, NULL);
+	if (!aFont) return;
 	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
+	CFRelease(aFont);
+	CFRelease(desc);
 }
 
 -(void)setTextColor:(UIColor*)color {
@@ -95,6 +101,7 @@
 	};
 	CTParagraphStyleRef aStyle = CTParagraphStyleCreate(paraStyles, 2);
 	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(id)aStyle range:range];
+	CFRelease(aStyle);
 }
 
 @end

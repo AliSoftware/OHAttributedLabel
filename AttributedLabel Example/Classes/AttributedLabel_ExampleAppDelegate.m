@@ -1,0 +1,94 @@
+//
+//  AttributedLabel_ExampleAppDelegate.m
+//  AttributedLabel Example
+//
+//  Created by Olivier on 18/02/11.
+//  Copyright 2011 AliSoftware. All rights reserved.
+//
+
+#import "AttributedLabel_ExampleAppDelegate.h"
+
+@implementation AttributedLabel_ExampleAppDelegate
+
+@synthesize window;
+
+
+#pragma mark -
+#pragma mark Application lifecycle
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+    [self.window makeKeyAndVisible];
+
+	/* Don't forget to add the CoreText framework in your project ! */
+	[self fillLabel1];
+	[self fillLabel2];
+	
+    return YES;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+-(IBAction)fillLabel1 {
+	/**(1)** Build the NSAttributedString *******/
+	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:@"Hello World! How are you? Hope everything is OK!"];
+	// for those calls we don't specify a range so it affects the whole string
+	[attrStr setFont:[UIFont systemFontOfSize:18]];
+	[attrStr setTextColor:[UIColor grayColor]];
+	// now we only change the color of "Hello"
+	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(0,5)];
+	
+	
+	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
+	label1.attributedText = attrStr;
+	// Use the "Justified" alignment
+	label1.textAlignment = UITextAlignmentJustify;
+	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.	
+}
+
+-(IBAction)makeWorldBold
+{
+	/**(3)** (... later ...) Modify again the existing string *******/
+	// Get the current attributedString and make it a mutable copy so we can modify it
+	NSMutableAttributedString* mas = [label1.attributedText mutableCopy];
+	// Modify the the font of "World!" to bold, 24pt
+	[mas setFont:[UIFont boldSystemFontOfSize:24] range:NSMakeRange(6,6)];
+	// Affect back the attributed string to the label
+	label1.attributedText = mas;
+	// Cleaning: balance the "mutableCopy" call with a "release"
+	[mas release];
+}
+
+
+-(IBAction)fillLabel2 {
+	// Suppose you already have set the following properties of the myAttributedLabel object in InterfaceBuilder:
+	// - 'text' set to "Hello World!"
+	// - fontSize set to 12, text color set to gray
+	
+	/**(1)** Build the NSAttributedString *******/
+	NSMutableAttributedString* attrStr = [label2.attributedText mutableCopy];
+	// and only change the color of "Hello"
+	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(0,5)];
+	
+	
+	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
+	label2.attributedText = attrStr;
+	// Use the "Justified" alignment
+	label2.textAlignment = UITextAlignmentCenter;
+	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
+	
+	[attrStr release];
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+- (void)dealloc {
+    [window release];
+    [super dealloc];
+}
+
+
+@end
