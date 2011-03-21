@@ -29,93 +29,9 @@
  ***********************************************************************************/
 
 
-
 #import "OHAttributedLabel.h"
+#import "NSAttributedString+Attributes.h"
 
-
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: NS(Mutable)AttributedString Additions
-/////////////////////////////////////////////////////////////////////////////
-
-@implementation NSAttributedString (OHCommodityConstructors)
-+(id)attributedStringWithString:(NSString*)string {
-	return [[[self alloc] initWithString:string] autorelease];
-}
-+(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr {
-	return [[[self alloc] initWithAttributedString:attrStr] autorelease];
-}
-@end
-
-@implementation NSMutableAttributedString (OHCommodityStyleModifiers)
-
--(void)setFont:(UIFont*)font {
-	[self setFontName:font.fontName size:font.pointSize];
-}
--(void)setFont:(UIFont*)font range:(NSRange)range {
-	[self setFontName:font.fontName size:font.pointSize range:range];
-}
--(void)setFontName:(NSString*)fontName size:(CGFloat)size {
-	[self setFontName:fontName size:size range:NSMakeRange(0,[self length])];
-}
--(void)setFontName:(NSString*)fontName size:(CGFloat)size range:(NSRange)range {
-	// kCTFontAttributeName
-	CTFontRef aFont = CTFontCreateWithName((CFStringRef)fontName, size, NULL);
-	if (!aFont) return;
-	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
-	CFRelease(aFont);
-}
--(void)setFontFamily:(NSString*)fontFamily size:(CGFloat)size bold:(BOOL)isBold italic:(BOOL)isItalic range:(NSRange)range {
-	// kCTFontFamilyNameAttribute + kCTFontTraitsAttribute
-	CTFontSymbolicTraits symTrait = (isBold?kCTFontBoldTrait:0) | (isItalic?kCTFontItalicTrait:0);
-	NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:symTrait] forKey:(NSString*)kCTFontSymbolicTrait];
-	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
-						  fontFamily,kCTFontFamilyNameAttribute,
-						  trait,kCTFontTraitsAttribute,nil];
-	
-	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)attr);
-	if (!desc) return;
-	CTFontRef aFont = CTFontCreateWithFontDescriptor(desc, size, NULL);
-	if (!aFont) return;
-	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
-	CFRelease(aFont);
-	CFRelease(desc);
-}
-
--(void)setTextColor:(UIColor*)color {
-	[self setTextColor:color range:NSMakeRange(0,[self length])];
-}
--(void)setTextColor:(UIColor*)color range:(NSRange)range {
-	// kCTForegroundColorAttributeName
-	[self addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:range];
-}
-
--(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode {
-	[self setTextAlignment:alignment lineBreakMode:lineBreakMode range:NSMakeRange(0,[self length])];
-}
--(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range {
-	// kCTParagraphStyleAttributeName > kCTParagraphStyleSpecifierAlignment
-	CTParagraphStyleSetting paraStyles[2] = {
-		{.spec = kCTParagraphStyleSpecifierAlignment, .valueSize = sizeof(CTTextAlignment), .value = (const void*)&alignment},
-		{.spec = kCTParagraphStyleSpecifierLineBreakMode, .valueSize = sizeof(CTLineBreakMode), .value = (const void*)&lineBreakMode},
-	};
-	CTParagraphStyleRef aStyle = CTParagraphStyleCreate(paraStyles, 2);
-	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(id)aStyle range:range];
-	CFRelease(aStyle);
-}
-
-@end
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: OHAttributedLabel
-/////////////////////////////////////////////////////////////////////////////
 
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment) {
 	switch (alignment) {
@@ -139,52 +55,198 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	}
 }
 
+@interface OHAttributedLabel(/* Private */)
+-(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
+-(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
+-(NSMutableAttributedString*)attributedTextWithLinks;
+@end
+
 /////////////////////////////////////////////////////////////////////////////
 
 
 @implementation OHAttributedLabel
+@synthesize centerVertically, automaticallyDetectLinks;
+@synthesize delegate;
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Init/Dealloc
+/////////////////////////////////////////////////////////////////////////////
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	self = [super initWithCoder:decoder];
 	if (self != nil) {
+		customLinks = [[NSMutableArray alloc] init];
+		automaticallyDetectLinks = YES;
+		self.userInteractionEnabled = YES;
 		[self resetAttributedText];
 	}
 	return self;
 }
+-(void)dealloc {
+	[_attributedText release];
+	[customLinks release];
+	if (frame) CFRelease(frame);
+	[super dealloc];
+}
 
 
-- (void)drawTextInRect:(CGRect)rect
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Links Mgmt
+/////////////////////////////////////////////////////////////////////////////
+
+-(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range {
+	NSTextCheckingResult* link = [NSTextCheckingResult linkCheckingResultWithRange:range URL:linkUrl];
+	[customLinks addObject:link];
+	[self setNeedsDisplay];
+}
+-(void)removeAllCustomLinks {
+	[customLinks removeAllObjects];
+	[self setNeedsDisplay];
+}
+
+-(NSMutableAttributedString*)attributedTextWithLinks {
+	NSMutableAttributedString* str = [_attributedText mutableCopy];
+	if (self.automaticallyDetectLinks) {
+		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+		[linkDetector enumerateMatchesInString:[str string] options:0 range:NSMakeRange(0,[[str string] length])
+									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
+		 {
+			 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
+			 ? [delegate colorForLink:result] : [UIColor blueColor];
+			 [str setTextColor:linkColor range:[result range]];
+		 }];
+		[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+		 {
+			 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
+			 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
+			 ? [delegate colorForLink:result] : [UIColor blueColor];
+			 [str setTextColor:linkColor range:[result range]];
+		 }];
+	}
+	return [str autorelease];
+}
+
+-(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx {
+	__block NSTextCheckingResult* foundResult = nil;
+	
+	NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+	[linkDetector enumerateMatchesInString:[_attributedText string] options:0 range:NSMakeRange(0,[[_attributedText string] length])
+								usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
+	 {
+		 NSRange r = [result range];
+		 if ((r.location<idx) && (idx<=r.location+r.length)) {
+			 foundResult = [[result retain] autorelease];
+			 *stop = YES;
+		 }
+	 }];
+	if (foundResult) return foundResult;
+	
+	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+	 {
+		 NSRange r = [(NSTextCheckingResult*)obj range];
+		 if ((r.location<idx) && (idx<=r.location+r.length)) {
+			 foundResult = [[obj retain] autorelease];
+			 *stop = YES;
+		 }
+	 }];
+	return foundResult;
+}
+-(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt {
+	static CGFloat kDeltaY = 5.f; // Because we generally tap a bit below the line
+	if (!CGRectContainsPoint(CGRectInset(self.bounds, 0, -kDeltaY), pt)) return nil;
+	
+	CFArrayRef lines = CTFrameGetLines(frame);
+	int nbLines = CFArrayGetCount(lines);
+	//CGFloat lineHeight = 0;
+	CGPoint origins[nbLines];
+	CTFrameGetLineOrigins(frame, CFRangeMake(0,0), origins);
+	for (int i=0;i<nbLines;++i) {
+		CGFloat lineY = (self.bounds.size.height-origins[i].y); // convert to "origin on top" coords
+		if (lineY+kDeltaY > pt.y) {
+			CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+			//(void)CTLineGetTypographicBounds(line, &lineHeight, NULL, NULL);
+			CGPoint relativePoint = CGPointMake(pt.x-origins[i].x, pt.y-lineY);
+			CFIndex idx = CTLineGetStringIndexForPosition(line, relativePoint);
+			return [self linkAtCharacterIndex:idx];
+		}
+	}
+	return nil;
+}
+
+-(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+	return ([self linkAtPoint:point] != nil);
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch* touch = [touches anyObject];
+	CGPoint pt = [touch locationInView:self];
+	
+	NSTextCheckingResult* link = [self linkAtPoint:pt];
+	
+	if (link) {
+		BOOL openLink = (delegate && [delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
+		? [delegate attributedLabel:self shouldFollowLink:link] : YES;
+		if (openLink) [[UIApplication sharedApplication] openURL:link.URL];
+	}	
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Drawing Text
+/////////////////////////////////////////////////////////////////////////////
+
+- (void)drawTextInRect:(CGRect)aRect
 {
 	if (_attributedText) {
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
 		CGContextSaveGState(ctx);
 		CGContextConcatCTM(ctx, CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f));
 		
+		NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
+		
+		CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
+		CGRect rect = self.bounds;
+		if (self.centerVertically) {
+			CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,self.bounds.size,NULL);
+			rect.origin.y -= (rect.size.height - sz.height)/2;
+			//rect.size.height = sz.height; // no real need, and actually may introduce a risk of bottom cropping if some rounding error
+		}
 		CGMutablePathRef path = CGPathCreateMutable();
-		CGPathAddRect(path, NULL, self.bounds); // self.bounds
-		CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)_attributedText);
-		CTFrameRef frame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+		CGPathAddRect(path, NULL, rect);
+		if (frame) CFRelease(frame);		
+		frame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
 		CFRelease(framesetter);
 		CTFrameDraw(frame, ctx);
-		CFRelease(frame);
 		CGPathRelease(path);
 		
 		CGContextRestoreGState(ctx);
 	} else {
-		[super drawTextInRect:rect];
+		[super drawTextInRect:aRect];
 	}
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)_attributedText);
-	CGFloat w = self.frame.size.width;
+	NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
+	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
+	CGFloat w = size.width;
 	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(w,CGFLOAT_MAX),NULL);
-	CFRelease(framesetter);
+	if (framesetter) CFRelease(framesetter);
 	return CGSizeMake(w,sz.height+1); // take 1pt of margin
 }
 
+
+
 /////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Setters/Getters
+/////////////////////////////////////////////////////////////////////////////
+
 
 -(void)resetAttributedText {
 	NSMutableAttributedString* mutAttrStr = [NSMutableAttributedString attributedStringWithString:self.text];
@@ -234,12 +296,17 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
 }
+-(void)setCenterVertically:(BOOL)val {
+	centerVertically = val;
+	[self setNeedsDisplay];
+}
+
+-(void)setAutomaticallyDetectLinks:(BOOL)detect {
+	automaticallyDetectLinks = detect;
+	[self setNeedsDisplay];
+}
 
 /////////////////////////////////////////////////////////////////////////////
 
--(void)dealloc {
-	[_attributedText release];
-	[super dealloc];
-}
 
 @end

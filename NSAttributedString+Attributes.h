@@ -29,32 +29,38 @@
  ***********************************************************************************/
 
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
 
-@class OHAttributedLabel;
-@protocol OHAttributedLabelDelegate <NSObject>
-@optional
--(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo;
--(UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo;
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: NSAttributedString Additions
+/////////////////////////////////////////////////////////////////////////////
+
+@interface NSAttributedString (OHCommodityConstructors)
++(id)attributedStringWithString:(NSString*)string;
++(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr;
 @end
 
-#define UITextAlignmentJustify ((UITextAlignment)kCTJustifiedTextAlignment)
 
-@interface OHAttributedLabel : UILabel {
-	NSMutableAttributedString* _attributedText; //!< Internally mutable, but externally immutable copy access only
-	CTFrameRef frame;
-	BOOL centerVertically;
-	BOOL automaticallyDetectLinks;
-	NSMutableArray* customLinks;
-	id<OHAttributedLabelDelegate> delegate;
-}
-@property(nonatomic, copy) NSAttributedString* attributedText; //!< Use this instead of the "text" property inherited from UILabel to set and get text
-@property(nonatomic, assign) BOOL centerVertically;
-@property(nonatomic, assign) BOOL automaticallyDetectLinks; //!< Defaults to true
--(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
--(void)removeAllCustomLinks;
-@property(nonatomic, assign) id<OHAttributedLabelDelegate> delegate;
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: NSMutableAttributedString Additions
+/////////////////////////////////////////////////////////////////////////////
 
--(void)resetAttributedText; //!< rebuild the attributedString based on UILabel's text/font/color/alignment/... properties
+@interface NSMutableAttributedString (OHCommodityStyleModifiers)
+-(void)setFont:(UIFont*)font;
+-(void)setFont:(UIFont*)font range:(NSRange)range;
+-(void)setFontName:(NSString*)fontName size:(CGFloat)size;
+-(void)setFontName:(NSString*)fontName size:(CGFloat)size range:(NSRange)range;
+-(void)setFontFamily:(NSString*)fontFamily size:(CGFloat)size bold:(BOOL)isBold italic:(BOOL)isItalic range:(NSRange)range;
+
+-(void)setTextColor:(UIColor*)color;
+-(void)setTextColor:(UIColor*)color range:(NSRange)range;
+
+-(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
+-(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;
 @end
+
+

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0958C7CE13229622006A71FF /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */; };
 		09AB4BBD130EEFC700D4B9EB /* OHAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */; };
 		09AB4BD6130EF1D700D4B9EB /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB4BD5130EF1D700D4B9EB /* CoreText.framework */; };
 		1D3623260D0F684500981E51 /* AttributedLabel_ExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AttributedLabel_ExampleAppDelegate.m */; };
@@ -18,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0958C7CC13229622006A71FF /* NSAttributedString+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Attributes.h"; sourceTree = "<group>"; };
+		0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Attributes.m"; sourceTree = "<group>"; };
 		09AB4BBB130EEFC700D4B9EB /* OHAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHAttributedLabel.h; sourceTree = "<group>"; };
 		09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHAttributedLabel.m; sourceTree = "<group>"; };
 		09AB4BD5130EF1D700D4B9EB /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -60,6 +63,8 @@
 		09AB4BBA130EEF9C00D4B9EB /* OHAttributedLabel */ = {
 			isa = PBXGroup;
 			children = (
+				0958C7CC13229622006A71FF /* NSAttributedString+Attributes.h */,
+				0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */,
 				09AB4BBB130EEFC700D4B9EB /* OHAttributedLabel.h */,
 				09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */,
 			);
@@ -180,6 +185,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AttributedLabel_ExampleAppDelegate.m in Sources */,
 				09AB4BBD130EEFC700D4B9EB /* OHAttributedLabel.m in Sources */,
+				0958C7CE13229622006A71FF /* NSAttributedString+Attributes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

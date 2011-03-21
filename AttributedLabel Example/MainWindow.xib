@@ -56,7 +56,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">(label1)</string>
-						<object class="NSFont" key="IBUIFont" id="903027471">
+						<object class="NSFont" key="IBUIFont">
 							<string key="NSName">Helvetica</string>
 							<double key="NSSize">24</double>
 							<int key="NSfFlags">16</int>
@@ -77,15 +77,23 @@
 					<object class="IBUILabel" id="365385424">
 						<reference key="NSNextResponder" ref="380026005"/>
 						<int key="NSvFlags">1316</int>
-						<string key="NSFrame">{{21, 248}, {280, 105}}</string>
+						<string key="NSFrame">{{10, 215}, {300, 138}}</string>
 						<reference key="NSSuperview" ref="380026005"/>
+						<object class="NSColor" key="IBUIBackgroundColor">
+							<int key="NSColorSpace">3</int>
+							<bytes key="NSWhite">MC44OTg1MTQ4NTE1AA</bytes>
+						</object>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Hello World! How are you? Hope everything is OK!</string>
-						<reference key="IBUIFont" ref="903027471"/>
+						<string key="IBUIText">Hello World! How are you? Hope everything is OK! Visit http://www.foodreporter.net to post your food!</string>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">Helvetica</string>
+							<double key="NSSize">18</double>
+							<int key="NSfFlags">16</int>
+						</object>
 						<reference key="IBUITextColor" ref="995786979"/>
 						<reference key="IBUIHighlightedColor" ref="585316935"/>
 						<int key="IBUIBaselineAdjustment">1</int>
@@ -253,8 +261,8 @@
 							<reference ref="973736286"/>
 							<reference ref="260938319"/>
 							<reference ref="992531389"/>
-							<reference ref="365385424"/>
 							<reference ref="283867508"/>
+							<reference ref="365385424"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -337,7 +345,7 @@
 					<string>OHAttributedLabel</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABBoAAAw40AAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABBqAAAw6+AAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -380,7 +388,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">19</int>
+			<int key="maxID">20</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

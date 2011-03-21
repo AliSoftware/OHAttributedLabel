@@ -7,6 +7,7 @@
 //
 
 #import "AttributedLabel_ExampleAppDelegate.h"
+#import "NSAttributedString+Attributes.h"
 
 @implementation AttributedLabel_ExampleAppDelegate
 
