@@ -210,7 +210,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		
 		NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
 		
-		if (self.highlighted)
+		if (self.highlighted && self.highlightedTextColor != nil)
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
 
 		CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
