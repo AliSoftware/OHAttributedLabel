@@ -58,6 +58,8 @@
 
 -(void)setTextColor:(UIColor*)color;
 -(void)setTextColor:(UIColor*)color range:(NSRange)range;
+-(void)setTextIsUnderlined:(BOOL)underlined;
+-(void)setTextIsUnderlined:(BOOL)underlined range:(NSRange)range;
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;

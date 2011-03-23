@@ -120,6 +120,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 			 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
 			 ? [delegate colorForLink:result] : [UIColor blueColor];
 			 [str setTextColor:linkColor range:[result range]];
+			 [str setTextIsUnderlined:YES range:[result range]];
 		 }];
 		[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
 		 {
@@ -127,6 +128,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 			 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
 			 ? [delegate colorForLink:result] : [UIColor blueColor];
 			 [str setTextColor:linkColor range:[result range]];
+			 [str setTextIsUnderlined:YES range:[result range]];
 		 }];
 	}
 	return [str autorelease];
@@ -209,10 +211,10 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		CGContextConcatCTM(ctx, CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f));
 		
 		NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
-		
-		if (self.highlighted && self.highlightedTextColor != nil)
+		if (self.highlighted && self.highlightedTextColor != nil) {
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
-
+		}
+		
 		CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
 		CGRect rect = self.bounds;
 		if (self.centerVertically) {
@@ -276,7 +278,8 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 /////////////////////////////////////////////////////////////////////////////
 
 -(void)setText:(NSString *)text {
-	[super setText:text]; // will call setNeedsDisplay too
+	NSString* cleanedText = [text stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+	[super setText:cleanedText]; // will call setNeedsDisplay too
 	[self resetAttributedText];
 }
 -(void)setFont:(UIFont *)font {

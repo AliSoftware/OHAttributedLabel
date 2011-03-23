@@ -89,6 +89,13 @@
 	[self addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:range];
 }
 
+-(void)setTextIsUnderlined:(BOOL)underlined {
+	[self setTextIsUnderlined:underlined range:NSMakeRange(0,[self length])];
+}
+-(void)setTextIsUnderlined:(BOOL)underlined range:(NSRange)range {
+	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:(underlined?1:0)] range:range];
+}
+
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode {
 	[self setTextAlignment:alignment lineBreakMode:lineBreakMode range:NSMakeRange(0,[self length])];
 }
