@@ -18,5 +18,6 @@
 -(IBAction)fillLabel1;
 -(IBAction)makeWorldBold;
 -(IBAction)fillLabel2;
+-(IBAction)changeAlignment;
 @end
 

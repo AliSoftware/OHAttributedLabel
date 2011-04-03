@@ -82,6 +82,9 @@
 	[attrStr release];
 }
 
+-(IBAction)changeAlignment {
+	label2.textAlignment = (label2.textAlignment+1) % 4;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 
