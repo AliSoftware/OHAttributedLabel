@@ -75,14 +75,27 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 // MARK: Init/Dealloc
 /////////////////////////////////////////////////////////////////////////////
 
+- (void)commonInit {
+	customLinks = [[NSMutableArray alloc] init];
+	automaticallyDetectLinks = YES;
+	self.userInteractionEnabled = YES;
+	[self resetAttributedText];	
+}
+
+- (id) initWithFrame:(CGRect)aFrame
+{
+	self = [super initWithFrame:aFrame];
+	if (self != nil) {
+		[self commonInit];
+	}
+	return self;
+}
+
 - (id)initWithCoder:(NSCoder *)decoder
 {
 	self = [super initWithCoder:decoder];
 	if (self != nil) {
-		customLinks = [[NSMutableArray alloc] init];
-		automaticallyDetectLinks = YES;
-		self.userInteractionEnabled = YES;
-		[self resetAttributedText];
+		[self commonInit];
 	}
 	return self;
 }
