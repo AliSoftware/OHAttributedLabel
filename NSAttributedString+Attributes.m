@@ -39,10 +39,10 @@
 
 @implementation NSAttributedString (OHCommodityConstructors)
 +(id)attributedStringWithString:(NSString*)string {
-	return [[[self alloc] initWithString:string] autorelease];
+	return string ? [[[self alloc] initWithString:string] autorelease] : nil;
 }
 +(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr {
-	return [[[self alloc] initWithAttributedString:attrStr] autorelease];
+	return attrStr ? [[[self alloc] initWithAttributedString:attrStr] autorelease] : nil;
 }
 @end
 
