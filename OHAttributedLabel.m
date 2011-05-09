@@ -155,7 +155,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 								usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 	 {
 		 NSRange r = [result range];
-		 if ((r.location<idx) && (idx<=r.location+r.length)) {
+		 if (NSLocationInRange(idx, r)) {
 			 foundResult = [[result retain] autorelease];
 			 *stop = YES;
 		 }
@@ -165,7 +165,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop)
 	 {
 		 NSRange r = [(NSTextCheckingResult*)obj range];
-		 if ((r.location<idx) && (idx<=r.location+r.length)) {
+		 if (NSLocationInRange(idx, r)) {
 			 foundResult = [[obj retain] autorelease];
 			 *stop = YES;
 		 }
