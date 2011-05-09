@@ -223,6 +223,10 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		CGContextSaveGState(ctx);
 		CGContextConcatCTM(ctx, CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f));
 		
+		if (self.shadowColor) {
+			CGContextSetShadowWithColor(ctx, self.shadowOffset, 0.0, self.shadowColor.CGColor);
+		}
+		
 		NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
 		if (self.highlighted && self.highlightedTextColor != nil) {
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
