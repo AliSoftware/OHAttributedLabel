@@ -197,7 +197,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
 	return ([self linkAtPoint:point] != nil);
 }
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch* touch = [touches anyObject];
 	CGPoint pt = [touch locationInView:self];
 	
