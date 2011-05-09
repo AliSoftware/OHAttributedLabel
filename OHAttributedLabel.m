@@ -162,7 +162,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	 }];
 	if (foundResult) return foundResult;
 	
-	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop)
 	 {
 		 NSRange r = [(NSTextCheckingResult*)obj range];
 		 if ((r.location<idx) && (idx<=r.location+r.length)) {
