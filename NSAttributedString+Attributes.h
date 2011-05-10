@@ -31,6 +31,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
+#import <UIKit/UIKit.h>
 
 
 /////////////////////////////////////////////////////////////////////////////
