@@ -217,7 +217,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		BOOL openLink = (delegate && [delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
 		? [delegate attributedLabel:self shouldFollowLink:link] : YES;
 		if (openLink) [[UIApplication sharedApplication] openURL:link.URL];
-	}	
+	}
 }
 
 

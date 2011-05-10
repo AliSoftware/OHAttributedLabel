@@ -46,6 +46,7 @@
 	CTFrameRef textFrame;
 	BOOL centerVertically;
 	BOOL automaticallyDetectLinks;
+	BOOL onlyCatchTouchesOnLinks;
 	NSMutableArray* customLinks;
 	id<OHAttributedLabelDelegate> delegate;
 	BOOL extendBottomToFit;
