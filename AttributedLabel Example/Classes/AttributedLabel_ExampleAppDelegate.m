@@ -30,19 +30,26 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+#define TXT_BEGIN "Hello World! How are you? Don't forget to "
+#define TXT_LINK "share your food"
+#define TXT_END "!"
 
 -(IBAction)fillLabel1 {
+	NSString* txt = @ TXT_BEGIN TXT_LINK TXT_END; // concat the 3 (#define) constant parts in a single NSString
 	/**(1)** Build the NSAttributedString *******/
-	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:@"Hello World! How are you? Hope everything is OK!"];
+	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:txt];
 	// for those calls we don't specify a range so it affects the whole string
 	[attrStr setFont:[UIFont systemFontOfSize:18]];
 	[attrStr setTextColor:[UIColor grayColor]];
+
 	// now we only change the color of "Hello"
-	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(0,5)];
-	
+	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(0,5)];	
 	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	label1.attributedText = attrStr;
+	// and add a link to the "share your food!" text
+	[label1 addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net/dish/list"] inRange:[txt rangeOfString:@TXT_LINK]];
+	 
 	// Use the "Justified" alignment
 	label1.textAlignment = UITextAlignmentJustify;
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.	

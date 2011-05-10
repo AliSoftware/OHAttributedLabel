@@ -65,7 +65,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 
 
 @implementation OHAttributedLabel
-@synthesize centerVertically, automaticallyDetectLinks, extendBottomToFit;
+@synthesize centerVertically, automaticallyDetectLinks, onlyCatchTouchesOnLinks, extendBottomToFit;
 @synthesize delegate;
 
 
@@ -78,6 +78,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 - (void)commonInit {
 	customLinks = [[NSMutableArray alloc] init];
 	automaticallyDetectLinks = YES;
+	onlyCatchTouchesOnLinks = NO;
 	self.userInteractionEnabled = YES;
 	self.contentMode = UIViewContentModeRedraw;
 	[self resetAttributedText];
@@ -138,15 +139,15 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 			 [str setTextColor:linkColor range:[result range]];
 			 [str setTextIsUnderlined:YES range:[result range]];
 		 }];
-		[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-		 {
-			 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
-			 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
-			 ? [delegate colorForLink:result] : [UIColor blueColor];
-			 [str setTextColor:linkColor range:[result range]];
-			 [str setTextIsUnderlined:YES range:[result range]];
-		 }];
 	}
+	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+	 {
+		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
+		 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
+		 ? [delegate colorForLink:result] : [UIColor blueColor];
+		 [str setTextColor:linkColor range:[result range]];
+		 [str setTextIsUnderlined:YES range:[result range]];
+	 }];
 	return [str autorelease];
 }
 
@@ -200,7 +201,11 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 }
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-	return ([self linkAtPoint:point] != nil);
+	if (self.onlyCatchTouchesOnLinks) {
+		return ([self linkAtPoint:point] != nil);
+	} else {
+		return [super pointInside:point withEvent:event];
+	}
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch* touch = [touches anyObject];
