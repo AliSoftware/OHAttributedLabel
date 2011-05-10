@@ -65,7 +65,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 
 
 @implementation OHAttributedLabel
-@synthesize centerVertically, automaticallyDetectLinks, onlyCatchTouchesOnLinks, extendBottomToFit;
+@synthesize linkColor, underlineLinks, centerVertically, automaticallyDetectLinks, onlyCatchTouchesOnLinks, extendBottomToFit;
 @synthesize delegate;
 
 
@@ -77,6 +77,8 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 
 - (void)commonInit {
 	customLinks = [[NSMutableArray alloc] init];
+	linkColor = [[UIColor blueColor] retain];
+	underlineLinks = YES;
 	automaticallyDetectLinks = YES;
 	onlyCatchTouchesOnLinks = NO;
 	self.userInteractionEnabled = YES;
@@ -105,6 +107,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 -(void)dealloc {
 	[_attributedText release];
 	[customLinks release];
+	[linkColor release];
 	if (textFrame) CFRelease(textFrame);
 	[super dealloc];
 }
@@ -134,19 +137,23 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		[linkDetector enumerateMatchesInString:[str string] options:0 range:NSMakeRange(0,[[str string] length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
-			 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
-			 ? [delegate colorForLink:result] : [UIColor blueColor];
-			 [str setTextColor:linkColor range:[result range]];
-			 [str setTextIsUnderlined:YES range:[result range]];
+			 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
+			 ? [delegate colorForLink:result] : self.linkColor;
+			 if (thisLinkColor)
+				 [str setTextColor:thisLinkColor range:[result range]];
+			 if (self.underlineLinks)
+				 [str setTextIsUnderlined:YES range:[result range]];
 		 }];
 	}
 	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
 	 {
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
-		 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
-		 ? [delegate colorForLink:result] : [UIColor blueColor];
-		 [str setTextColor:linkColor range:[result range]];
-		 [str setTextIsUnderlined:YES range:[result range]];
+		 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
+		 ? [delegate colorForLink:result] : self.linkColor;
+		 if (thisLinkColor)
+			 [str setTextColor:thisLinkColor range:[result range]];
+		 if (self.underlineLinks)
+			 [str setTextIsUnderlined:YES range:[result range]];
 	 }];
 	return [str autorelease];
 }
