@@ -271,7 +271,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	CGFloat w = size.width;
 	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(w,CGFLOAT_MAX),NULL);
 	if (framesetter) CFRelease(framesetter);
-	return CGSizeMake(w,sz.height+1); // take 1pt of margin
+	return CGSizeMake(sz.height,sz.height+1); // take 1pt of margin for security
 }
 
 
