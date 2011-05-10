@@ -65,7 +65,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 
 
 @implementation OHAttributedLabel
-@synthesize centerVertically, automaticallyDetectLinks;
+@synthesize centerVertically, automaticallyDetectLinks, onlyCatchTouchesOnLinks, extendBottomToFit;
 @synthesize delegate;
 
 
@@ -78,8 +78,10 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 - (void)commonInit {
 	customLinks = [[NSMutableArray alloc] init];
 	automaticallyDetectLinks = YES;
+	onlyCatchTouchesOnLinks = NO;
 	self.userInteractionEnabled = YES;
-	[self resetAttributedText];	
+	self.contentMode = UIViewContentModeRedraw;
+	[self resetAttributedText];
 }
 
 - (id) initWithFrame:(CGRect)aFrame
@@ -99,10 +101,11 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	}
 	return self;
 }
+
 -(void)dealloc {
 	[_attributedText release];
 	[customLinks release];
-	if (frame) CFRelease(frame);
+	if (textFrame) CFRelease(textFrame);
 	[super dealloc];
 }
 
@@ -126,7 +129,8 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 -(NSMutableAttributedString*)attributedTextWithLinks {
 	NSMutableAttributedString* str = [_attributedText mutableCopy];
 	if (self.automaticallyDetectLinks) {
-		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+		NSError* error = nil;
+		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
 		[linkDetector enumerateMatchesInString:[str string] options:0 range:NSMakeRange(0,[[str string] length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
@@ -135,22 +139,22 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 			 [str setTextColor:linkColor range:[result range]];
 			 [str setTextIsUnderlined:YES range:[result range]];
 		 }];
-		[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-		 {
-			 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
-			 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
-			 ? [delegate colorForLink:result] : [UIColor blueColor];
-			 [str setTextColor:linkColor range:[result range]];
-			 [str setTextIsUnderlined:YES range:[result range]];
-		 }];
 	}
+	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+	 {
+		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
+		 UIColor* linkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
+		 ? [delegate colorForLink:result] : [UIColor blueColor];
+		 [str setTextColor:linkColor range:[result range]];
+		 [str setTextIsUnderlined:YES range:[result range]];
+	 }];
 	return [str autorelease];
 }
 
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx {
 	__block NSTextCheckingResult* foundResult = nil;
-	
-	NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+	NSError* error = nil;
+	NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
 	[linkDetector enumerateMatchesInString:[_attributedText string] options:0 range:NSMakeRange(0,[[_attributedText string] length])
 								usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 	 {
@@ -173,29 +177,35 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	return foundResult;
 }
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt {
-	static CGFloat kDeltaY = 5.f; // Because we generally tap a bit below the line
-	if (!CGRectContainsPoint(CGRectInset(self.bounds, 0, -kDeltaY), pt)) return nil;
+	static const CGFloat kVMargin = 5.f;
+	if (!CGRectContainsPoint(CGRectInset(self.bounds, 0, -kVMargin), pt)) return nil;
 	
-	CFArrayRef lines = CTFrameGetLines(frame);
+	CFArrayRef lines = CTFrameGetLines(textFrame);
 	int nbLines = CFArrayGetCount(lines);
-	//CGFloat lineHeight = 0;
+	CGFloat lineHeight = 0;
+	NSTextCheckingResult* link = nil;
 	CGPoint origins[nbLines];
-	CTFrameGetLineOrigins(frame, CFRangeMake(0,0), origins);
+	CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), origins);
 	for (int i=0;i<nbLines;++i) {
 		CGFloat lineY = (self.bounds.size.height-origins[i].y); // convert to "origin on top" coords
-		if (lineY+kDeltaY > pt.y) {
-			CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-			//(void)CTLineGetTypographicBounds(line, &lineHeight, NULL, NULL);
+		CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+		(void)CTLineGetTypographicBounds(line, &lineHeight, NULL, NULL);
+		if ((lineY-kVMargin < pt.y) && (pt.y < lineY+lineHeight+kVMargin)){
 			CGPoint relativePoint = CGPointMake(pt.x-origins[i].x, pt.y-lineY);
 			CFIndex idx = CTLineGetStringIndexForPosition(line, relativePoint);
-			return [self linkAtCharacterIndex:idx];
+			link = ([self linkAtCharacterIndex:idx]);
+			if (link) return link;
 		}
 	}
 	return nil;
 }
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-	return ([self linkAtPoint:point] != nil);
+	if (self.onlyCatchTouchesOnLinks) {
+		return ([self linkAtPoint:point] != nil);
+	} else {
+		return [super pointInside:point withEvent:event];
+	}
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch* touch = [touches anyObject];
@@ -207,7 +217,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		BOOL openLink = (delegate && [delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
 		? [delegate attributedLabel:self shouldFollowLink:link] : YES;
 		if (openLink) [[UIApplication sharedApplication] openURL:link.URL];
-	}	
+	}
 }
 
 
@@ -234,17 +244,23 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		
 		CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
 		CGRect rect = self.bounds;
-		if (self.centerVertically) {
-			CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,self.bounds.size,NULL);
-			rect.origin.y -= (rect.size.height - sz.height)/2;
-			//rect.size.height = sz.height; // no real need, and actually may introduce a risk of bottom cropping if some rounding error
+		if (self.centerVertically || self.extendBottomToFit) {
+			CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(rect.size.width,CGFLOAT_MAX),NULL);
+			if (self.extendBottomToFit) {
+				CGFloat delta = MAX(0.f , ceilf(sz.height - rect.size.height)) + 10 /* Security margin */;
+				rect.origin.y -= delta;
+				rect.size.height += delta;
+			}
+			if (self.centerVertically) {
+				rect.origin.y -= (rect.size.height - sz.height)/2;
+			}
 		}
 		CGMutablePathRef path = CGPathCreateMutable();
 		CGPathAddRect(path, NULL, rect);
-		if (frame) CFRelease(frame);		
-		frame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+		if (textFrame) CFRelease(textFrame);		
+		textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
 		CFRelease(framesetter);
-		CTFrameDraw(frame, ctx);
+		CTFrameDraw(textFrame, ctx);
 		CGPathRelease(path);
 		
 		CGContextRestoreGState(ctx);
@@ -259,9 +275,8 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	CGFloat w = size.width;
 	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(w,CGFLOAT_MAX),NULL);
 	if (framesetter) CFRelease(framesetter);
-	return CGSizeMake(w,sz.height+1); // take 1pt of margin
+	return CGSizeMake(sz.height,sz.height+1); // take 1pt of margin for security
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -295,7 +310,8 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 /////////////////////////////////////////////////////////////////////////////
 
 -(void)setText:(NSString *)text {
-	NSString* cleanedText = [text stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+	NSString* cleanedText = [[text stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"]
+							 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	[super setText:cleanedText]; // will call setNeedsDisplay too
 	[self resetAttributedText];
 }
@@ -326,6 +342,11 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 
 -(void)setAutomaticallyDetectLinks:(BOOL)detect {
 	automaticallyDetectLinks = detect;
+	[self setNeedsDisplay];
+}
+
+-(void)setExtendBottomToFit:(BOOL)val {
+	extendBottomToFit = val;
 	[self setNeedsDisplay];
 }
 

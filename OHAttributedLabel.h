@@ -43,15 +43,19 @@
 
 @interface OHAttributedLabel : UILabel {
 	NSMutableAttributedString* _attributedText; //!< Internally mutable, but externally immutable copy access only
-	CTFrameRef frame;
+	CTFrameRef textFrame;
 	BOOL centerVertically;
 	BOOL automaticallyDetectLinks;
+	BOOL onlyCatchTouchesOnLinks;
 	NSMutableArray* customLinks;
 	id<OHAttributedLabelDelegate> delegate;
+	BOOL extendBottomToFit;
 }
 @property(nonatomic, copy) NSAttributedString* attributedText; //!< Use this instead of the "text" property inherited from UILabel to set and get text
 @property(nonatomic, assign) BOOL centerVertically;
-@property(nonatomic, assign) BOOL automaticallyDetectLinks; //!< Defaults to true
+@property(nonatomic, assign) BOOL automaticallyDetectLinks; //!< Defaults to YES
+@property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks; //!< If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to NO)
+@property(nonatomic, assign) BOOL extendBottomToFit; //!< Allows to draw text past the bottom of the view if need. May help in rare cases (like using Emoji)
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
 -(void)removeAllCustomLinks;
 @property(nonatomic, assign) id<OHAttributedLabelDelegate> delegate;
