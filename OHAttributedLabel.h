@@ -49,6 +49,7 @@
 	NSMutableAttributedString* _attributedText; //!< Internally mutable, but externally immutable copy access only
 	CTFrameRef textFrame;
 	NSMutableArray* customLinks;
+	NSTextCheckingResult* activeLink;
 }
 
 /* Attributed String accessors */

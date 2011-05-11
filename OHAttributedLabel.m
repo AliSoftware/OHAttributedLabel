@@ -109,6 +109,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	[customLinks release];
 	[linkColor release];
 	if (textFrame) CFRelease(textFrame);
+	[activeLink release];
 	[super dealloc];
 }
 
@@ -231,17 +232,40 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	}
 	return hitResult;
 }
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch* touch = [touches anyObject];
+	CGPoint pt = [touch locationInView:self];
+	
+	[activeLink release];
+	activeLink = [[self linkAtPoint:pt] retain];
+	
+	// we're using activeLink to draw a highlight in -drawRect:
+	[self setNeedsDisplay];
+}
+
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch* touch = [touches anyObject];
 	CGPoint pt = [touch locationInView:self];
 	
-	NSTextCheckingResult* link = [self linkAtPoint:pt];
+	NSTextCheckingResult *linkAtTouchesEnded = [self linkAtPoint:pt];
 	
-	if (link) {
+	// we can check on equality of the links themselfes since the data detectors create new results
+	if (activeLink.URL && [activeLink.URL isEqual:linkAtTouchesEnded.URL]) {
 		BOOL openLink = (delegate && [delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
-		? [delegate attributedLabel:self shouldFollowLink:link] : YES;
-		if (openLink) [[UIApplication sharedApplication] openURL:link.URL];
+		? [delegate attributedLabel:self shouldFollowLink:activeLink] : YES;
+		if (openLink) [[UIApplication sharedApplication] openURL:activeLink.URL];
 	}
+	
+	[activeLink release];
+	activeLink = nil;
+	[self setNeedsDisplay];
+}
+
+-(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	[activeLink release];
+	activeLink = nil;
+	[self setNeedsDisplay];
 }
 
 
