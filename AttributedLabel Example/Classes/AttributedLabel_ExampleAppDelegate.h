@@ -9,15 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "OHAttributedLabel.h"
 
-@interface AttributedLabel_ExampleAppDelegate : NSObject <UIApplicationDelegate> {
+@interface AttributedLabel_ExampleAppDelegate : NSObject <UIApplicationDelegate, OHAttributedLabelDelegate> {
     UIWindow* window;
 	IBOutlet OHAttributedLabel* label1;
 	IBOutlet OHAttributedLabel* label2;
+	
+	NSMutableSet* visitedLinks;
 }
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 -(IBAction)fillLabel1;
 -(IBAction)makeWorldBold;
 -(IBAction)fillLabel2;
 -(IBAction)changeAlignment;
+-(IBAction)resetVisitedLinks;
 @end
 

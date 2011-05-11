@@ -93,7 +93,11 @@
 	[self setTextIsUnderlined:underlined range:NSMakeRange(0,[self length])];
 }
 -(void)setTextIsUnderlined:(BOOL)underlined range:(NSRange)range {
-	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:(underlined?1:0)] range:range];
+	int32_t style = underlined ? (kCTUnderlineStyleSingle|kCTUnderlinePatternSolid) : kCTUnderlineStyleNone;
+	[self setTextUnderlineStyle:style range:range];
+}
+-(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range {
+	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode {

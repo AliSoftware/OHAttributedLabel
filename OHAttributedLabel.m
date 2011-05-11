@@ -137,23 +137,28 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		[linkDetector enumerateMatchesInString:[str string] options:0 range:NSMakeRange(0,[[str string] length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
-			 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
-			 ? [delegate colorForLink:result] : self.linkColor;
+			 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
+			 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
+			 ? [delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+			 
 			 if (thisLinkColor)
 				 [str setTextColor:thisLinkColor range:[result range]];
-			 if (self.underlineLinks)
-				 [str setTextIsUnderlined:YES range:[result range]];
+			 if (uStyle>0)
+				 [str setTextUnderlineStyle:uStyle range:[result range]];
 		 }];
 	}
 	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
 	 {
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
-		 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:)])
-		 ? [delegate colorForLink:result] : self.linkColor;
+		 
+		 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
+		 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
+		 ? [delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+		 
 		 if (thisLinkColor)
 			 [str setTextColor:thisLinkColor range:[result range]];
-		 if (self.underlineLinks)
-			 [str setTextIsUnderlined:YES range:[result range]];
+		 if (uStyle>0)
+			 [str setTextUnderlineStyle:uStyle range:[result range]];
 	 }];
 	return [str autorelease];
 }

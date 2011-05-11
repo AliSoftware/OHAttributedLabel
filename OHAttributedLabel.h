@@ -32,37 +32,39 @@
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
 
+/////////////////////////////////////////////////////////////////////////////
+
 @class OHAttributedLabel;
 @protocol OHAttributedLabelDelegate <NSObject>
 @optional
 -(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo;
--(UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo;
+-(UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo underlineStyle:(int32_t*)underlineStyle; //!< Combination of CTUnderlineStyle and CTUnderlineStyleModifiers
 @end
 
 #define UITextAlignmentJustify ((UITextAlignment)kCTJustifiedTextAlignment)
 
+/////////////////////////////////////////////////////////////////////////////
+
 @interface OHAttributedLabel : UILabel {
 	NSMutableAttributedString* _attributedText; //!< Internally mutable, but externally immutable copy access only
 	CTFrameRef textFrame;
-	UIColor* linkColor;
-	BOOL underlineLinks;
-	BOOL centerVertically;
-	BOOL automaticallyDetectLinks;
-	BOOL onlyCatchTouchesOnLinks;
 	NSMutableArray* customLinks;
-	id<OHAttributedLabelDelegate> delegate;
-	BOOL extendBottomToFit;
 }
+
+/* Attributed String accessors */
 @property(nonatomic, copy) NSAttributedString* attributedText; //!< Use this instead of the "text" property inherited from UILabel to set and get text
-@property(nonatomic, retain) UIColor* linkColor; //!< Defaults to [UIColor blueColor]
-@property(nonatomic, assign) BOOL underlineLinks; //!< Defaults to YES
-@property(nonatomic, assign) BOOL centerVertically;
+-(void)resetAttributedText; //!< rebuild the attributedString based on UILabel's text/font/color/alignment/... properties
+
+/* Links configuration */
 @property(nonatomic, assign) BOOL automaticallyDetectLinks; //!< Defaults to YES
-@property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks; //!< If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to NO)
-@property(nonatomic, assign) BOOL extendBottomToFit; //!< Allows to draw text past the bottom of the view if need. May help in rare cases (like using Emoji)
+@property(nonatomic, retain) UIColor* linkColor; //!< Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
+@property(nonatomic, assign) BOOL underlineLinks; //!< Defaults to YES. See also OHAttributedLabelDelegate
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
 -(void)removeAllCustomLinks;
-@property(nonatomic, assign) id<OHAttributedLabelDelegate> delegate;
 
--(void)resetAttributedText; //!< rebuild the attributedString based on UILabel's text/font/color/alignment/... properties
+@property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks; //!< If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to NO)
+@property(nonatomic, assign) IBOutlet id<OHAttributedLabelDelegate> delegate;
+
+@property(nonatomic, assign) BOOL centerVertically;
+@property(nonatomic, assign) BOOL extendBottomToFit; //!< Allows to draw text past the bottom of the view if need. May help in rare cases (like using Emoji)
 @end

@@ -20,12 +20,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     [self.window makeKeyAndVisible];
 
+	visitedLinks = [[NSMutableSet alloc] init];
+	
 	/* Don't forget to add the CoreText framework in your project ! */
 	[self fillLabel1];
 	[self fillLabel2];
 	
     return YES;
 }
+- (void)applicationWillTerminate:(UIApplication *)application {
+	[visitedLinks release];
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -91,6 +97,35 @@
 
 -(IBAction)changeAlignment {
 	label2.textAlignment = (label2.textAlignment+1) % 4;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Visited Links
+/////////////////////////////////////////////////////////////////////////////
+
+-(UIColor*)colorForLink:(NSTextCheckingResult*)link underlineStyle:(int32_t*)pUnderline {
+	if ([visitedLinks containsObject:link.URL]) {
+		// Visited link
+		*pUnderline = kCTUnderlineStyleSingle|kCTUnderlinePatternDot;
+		return [UIColor purpleColor];
+	} else {
+		*pUnderline = kCTUnderlineStyleSingle|kCTUnderlinePatternSolid;
+		return [UIColor blueColor];
+	}
+}
+-(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo {
+	[visitedLinks addObject:linkInfo.URL];
+	[attributedLabel setNeedsDisplay];
+	return YES;
+}
+
+-(IBAction)resetVisitedLinks {
+	[visitedLinks removeAllObjects];
+	[label1 setNeedsDisplay];
+	[label2 setNeedsDisplay];
 }
 
 /////////////////////////////////////////////////////////////////////////////

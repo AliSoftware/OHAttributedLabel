@@ -48,7 +48,7 @@
 					<object class="IBUILabel" id="973736286">
 						<reference key="NSNextResponder" ref="380026005"/>
 						<int key="NSvFlags">1316</int>
-						<string key="NSFrame">{{20, 40}, {280, 78}}</string>
+						<string key="NSFrame">{{20, 40}, {280, 60}}</string>
 						<reference key="NSSuperview" ref="380026005"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -77,7 +77,7 @@
 					<object class="IBUILabel" id="365385424">
 						<reference key="NSNextResponder" ref="380026005"/>
 						<int key="NSvFlags">1316</int>
-						<string key="NSFrame">{{10, 215}, {300, 138}}</string>
+						<string key="NSFrame">{{10, 199}, {300, 120}}</string>
 						<reference key="NSSuperview" ref="380026005"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -105,7 +105,7 @@
 					<object class="IBUIButton" id="992531389">
 						<reference key="NSNextResponder" ref="380026005"/>
 						<int key="NSvFlags">1316</int>
-						<string key="NSFrame">{{20, 126}, {104, 37}}</string>
+						<string key="NSFrame">{{20, 108}, {104, 37}}</string>
 						<reference key="NSSuperview" ref="380026005"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -131,7 +131,7 @@
 					<object class="IBUIButton" id="260938319">
 						<reference key="NSNextResponder" ref="380026005"/>
 						<int key="NSvFlags">1316</int>
-						<string key="NSFrame">{{141, 126}, {160, 37}}</string>
+						<string key="NSFrame">{{141, 108}, {160, 37}}</string>
 						<reference key="NSSuperview" ref="380026005"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -150,7 +150,7 @@
 					<object class="IBUIButton" id="283867508">
 						<reference key="NSNextResponder" ref="380026005"/>
 						<int key="NSvFlags">1316</int>
-						<string key="NSFrame">{{21, 361}, {104, 37}}</string>
+						<string key="NSFrame">{{21, 327}, {104, 37}}</string>
 						<reference key="NSSuperview" ref="380026005"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -169,7 +169,7 @@
 					<object class="IBUIButton" id="642127647">
 						<reference key="NSNextResponder" ref="380026005"/>
 						<int key="NSvFlags">1316</int>
-						<string key="NSFrame">{{141, 361}, {158, 37}}</string>
+						<string key="NSFrame">{{141, 327}, {158, 37}}</string>
 						<reference key="NSSuperview" ref="380026005"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -178,6 +178,51 @@
 						<reference key="IBUIFont" ref="741912167"/>
 						<int key="IBUIButtonType">1</int>
 						<string key="IBUINormalTitle">Change Alignment</string>
+						<reference key="IBUIHighlightedTitleColor" ref="585316935"/>
+						<object class="NSColor" key="IBUINormalTitleColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
+						</object>
+						<reference key="IBUINormalTitleShadowColor" ref="954630114"/>
+					</object>
+					<object class="IBUILabel" id="333629584">
+						<reference key="NSNextResponder" ref="380026005"/>
+						<int key="NSvFlags">1316</int>
+						<string key="NSFrame">{{10, 388}, {300, 45}}</string>
+						<reference key="NSSuperview" ref="380026005"/>
+						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<int key="IBUIContentMode">7</int>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<string key="IBUIText">When a link is visited, its color will change (thanks to the implementation of the delegate methods)</string>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">Helvetica-Oblique</string>
+							<double key="NSSize">12</double>
+							<int key="NSfFlags">16</int>
+						</object>
+						<reference key="IBUITextColor" ref="995786979"/>
+						<reference key="IBUIHighlightedColor" ref="585316935"/>
+						<int key="IBUIBaselineAdjustment">1</int>
+						<float key="IBUIMinimumFontSize">10</float>
+						<int key="IBUINumberOfLines">2</int>
+					</object>
+					<object class="IBUIButton" id="1060165362">
+						<reference key="NSNextResponder" ref="380026005"/>
+						<int key="NSvFlags">1316</int>
+						<string key="NSFrame">{{10, 433}, {300, 27}}</string>
+						<reference key="NSSuperview" ref="380026005"/>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">Helvetica</string>
+							<double key="NSSize">12</double>
+							<int key="NSfFlags">16</int>
+						</object>
+						<int key="IBUIButtonType">1</int>
+						<string key="IBUINormalTitle">Reset visited links</string>
 						<reference key="IBUIHighlightedTitleColor" ref="585316935"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
@@ -271,6 +316,31 @@
 					</object>
 					<int key="connectionID">23</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="973736286"/>
+						<reference key="destination" ref="664661524"/>
+					</object>
+					<int key="connectionID">24</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="365385424"/>
+						<reference key="destination" ref="664661524"/>
+					</object>
+					<int key="connectionID">25</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">resetVisitedLinks</string>
+						<reference key="source" ref="1060165362"/>
+						<reference key="destination" ref="664661524"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">28</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -287,11 +357,13 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="973736286"/>
-							<reference ref="260938319"/>
-							<reference ref="992531389"/>
 							<reference ref="283867508"/>
 							<reference ref="365385424"/>
 							<reference ref="642127647"/>
+							<reference ref="333629584"/>
+							<reference ref="1060165362"/>
+							<reference ref="992531389"/>
+							<reference ref="260938319"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -341,6 +413,16 @@
 						<reference key="object" ref="642127647"/>
 						<reference key="parent" ref="380026005"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">26</int>
+						<reference key="object" ref="333629584"/>
+						<reference key="parent" ref="380026005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">27</int>
+						<reference key="object" ref="1060165362"/>
+						<reference key="parent" ref="380026005"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -366,6 +448,9 @@
 					<string>2.IBPluginDependency</string>
 					<string>21.IBPluginDependency</string>
 					<string>21.IBViewBoundsToFrameTransform</string>
+					<string>26.IBPluginDependency</string>
+					<string>27.IBPluginDependency</string>
+					<string>27.IBViewBoundsToFrameTransform</string>
 					<string>3.CustomClassName</string>
 					<string>3.IBPluginDependency</string>
 				</object>
@@ -385,11 +470,11 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">AUGgAABC/AAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABBoAAAwyEAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABCvAAAwyEAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABDDQAAwyEAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -407,6 +492,11 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABC1AAAw8YAAA</bytes>
+					</object>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">P4AAAL+AAADCAAAAw+4AAA</bytes>
 					</object>
 					<string>AttributedLabel_ExampleAppDelegate</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -428,7 +518,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">23</int>
+			<int key="maxID">28</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -444,9 +534,11 @@
 							<string>fillLabel1</string>
 							<string>fillLabel2</string>
 							<string>makeWorldBold</string>
+							<string>resetVisitedLinks</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -461,6 +553,7 @@
 							<string>fillLabel1</string>
 							<string>fillLabel2</string>
 							<string>makeWorldBold</string>
+							<string>resetVisitedLinks</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -478,6 +571,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">makeWorldBold</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">resetVisitedLinks</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>
