@@ -212,12 +212,24 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	return nil;
 }
 
--(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-	if (self.onlyCatchTouchesOnLinks) {
-		return ([self linkAtPoint:point] != nil);
-	} else {
-		return [super pointInside:point withEvent:event];
+-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+	// never return self. always return the result of [super hitTest..].
+	// this takes userInteraction state, enabled, alpha values etc. into account
+	UIView *hitResult = [super hitTest:point withEvent:event];
+	
+	// don't check for links if the event was handled by one of the subviews
+	if (hitResult != self) {
+		return hitResult;
 	}
+	
+	if (self.onlyCatchTouchesOnLinks) {
+		BOOL didHitLink = ([self linkAtPoint:point] != nil);
+		if (!didHitLink) {
+			// not catch the touch if it didn't hit a link
+			return nil;
+		}
+	}
+	return hitResult;
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch* touch = [touches anyObject];
