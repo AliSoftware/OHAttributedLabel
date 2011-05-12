@@ -55,6 +55,50 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	}
 }
 
+CGPoint CGPointFlipped(CGPoint point, CGRect bounds) {
+	return CGPointMake(point.x, CGRectGetMaxY(bounds)-point.y);
+}
+
+CGRect CGRectFlipped(CGRect rect, CGRect bounds) {
+	return CGRectMake(CGRectGetMinX(rect),
+					  CGRectGetMaxY(bounds)-CGRectGetMaxY(rect),
+					  CGRectGetWidth(rect),
+					  CGRectGetHeight(rect));
+}
+
+NSRange NSRangeFromCFRange(CFRange range) {
+	return NSMakeRange(range.location, range.length);
+}
+
+CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin) {
+	CGFloat ascent = 0;
+	CGFloat descent = 0;
+	CGFloat leading = 0;
+	CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+	CGFloat height = ascent + descent;
+	
+	return CGRectMake(lineOrigin.x - leading,
+					  lineOrigin.y,
+					  width + leading,
+					  height);
+}
+
+CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin) {
+	CGFloat ascent = 0;
+	CGFloat descent = 0;
+	CGFloat leading = 0;
+	CGFloat width = CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &descent, &leading);
+	CGFloat height = ascent + descent;
+	
+	CGFloat xOffset = CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL);
+	
+	return CGRectMake(lineOrigin.x + xOffset - leading,
+					  lineOrigin.y,
+					  width + leading,
+					  height);
+}
+
+
 @interface OHAttributedLabel(/* Private */)
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
@@ -109,6 +153,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	[customLinks release];
 	[linkColor release];
 	if (textFrame) CFRelease(textFrame);
+	[activeLink release];
 	[super dealloc];
 }
 
@@ -212,24 +257,59 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	return nil;
 }
 
--(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-	if (self.onlyCatchTouchesOnLinks) {
-		return ([self linkAtPoint:point] != nil);
-	} else {
-		return [super pointInside:point withEvent:event];
+-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+	// never return self. always return the result of [super hitTest..].
+	// this takes userInteraction state, enabled, alpha values etc. into account
+	UIView *hitResult = [super hitTest:point withEvent:event];
+	
+	// don't check for links if the event was handled by one of the subviews
+	if (hitResult != self) {
+		return hitResult;
 	}
+	
+	if (self.onlyCatchTouchesOnLinks) {
+		BOOL didHitLink = ([self linkAtPoint:point] != nil);
+		if (!didHitLink) {
+			// not catch the touch if it didn't hit a link
+			return nil;
+		}
+	}
+	return hitResult;
 }
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch* touch = [touches anyObject];
+	CGPoint pt = [touch locationInView:self];
+	
+	[activeLink release];
+	activeLink = [[self linkAtPoint:pt] retain];
+	
+	// we're using activeLink to draw a highlight in -drawRect:
+	[self setNeedsDisplay];
+}
+
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch* touch = [touches anyObject];
 	CGPoint pt = [touch locationInView:self];
 	
-	NSTextCheckingResult* link = [self linkAtPoint:pt];
+	NSTextCheckingResult *linkAtTouchesEnded = [self linkAtPoint:pt];
 	
-	if (link) {
+	// we can check on equality of the links themselfes since the data detectors create new results
+	if (activeLink.URL && [activeLink.URL isEqual:linkAtTouchesEnded.URL]) {
 		BOOL openLink = (delegate && [delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
-		? [delegate attributedLabel:self shouldFollowLink:link] : YES;
-		if (openLink) [[UIApplication sharedApplication] openURL:link.URL];
+		? [delegate attributedLabel:self shouldFollowLink:activeLink] : YES;
+		if (openLink) [[UIApplication sharedApplication] openURL:activeLink.URL];
 	}
+	
+	[activeLink release];
+	activeLink = nil;
+	[self setNeedsDisplay];
+}
+
+-(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	[activeLink release];
+	activeLink = nil;
+	[self setNeedsDisplay];
 }
 
 
@@ -243,6 +323,9 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	if (_attributedText) {
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
 		CGContextSaveGState(ctx);
+		
+		// flipping the context to draw core text
+		// no need to flip our typographical bounds from now on
 		CGContextConcatCTM(ctx, CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f));
 		
 		if (self.shadowColor) {
@@ -271,9 +354,58 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		CGPathAddRect(path, NULL, rect);
 		if (textFrame) CFRelease(textFrame);		
 		textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
-		CFRelease(framesetter);
-		CTFrameDraw(textFrame, ctx);
 		CGPathRelease(path);
+		CFRelease(framesetter);
+		
+		// draw highlights for activeLink
+		if (activeLink) {
+			CGContextSaveGState(ctx);
+			CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y));
+			[[UIColor colorWithWhite:0.2 alpha:0.2] setFill];
+			
+			NSRange linkRange = activeLink.range;
+			
+			CFArrayRef lines = CTFrameGetLines(textFrame);
+			CFIndex lineCount = CFArrayGetCount(lines);
+			CGPoint lineOrigins[lineCount];
+			CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), lineOrigins);
+			for (CFIndex lineIndex = 0; lineIndex < lineCount; lineIndex++) {
+				CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
+				NSRange lineRange = NSRangeFromCFRange(CTLineGetStringRange(line));
+				NSRange lineLinkRange = NSIntersectionRange(lineRange, linkRange);
+				if (lineLinkRange.length == 0) {
+					continue; // with next line
+				}
+				
+				CFArrayRef runs = CTLineGetGlyphRuns(line);
+				CFIndex runCount = CFArrayGetCount(runs);
+				for (CFIndex runIndex = 0; runIndex < runCount; runIndex++) {
+					CTRunRef run = CFArrayGetValueAtIndex(runs, runIndex);
+					
+					NSRange runRange = NSRangeFromCFRange(CTRunGetStringRange(run));
+					NSRange runLinkRange = NSIntersectionRange(runRange, linkRange);
+					if (runLinkRange.length == 0) {
+						continue; // with next run
+					}
+					
+					CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
+					// flooring & ceiling so we hit pixels
+					linkRunRect = CGRectMake(floorf(CGRectGetMinX(linkRunRect)),
+											 floorf(CGRectGetMinY(linkRunRect)) - 3,	// TODO: find out where this offset comes from
+											 ceilf(CGRectGetWidth(linkRunRect)),
+											 ceilf(CGRectGetHeight(linkRunRect)));
+					linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
+					
+					if (!CGRectIsEmpty(linkRunRect)) {
+						CGContextFillRect(ctx, linkRunRect);
+					}
+				}
+			}
+			CGContextRestoreGState(ctx);
+		}
+		
+		CTFrameDraw(textFrame, ctx);
+
 		
 		CGContextRestoreGState(ctx);
 	} else {
