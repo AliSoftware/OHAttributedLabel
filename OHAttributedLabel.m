@@ -55,6 +55,50 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	}
 }
 
+CGPoint CGPointFlipped(CGPoint point, CGRect bounds) {
+	return CGPointMake(point.x, CGRectGetMaxY(bounds)-point.y);
+}
+
+CGRect CGRectFlipped(CGRect rect, CGRect bounds) {
+	return CGRectMake(CGRectGetMinX(rect),
+					  CGRectGetMaxY(bounds)-CGRectGetMaxY(rect),
+					  CGRectGetWidth(rect),
+					  CGRectGetHeight(rect));
+}
+
+NSRange NSRangeFromCFRange(CFRange range) {
+	return NSMakeRange(range.location, range.length);
+}
+
+CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin) {
+	CGFloat ascent = 0;
+	CGFloat descent = 0;
+	CGFloat leading = 0;
+	CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+	CGFloat height = ascent + descent;
+	
+	return CGRectMake(lineOrigin.x - leading,
+					  lineOrigin.y,
+					  width + leading,
+					  height);
+}
+
+CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin) {
+	CGFloat ascent = 0;
+	CGFloat descent = 0;
+	CGFloat leading = 0;
+	CGFloat width = CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &descent, &leading);
+	CGFloat height = ascent + descent;
+	
+	CGFloat xOffset = CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL);
+	
+	return CGRectMake(lineOrigin.x + xOffset - leading,
+					  lineOrigin.y,
+					  width + leading,
+					  height);
+}
+
+
 @interface OHAttributedLabel(/* Private */)
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
@@ -279,6 +323,9 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	if (_attributedText) {
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
 		CGContextSaveGState(ctx);
+		
+		// flipping the context to draw core text
+		// no need to flip our typographical bounds from now on
 		CGContextConcatCTM(ctx, CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f));
 		
 		if (self.shadowColor) {
@@ -307,9 +354,58 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 		CGPathAddRect(path, NULL, rect);
 		if (textFrame) CFRelease(textFrame);		
 		textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
-		CFRelease(framesetter);
-		CTFrameDraw(textFrame, ctx);
 		CGPathRelease(path);
+		CFRelease(framesetter);
+		
+		// draw highlights for activeLink
+		if (activeLink) {
+			CGContextSaveGState(ctx);
+			CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y));
+			[[UIColor colorWithWhite:0.2 alpha:0.2] setFill];
+			
+			NSRange linkRange = activeLink.range;
+			
+			CFArrayRef lines = CTFrameGetLines(textFrame);
+			CFIndex lineCount = CFArrayGetCount(lines);
+			CGPoint lineOrigins[lineCount];
+			CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), lineOrigins);
+			for (CFIndex lineIndex = 0; lineIndex < lineCount; lineIndex++) {
+				CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
+				NSRange lineRange = NSRangeFromCFRange(CTLineGetStringRange(line));
+				NSRange lineLinkRange = NSIntersectionRange(lineRange, linkRange);
+				if (lineLinkRange.length == 0) {
+					continue; // with next line
+				}
+				
+				CFArrayRef runs = CTLineGetGlyphRuns(line);
+				CFIndex runCount = CFArrayGetCount(runs);
+				for (CFIndex runIndex = 0; runIndex < runCount; runIndex++) {
+					CTRunRef run = CFArrayGetValueAtIndex(runs, runIndex);
+					
+					NSRange runRange = NSRangeFromCFRange(CTRunGetStringRange(run));
+					NSRange runLinkRange = NSIntersectionRange(runRange, linkRange);
+					if (runLinkRange.length == 0) {
+						continue; // with next run
+					}
+					
+					CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
+					// flooring & ceiling so we hit pixels
+					linkRunRect = CGRectMake(floorf(CGRectGetMinX(linkRunRect)),
+											 floorf(CGRectGetMinY(linkRunRect)) - 3,	// TODO: find out where this offset comes from
+											 ceilf(CGRectGetWidth(linkRunRect)),
+											 ceilf(CGRectGetHeight(linkRunRect)));
+					linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
+					
+					if (!CGRectIsEmpty(linkRunRect)) {
+						CGContextFillRect(ctx, linkRunRect);
+					}
+				}
+			}
+			CGContextRestoreGState(ctx);
+		}
+		
+		CTFrameDraw(textFrame, ctx);
+
 		
 		CGContextRestoreGState(ctx);
 	} else {
