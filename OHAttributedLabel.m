@@ -99,6 +99,18 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 					  height);
 }
 
+BOOL CTLineContainsCharactersFromStringRange(CTLineRef line, NSRange range) {
+	NSRange lineRange = NSRangeFromCFRange(CTLineGetStringRange(line));
+	NSRange intersectedRange = NSIntersectionRange(lineRange, range);
+	return (intersectedRange.length > 0);
+}
+
+BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
+	NSRange runRange = NSRangeFromCFRange(CTRunGetStringRange(run));
+	NSRange intersectedRange = NSIntersectionRange(runRange, range);
+	return (intersectedRange.length > 0);
+}
+
 
 @interface OHAttributedLabel(/* Private */)
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
@@ -364,7 +376,7 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 			CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y));
 			[[UIColor colorWithWhite:0.2 alpha:0.2] setFill];
 			
-			NSRange linkRange = activeLink.range;
+			NSRange activeLinkRange = activeLink.range;
 			
 			CFArrayRef lines = CTFrameGetLines(textFrame);
 			CFIndex lineCount = CFArrayGetCount(lines);
@@ -372,30 +384,39 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 			CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), lineOrigins);
 			for (CFIndex lineIndex = 0; lineIndex < lineCount; lineIndex++) {
 				CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
-				NSRange lineRange = NSRangeFromCFRange(CTLineGetStringRange(line));
-				NSRange lineLinkRange = NSIntersectionRange(lineRange, linkRange);
-				if (lineLinkRange.length == 0) {
+				
+				if (!CTLineContainsCharactersFromStringRange(line, activeLinkRange)) {
 					continue; // with next line
 				}
+				
+				// we use this rect to union the bounds of successive runs that belong to the same active link
+				CGRect unionRect = CGRectZero;
 				
 				CFArrayRef runs = CTLineGetGlyphRuns(line);
 				CFIndex runCount = CFArrayGetCount(runs);
 				for (CFIndex runIndex = 0; runIndex < runCount; runIndex++) {
 					CTRunRef run = CFArrayGetValueAtIndex(runs, runIndex);
 					
-					NSRange runRange = NSRangeFromCFRange(CTRunGetStringRange(run));
-					NSRange runLinkRange = NSIntersectionRange(runRange, linkRange);
-					if (runLinkRange.length == 0) {
+					if (!CTRunContainsCharactersFromStringRange(run, activeLinkRange)) {
+						if (!CGRectIsEmpty(unionRect)) {
+							CGContextFillRect(ctx, unionRect);
+							unionRect = CGRectZero;
+						}
 						continue; // with next run
 					}
 					
 					CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
 					linkRunRect = CGRectIntegral(linkRunRect);		// putting the rect on pixel edges
 					linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
-					
-					if (!CGRectIsEmpty(linkRunRect)) {
-						CGContextFillRect(ctx, linkRunRect);
+					if (CGRectIsEmpty(unionRect)) {
+						unionRect = linkRunRect;
+					} else {
+						unionRect = CGRectUnion(unionRect, linkRunRect);
 					}
+				}
+				if (!CGRectIsEmpty(unionRect)) {
+					CGContextFillRect(ctx, unionRect);
+					unionRect = CGRectZero;
 				}
 			}
 			CGContextRestoreGState(ctx);
@@ -403,7 +424,6 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 		
 		CTFrameDraw(textFrame, ctx);
 
-		
 		CGContextRestoreGState(ctx);
 	} else {
 		[super drawTextInRect:aRect];
