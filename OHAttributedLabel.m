@@ -55,6 +55,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	}
 }
 
+// Don't use this method for origins. Origins always depend on the height of the rect.
 CGPoint CGPointFlipped(CGPoint point, CGRect bounds) {
 	return CGPointMake(point.x, CGRectGetMaxY(bounds)-point.y);
 }
@@ -78,7 +79,7 @@ CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin) {
 	CGFloat height = ascent + descent;
 	
 	return CGRectMake(lineOrigin.x - leading,
-					  lineOrigin.y,
+					  lineOrigin.y - descent,
 					  width + leading,
 					  height);
 }
@@ -93,7 +94,7 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 	CGFloat xOffset = CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL);
 	
 	return CGRectMake(lineOrigin.x + xOffset - leading,
-					  lineOrigin.y,
+					  lineOrigin.y - descent,
 					  width + leading,
 					  height);
 }
@@ -389,11 +390,7 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 					}
 					
 					CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
-					// flooring & ceiling so we hit pixels
-					linkRunRect = CGRectMake(floorf(CGRectGetMinX(linkRunRect)),
-											 floorf(CGRectGetMinY(linkRunRect)) - 3,	// TODO: find out where this offset comes from
-											 ceilf(CGRectGetWidth(linkRunRect)),
-											 ceilf(CGRectGetHeight(linkRunRect)));
+					linkRunRect = CGRectIntegral(linkRunRect);		// putting the rect on pixel edges
 					linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
 					
 					if (!CGRectIsEmpty(linkRunRect)) {
