@@ -9,8 +9,10 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * - The above copyright notice and this permission notice shall be included in
+ *   all copies or substantial portions of the Software.
+ * - This project, the author (Olivier Halligon) and the URL to this github source
+ *   have to be mentioned in your credits (AboutBox and/or CREDITS file).
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,8 +25,8 @@
  ***********************************************************************************
  *
  * Created by Olivier Halligon  (AliSoftware) on 20 Jul. 2010.
- * Any comment or suggestion welcome. Referencing this project in your AboutBox is appreciated.
- * Please tell me if you use this class so we can cross-reference our projects.
+ * Any comment or suggestion welcome. Don't forget to reference this project in your AboutBox.
+ * E-mailing me to let me know you use this project is appreciated; we may thus cross-reference projects.
  *
  ***********************************************************************************/
 
@@ -111,18 +113,21 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	return (intersectedRange.length > 0);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 
 @interface OHAttributedLabel(/* Private */)
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
 -(NSMutableAttributedString*)attributedTextWithLinks;
+-(void)drawActiveLinkHighlightForRect:(CGRect)rect;
 @end
 
 /////////////////////////////////////////////////////////////////////////////
 
 
 @implementation OHAttributedLabel
-@synthesize linkColor, underlineLinks, centerVertically, automaticallyDetectLinks, onlyCatchTouchesOnLinks, extendBottomToFit;
+@synthesize linkColor, highlightedLinkColor, underlineLinks;
+@synthesize centerVertically, automaticallyDetectLinks, onlyCatchTouchesOnLinks, extendBottomToFit;
 @synthesize delegate;
 
 
@@ -135,6 +140,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 - (void)commonInit {
 	customLinks = [[NSMutableArray alloc] init];
 	linkColor = [[UIColor blueColor] retain];
+	highlightedLinkColor = [[UIColor colorWithWhite:0.4 alpha:0.3] retain];
 	underlineLinks = YES;
 	automaticallyDetectLinks = YES;
 	onlyCatchTouchesOnLinks = NO;
@@ -165,6 +171,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[_attributedText release];
 	[customLinks release];
 	[linkColor release];
+	[highlightedLinkColor release];
 	if (textFrame) CFRelease(textFrame);
 	[activeLink release];
 	[super dealloc];
@@ -372,54 +379,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		
 		// draw highlights for activeLink
 		if (activeLink) {
-			CGContextSaveGState(ctx);
-			CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y));
-			[[UIColor colorWithWhite:0.2 alpha:0.2] setFill];
-			
-			NSRange activeLinkRange = activeLink.range;
-			
-			CFArrayRef lines = CTFrameGetLines(textFrame);
-			CFIndex lineCount = CFArrayGetCount(lines);
-			CGPoint lineOrigins[lineCount];
-			CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), lineOrigins);
-			for (CFIndex lineIndex = 0; lineIndex < lineCount; lineIndex++) {
-				CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
-				
-				if (!CTLineContainsCharactersFromStringRange(line, activeLinkRange)) {
-					continue; // with next line
-				}
-				
-				// we use this rect to union the bounds of successive runs that belong to the same active link
-				CGRect unionRect = CGRectZero;
-				
-				CFArrayRef runs = CTLineGetGlyphRuns(line);
-				CFIndex runCount = CFArrayGetCount(runs);
-				for (CFIndex runIndex = 0; runIndex < runCount; runIndex++) {
-					CTRunRef run = CFArrayGetValueAtIndex(runs, runIndex);
-					
-					if (!CTRunContainsCharactersFromStringRange(run, activeLinkRange)) {
-						if (!CGRectIsEmpty(unionRect)) {
-							CGContextFillRect(ctx, unionRect);
-							unionRect = CGRectZero;
-						}
-						continue; // with next run
-					}
-					
-					CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
-					linkRunRect = CGRectIntegral(linkRunRect);		// putting the rect on pixel edges
-					linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
-					if (CGRectIsEmpty(unionRect)) {
-						unionRect = linkRunRect;
-					} else {
-						unionRect = CGRectUnion(unionRect, linkRunRect);
-					}
-				}
-				if (!CGRectIsEmpty(unionRect)) {
-					CGContextFillRect(ctx, unionRect);
-					unionRect = CGRectZero;
-				}
-			}
-			CGContextRestoreGState(ctx);
+			[self drawActiveLinkHighlightForRect:rect];
 		}
 		
 		CTFrameDraw(textFrame, ctx);
@@ -428,6 +388,59 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	} else {
 		[super drawTextInRect:aRect];
 	}
+}
+
+-(void)drawActiveLinkHighlightForRect:(CGRect)rect
+{
+	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(ctx);
+	CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y));
+	[self.highlightedLinkColor setFill];
+	
+	NSRange activeLinkRange = activeLink.range;
+	
+	CFArrayRef lines = CTFrameGetLines(textFrame);
+	CFIndex lineCount = CFArrayGetCount(lines);
+	CGPoint lineOrigins[lineCount];
+	CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), lineOrigins);
+	for (CFIndex lineIndex = 0; lineIndex < lineCount; lineIndex++) {
+		CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
+		
+		if (!CTLineContainsCharactersFromStringRange(line, activeLinkRange)) {
+			continue; // with next line
+		}
+		
+		// we use this rect to union the bounds of successive runs that belong to the same active link
+		CGRect unionRect = CGRectZero;
+		
+		CFArrayRef runs = CTLineGetGlyphRuns(line);
+		CFIndex runCount = CFArrayGetCount(runs);
+		for (CFIndex runIndex = 0; runIndex < runCount; runIndex++) {
+			CTRunRef run = CFArrayGetValueAtIndex(runs, runIndex);
+			
+			if (!CTRunContainsCharactersFromStringRange(run, activeLinkRange)) {
+				if (!CGRectIsEmpty(unionRect)) {
+					CGContextFillRect(ctx, unionRect);
+					unionRect = CGRectZero;
+				}
+				continue; // with next run
+			}
+			
+			CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
+			linkRunRect = CGRectIntegral(linkRunRect);		// putting the rect on pixel edges
+			linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
+			if (CGRectIsEmpty(unionRect)) {
+				unionRect = linkRunRect;
+			} else {
+				unionRect = CGRectUnion(unionRect, linkRunRect);
+			}
+		}
+		if (!CGRectIsEmpty(unionRect)) {
+			CGContextFillRect(ctx, unionRect);
+			unionRect = CGRectZero;
+		}
+	}
+	CGContextRestoreGState(ctx);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {

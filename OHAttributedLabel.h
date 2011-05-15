@@ -9,8 +9,10 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * - The above copyright notice and this permission notice shall be included in
+ *   all copies or substantial portions of the Software.
+ * - This project, the author (Olivier Halligon) and the URL to this github source
+ *   have to be mentioned in your credits (AboutBox and/or CREDITS file).
  * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,8 +25,8 @@
  ***********************************************************************************
  *
  * Created by Olivier Halligon  (AliSoftware) on 20 Jul. 2010.
- * Any comment or suggestion welcome. Referencing this project in your AboutBox is appreciated.
- * Please tell me if you use this class so we can cross-reference our projects.
+ * Any comment or suggestion welcome. Don't forget to reference this project in your AboutBox.
+ * E-mailing me to let me know you use this project is appreciated; we may thus cross-reference projects.
  *
  ***********************************************************************************/
 
@@ -59,6 +61,7 @@
 /* Links configuration */
 @property(nonatomic, assign) BOOL automaticallyDetectLinks; //!< Defaults to YES
 @property(nonatomic, retain) UIColor* linkColor; //!< Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
+@property(nonatomic, retain) UIColor* highlightedLinkColor; //[UIColor colorWithWhite:0.2 alpha:0.5]
 @property(nonatomic, assign) BOOL underlineLinks; //!< Defaults to YES. See also OHAttributedLabelDelegate
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
 -(void)removeAllCustomLinks;
