@@ -99,6 +99,11 @@
 	label2.textAlignment = (label2.textAlignment+1) % 4;
 }
 
+-(IBAction)changeSize {
+	CGRect r = label2.frame;
+	r.size.width = 500 - r.size.width; // switch between 200 and 300px
+	label2.frame = r;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////

@@ -21,6 +21,7 @@
 -(IBAction)makeWorldBold;
 -(IBAction)fillLabel2;
 -(IBAction)changeAlignment;
+-(IBAction)changeSize;
 -(IBAction)resetVisitedLinks;
 @end
 

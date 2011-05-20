@@ -341,6 +341,13 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 // MARK: Drawing Text
 /////////////////////////////////////////////////////////////////////////////
 
+-(void)resetTextFrame {
+	if (textFrame) {
+		CFRelease(textFrame);
+		textFrame = NULL;
+	}
+}
+
 - (void)drawTextInRect:(CGRect)aRect
 {
 	if (_attributedText) {
@@ -359,30 +366,30 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		if (self.highlighted && self.highlightedTextColor != nil) {
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
 		}
-		
-		CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
-		CGRect rect = self.bounds;
-		if (self.centerVertically || self.extendBottomToFit) {
-			CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(rect.size.width,CGFLOAT_MAX),NULL);
-			if (self.extendBottomToFit) {
-				CGFloat delta = MAX(0.f , ceilf(sz.height - rect.size.height)) + 10 /* Security margin */;
-				rect.origin.y -= delta;
-				rect.size.height += delta;
+		if (textFrame == NULL) {
+			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
+			drawingRect = self.bounds;
+			if (self.centerVertically || self.extendBottomToFit) {
+				CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(drawingRect.size.width,CGFLOAT_MAX),NULL);
+				if (self.extendBottomToFit) {
+					CGFloat delta = MAX(0.f , ceilf(sz.height - drawingRect.size.height)) + 10 /* Security margin */;
+					drawingRect.origin.y -= delta;
+					drawingRect.size.height += delta;
+				}
+				if (self.centerVertically) {
+					drawingRect.origin.y -= (drawingRect.size.height - sz.height)/2;
+				}
 			}
-			if (self.centerVertically) {
-				rect.origin.y -= (rect.size.height - sz.height)/2;
-			}
+			CGMutablePathRef path = CGPathCreateMutable();
+			CGPathAddRect(path, NULL, drawingRect);
+			textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+			CGPathRelease(path);
+			CFRelease(framesetter);
 		}
-		CGMutablePathRef path = CGPathCreateMutable();
-		CGPathAddRect(path, NULL, rect);
-		if (textFrame) CFRelease(textFrame);		
-		textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
-		CGPathRelease(path);
-		CFRelease(framesetter);
 		
 		// draw highlights for activeLink
 		if (activeLink) {
-			[self drawActiveLinkHighlightForRect:rect];
+			[self drawActiveLinkHighlightForRect:drawingRect];
 		}
 		
 		CTFrameDraw(textFrame, ctx);
@@ -481,8 +488,11 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 -(void)setAttributedText:(NSAttributedString*)attributedText {
 	[_attributedText release];
 	_attributedText = [attributedText mutableCopy];
+	
+	[self resetTextFrame];
 	[self setNeedsDisplay];
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -494,6 +504,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 }
 -(void)setFont:(UIFont *)font {
 	[_attributedText setFont:font];
+	[self resetTextFrame];
 	[super setFont:font]; // will call setNeedsDisplay too
 }
 -(void)setTextColor:(UIColor *)color {
@@ -504,16 +515,19 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(alignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
 	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+	[self resetTextFrame];
 	[super setTextAlignment:alignment]; // will call setNeedsDisplay too
 }
 -(void)setLineBreakMode:(UILineBreakMode)lineBreakMode {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(lineBreakMode);
 	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+	[self resetTextFrame];
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
 }
 -(void)setCenterVertically:(BOOL)val {
 	centerVertically = val;
+	[self resetTextFrame];
 	[self setNeedsDisplay];
 }
 
@@ -524,7 +538,14 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(void)setExtendBottomToFit:(BOOL)val {
 	extendBottomToFit = val;
+	[self resetTextFrame];
 	[self setNeedsDisplay];
+}
+
+-(void)layoutSubviews {
+	// Alswo called when changing bounds and frame of the label
+	[self resetTextFrame];
+	[super layoutSubviews];
 }
 
 /////////////////////////////////////////////////////////////////////////////
