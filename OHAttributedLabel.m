@@ -78,11 +78,11 @@ CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin) {
 	CGFloat descent = 0;
 	CGFloat leading = 0;
 	CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-	CGFloat height = ascent + descent;
+	CGFloat height = ascent + descent /* + leading */;
 	
-	return CGRectMake(lineOrigin.x - leading,
+	return CGRectMake(lineOrigin.x,
 					  lineOrigin.y - descent,
-					  width + leading,
+					  width,
 					  height);
 }
 
@@ -256,22 +256,30 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	 }];
 	return foundResult;
 }
--(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt {
+
+-(NSTextCheckingResult*)linkAtPoint:(CGPoint)point {
 	static const CGFloat kVMargin = 5.f;
-	if (!CGRectContainsPoint(CGRectInset(self.bounds, 0, -kVMargin), pt)) return nil;
+	if (!CGRectContainsPoint(CGRectInset(drawingRect, 0, -kVMargin), point)) return nil;
 	
 	CFArrayRef lines = CTFrameGetLines(textFrame);
-	int nbLines = CFArrayGetCount(lines);
-	CGFloat lineHeight = 0;
+	CFIndex nbLines = CFArrayGetCount(lines);
 	NSTextCheckingResult* link = nil;
+	
 	CGPoint origins[nbLines];
 	CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), origins);
-	for (int i=0;i<nbLines;++i) {
-		CGFloat lineY = (self.bounds.size.height-origins[i].y); // convert to "origin on top" coords
-		CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-		(void)CTLineGetTypographicBounds(line, &lineHeight, NULL, NULL);
-		if ((lineY-kVMargin < pt.y) && (pt.y < lineY+lineHeight+kVMargin)){
-			CGPoint relativePoint = CGPointMake(pt.x-origins[i].x, pt.y-lineY);
+	
+	for (int lineIndex=0 ; lineIndex<nbLines ; ++lineIndex) {
+		// this actually the origin of the line rect, so we need the whole rect to flip it
+		CGPoint lineOriginFlipped = origins[lineIndex];
+		
+		CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
+		CGRect lineRectFlipped = CTLineGetTypographicBoundsAsRect(line, lineOriginFlipped);
+		CGRect lineRect = CGRectFlipped(lineRectFlipped, CGRectFlipped(drawingRect,self.bounds));
+		
+		lineRect = CGRectInset(lineRect, 0, -kVMargin);
+		if (CGRectContainsPoint(lineRect, point)) {
+			CGPoint relativePoint = CGPointMake(point.x-CGRectGetMinX(lineRect),
+												point.y-CGRectGetMinY(lineRect));
 			CFIndex idx = CTLineGetStringIndexForPosition(line, relativePoint);
 			link = ([self linkAtCharacterIndex:idx]);
 			if (link) return link;
@@ -489,7 +497,6 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[_attributedText release];
 	_attributedText = [attributedText mutableCopy];
 	
-	[self resetTextFrame];
 	[self setNeedsDisplay];
 }
 
@@ -504,7 +511,6 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 }
 -(void)setFont:(UIFont *)font {
 	[_attributedText setFont:font];
-	[self resetTextFrame];
 	[super setFont:font]; // will call setNeedsDisplay too
 }
 -(void)setTextColor:(UIColor *)color {
@@ -515,19 +521,16 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(alignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
 	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
-	[self resetTextFrame];
 	[super setTextAlignment:alignment]; // will call setNeedsDisplay too
 }
 -(void)setLineBreakMode:(UILineBreakMode)lineBreakMode {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(lineBreakMode);
 	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
-	[self resetTextFrame];
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
 }
 -(void)setCenterVertically:(BOOL)val {
 	centerVertically = val;
-	[self resetTextFrame];
 	[self setNeedsDisplay];
 }
 
@@ -538,14 +541,12 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(void)setExtendBottomToFit:(BOOL)val {
 	extendBottomToFit = val;
-	[self resetTextFrame];
 	[self setNeedsDisplay];
 }
 
--(void)layoutSubviews {
-	// Alswo called when changing bounds and frame of the label
+-(void)setNeedsDisplay {
 	[self resetTextFrame];
-	[super layoutSubviews];
+	[super setNeedsDisplay];
 }
 
 /////////////////////////////////////////////////////////////////////////////

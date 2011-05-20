@@ -95,8 +95,12 @@
 	[attrStr release];
 }
 
--(IBAction)changeAlignment {
+-(IBAction)changeHAlignment {
 	label2.textAlignment = (label2.textAlignment+1) % 4;
+}
+
+-(IBAction)changeVAlignment {
+	label2.centerVertically = !label2.centerVertically;
 }
 
 -(IBAction)changeSize {
