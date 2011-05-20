@@ -230,18 +230,21 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx {
 	__block NSTextCheckingResult* foundResult = nil;
-	NSError* error = nil;
-	NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
-	[linkDetector enumerateMatchesInString:[_attributedText string] options:0 range:NSMakeRange(0,[[_attributedText string] length])
-								usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
-	 {
-		 NSRange r = [result range];
-		 if (NSLocationInRange(idx, r)) {
-			 foundResult = [[result retain] autorelease];
-			 *stop = YES;
-		 }
-	 }];
-	if (foundResult) return foundResult;
+	
+	if (self.automaticallyDetectLinks) {
+		NSError* error = nil;
+		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
+		[linkDetector enumerateMatchesInString:[_attributedText string] options:0 range:NSMakeRange(0,[[_attributedText string] length])
+									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
+		 {
+			 NSRange r = [result range];
+			 if (NSLocationInRange(idx, r)) {
+				 foundResult = [[result retain] autorelease];
+				 *stop = YES;
+			 }
+		 }];
+		if (foundResult) return foundResult;
+	}
 	
 	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop)
 	 {
