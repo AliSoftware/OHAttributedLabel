@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0958C7CE13229622006A71FF /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */; };
 		099788DC137A06F000801886 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 099788DB137A06F000801886 /* Icon.png */; };
+		09978CDB138730F700801886 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 09978CD9138730F700801886 /* LICENSE */; };
 		09AB4BBD130EEFC700D4B9EB /* OHAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */; };
 		09AB4BD6130EF1D700D4B9EB /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB4BD5130EF1D700D4B9EB /* CoreText.framework */; };
 		1D3623260D0F684500981E51 /* AttributedLabel_ExampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AttributedLabel_ExampleAppDelegate.m */; };
@@ -23,6 +24,8 @@
 		0958C7CC13229622006A71FF /* NSAttributedString+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Attributes.h"; sourceTree = "<group>"; };
 		0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Attributes.m"; sourceTree = "<group>"; };
 		099788DB137A06F000801886 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		09978CD9138730F700801886 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = SOURCE_ROOT; };
+		09978CDA138730F700801886 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README; path = ../README; sourceTree = SOURCE_ROOT; };
 		09AB4BBB130EEFC700D4B9EB /* OHAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHAttributedLabel.h; sourceTree = "<group>"; };
 		09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHAttributedLabel.m; sourceTree = "<group>"; };
 		09AB4BD5130EF1D700D4B9EB /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -85,6 +88,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				09978CDA138730F700801886 /* README */,
+				09978CD9138730F700801886 /* LICENSE */,
 				09AB4BBA130EEF9C00D4B9EB /* OHAttributedLabel */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -176,6 +181,7 @@
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				099788DC137A06F000801886 /* Icon.png in Resources */,
+				09978CDB138730F700801886 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
