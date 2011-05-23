@@ -454,7 +454,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		}
 		if (!CGRectIsEmpty(unionRect)) {
 			CGContextFillRect(ctx, unionRect);
-			unionRect = CGRectZero;
+			//unionRect = CGRectZero;
 		}
 	}
 	CGContextRestoreGState(ctx);

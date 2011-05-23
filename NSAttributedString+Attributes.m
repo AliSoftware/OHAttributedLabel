@@ -62,6 +62,7 @@
 	// kCTFontAttributeName
 	CTFontRef aFont = CTFontCreateWithName((CFStringRef)fontName, size, NULL);
 	if (!aFont) return;
+	[self removeAttribute:(NSString * )kCTFontAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
 	CFRelease(aFont);
 }
@@ -76,10 +77,12 @@
 	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)attr);
 	if (!desc) return;
 	CTFontRef aFont = CTFontCreateWithFontDescriptor(desc, size, NULL);
+	CFRelease(desc);
 	if (!aFont) return;
+
+	[self removeAttribute:(NSString * )kCTFontAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
 	CFRelease(aFont);
-	CFRelease(desc);
 }
 
 -(void)setTextColor:(UIColor*)color {
@@ -87,6 +90,7 @@
 }
 -(void)setTextColor:(UIColor*)color range:(NSRange)range {
 	// kCTForegroundColorAttributeName
+	[self removeAttribute:(NSString * )kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:range];
 }
 
@@ -98,6 +102,7 @@
 	[self setTextUnderlineStyle:style range:range];
 }
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range {
+	[self removeAttribute:(NSString * )kCTUnderlineStyleAttributeNameg range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
