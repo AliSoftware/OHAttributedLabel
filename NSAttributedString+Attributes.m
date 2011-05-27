@@ -102,7 +102,7 @@
 	[self setTextUnderlineStyle:style range:range];
 }
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range {
-	[self removeAttribute:(NSString * )kCTUnderlineStyleAttributeNameg range:range]; // Work around for Apple leak
+	[self removeAttribute:(NSString * )kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
