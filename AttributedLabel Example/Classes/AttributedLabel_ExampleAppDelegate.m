@@ -54,7 +54,7 @@
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	label1.attributedText = attrStr;
 	// and add a link to the "share your food!" text
-	[label1 addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net/dish/list"] inRange:[txt rangeOfString:@TXT_LINK]];
+	[label1 addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net"] inRange:[txt rangeOfString:@TXT_LINK]];
 	 
 	// Use the "Justified" alignment
 	label1.textAlignment = UITextAlignmentJustify;
