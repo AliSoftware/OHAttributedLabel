@@ -248,7 +248,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
 	 {
 		 NSRange r = [(NSTextCheckingResult*)obj range];
-		 if (NSLocationInRange(aidx, r)) {
+		 if (NSLocationInRange(idx, r)) {
 			 foundResult = [[obj retain] autorelease];
 			 *stop = YES;
 		 }
