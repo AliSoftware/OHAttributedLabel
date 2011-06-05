@@ -245,7 +245,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		if (foundResult) return foundResult;
 	}
 	
-	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop)
+	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
 	 {
 		 NSRange r = [(NSTextCheckingResult*)obj range];
 		 if (NSLocationInRange(idx, r)) {
