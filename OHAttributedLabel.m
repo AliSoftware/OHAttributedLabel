@@ -261,6 +261,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	if (!CGRectContainsPoint(CGRectInset(drawingRect, 0, -kVMargin), point)) return nil;
 	
 	CFArrayRef lines = CTFrameGetLines(textFrame);
+	if (!lines) return nil;
 	CFIndex nbLines = CFArrayGetCount(lines);
 	NSTextCheckingResult* link = nil;
 	
