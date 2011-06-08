@@ -195,6 +195,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(NSMutableAttributedString*)attributedTextWithLinks {
 	NSMutableAttributedString* str = [self.attributedText mutableCopy];
+	if (!str) return nil;
+	
 	if (self.automaticallyDetectLinks) {
 		NSError* error = nil;
 		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
@@ -463,6 +465,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 - (CGSize)sizeThatFits:(CGSize)size {
 	NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
+	if (!attrStrWithLinks) return CGSizeZero;
 	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
 	CGFloat w = size.width;
 	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(w,CGFLOAT_MAX),NULL);
