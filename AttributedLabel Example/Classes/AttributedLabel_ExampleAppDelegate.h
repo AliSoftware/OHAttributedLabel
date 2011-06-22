@@ -13,6 +13,7 @@
     UIWindow* window;
 	IBOutlet OHAttributedLabel* label1;
 	IBOutlet OHAttributedLabel* label2;
+	IBOutlet OHAttributedLabel* label3;
 	
 	NSMutableSet* visitedLinks;
 }
@@ -23,6 +24,7 @@
 -(IBAction)changeHAlignment;
 -(IBAction)changeVAlignment;
 -(IBAction)changeSize;
+-(IBAction)fillLabel3;
 -(IBAction)resetVisitedLinks;
 @end
 

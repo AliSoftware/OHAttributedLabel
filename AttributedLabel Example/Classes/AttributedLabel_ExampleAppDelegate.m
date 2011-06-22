@@ -25,6 +25,7 @@
 	/* Don't forget to add the CoreText framework in your project ! */
 	[self fillLabel1];
 	[self fillLabel2];
+	[self fillLabel3];
 	
     return YES;
 }
@@ -33,7 +34,13 @@
 }
 
 
+
+
 /////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Label 1 : Simple text with bold and custom link.
+/////////////////////////////////////////////////////////////////////////////
+
 
 
 #define TXT_BEGIN "Hello World! How are you? Don't forget to "
@@ -75,6 +82,18 @@
 }
 
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Label 2 : Alignment, Size, etc
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
 -(IBAction)fillLabel2 {
 	// Suppose you already have set the following properties of the myAttributedLabel object in InterfaceBuilder:
 	// - 'text' set to "Hello World!"
@@ -95,6 +114,7 @@
 	[attrStr release];
 }
 
+
 -(IBAction)changeHAlignment {
 	label2.textAlignment = (label2.textAlignment+1) % 4;
 }
@@ -107,6 +127,21 @@
 	CGRect r = label2.frame;
 	r.size.width = 500 - r.size.width; // switch between 200 and 300px
 	label2.frame = r;
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Label 3 : Using Links for navigation in your app
+/////////////////////////////////////////////////////////////////////////////
+
+
+-(IBAction)fillLabel3 {
+	NSRange linkRange = [label3.text rangeOfString:@"internal navigation"];
+	[label3 addCustomLink:[NSURL URLWithString:@"user://tom1362"] inRange:linkRange];
+	label3.centerVertically = YES;
 }
 
 
@@ -128,13 +163,31 @@
 -(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo {
 	[visitedLinks addObject:linkInfo.URL];
 	[attributedLabel setNeedsDisplay];
-	return YES;
+	
+	if ([[linkInfo.URL scheme] isEqualToString:@"user"]) {
+		// We use this arbitrary URL scheme to handle custom actions
+		// So URLs like "user://xxx" will be handled here instead of opening in Safari.
+		// Note: in the above example, "xxx" is the 'host' of the URL
+
+		NSString* user = [linkInfo.URL host];
+		NSString* msg = [NSString stringWithFormat:@"Here you should display the profile of user %@ on a new screen.",user];
+		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"User Profile" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+		[alert release];
+		
+		// Prevent the URL from opening as we handled here manually instead
+		return NO;
+	} else {
+		// Execute the default behavior, which is opening the URL in Safari.
+		return YES;
+	}
 }
 
 -(IBAction)resetVisitedLinks {
 	[visitedLinks removeAllObjects];
 	[label1 setNeedsDisplay];
 	[label2 setNeedsDisplay];
+	[label3 setNeedsDisplay];
 }
 
 /////////////////////////////////////////////////////////////////////////////
