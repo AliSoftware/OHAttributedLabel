@@ -171,7 +171,10 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[customLinks release];
 	[linkColor release];
 	[highlightedLinkColor release];
-	if (textFrame) CFRelease(textFrame);
+	if (textFrame) {
+            CFRelease(textFrame);
+            textFrame = NULL;
+        }
 	[activeLink release];
 	[super dealloc];
 }
