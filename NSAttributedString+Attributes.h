@@ -66,6 +66,9 @@
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;
+
+-(void)setSuperscript:(BOOL)isSuperscript range:(NSRange)range; // Superscript (text above baseline, like for the "square" symbol
+-(void)setSubscript:(BOOL)isSubscript range:(NSRange)range;   // Subscript (text below the baseline)
 @end
 
 
