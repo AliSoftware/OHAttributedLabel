@@ -118,6 +118,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
 -(NSMutableAttributedString*)attributedTextWithLinks;
+-(void)resetTextFrame;
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect;
 @end
 
@@ -136,7 +137,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 // MARK: Init/Dealloc
 /////////////////////////////////////////////////////////////////////////////
 
-- (void)commonInit {
+- (void)commonInit
+{
 	customLinks = [[NSMutableArray alloc] init];
 	linkColor = [[UIColor blueColor] retain];
 	highlightedLinkColor = [[UIColor colorWithWhite:0.4 alpha:0.3] retain];
@@ -166,16 +168,16 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	return self;
 }
 
--(void)dealloc {
+-(void)dealloc
+{
 	[_attributedText release];
+	[self resetTextFrame];
+
 	[customLinks release];
 	[linkColor release];
 	[highlightedLinkColor release];
-	if (textFrame) {
-            CFRelease(textFrame);
-            textFrame = NULL;
-        }
 	[activeLink release];
+	
 	[super dealloc];
 }
 
@@ -473,7 +475,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	CGFloat w = size.width;
 	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(w,CGFLOAT_MAX),NULL);
 	if (framesetter) CFRelease(framesetter);
-	return CGSizeMake(sz.width,sz.height+1); // take 1pt of margin for security
+	return CGSizeMake( floorf(sz.width+1) , floorf(sz.height+1) ); // take 1pt of margin for security
 }
 
 
