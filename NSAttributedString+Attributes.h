@@ -43,6 +43,12 @@
 @interface NSAttributedString (OHCommodityConstructors)
 +(id)attributedStringWithString:(NSString*)string;
 +(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr;
+
+//! Commodity method that call the following sizeConstrainedToSize:fitRange: method with NULL for the fitRange parameter
+-(CGSize)sizeConstrainedToSize:(CGSize)maxSize;
+//! if fitRange is not NULL, on return it will contain the used range that actually fits the constrained size.
+//! Note: Use CGFLOAT_MAX for the CGSize's height if you don't want a constraint for the height.
+-(CGSize)sizeConstrainedToSize:(CGSize)maxSize fitRange:(NSRange*)fitRange;
 @end
 
 

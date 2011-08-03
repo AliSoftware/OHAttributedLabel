@@ -45,7 +45,22 @@
 +(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr {
 	return attrStr ? [[[self alloc] initWithAttributedString:attrStr] autorelease] : nil;
 }
+
+-(CGSize)sizeConstrainedToSize:(CGSize)maxSize {
+	return [self sizeConstrainedToSize:maxSize fitRange:NULL];
+}
+-(CGSize)sizeConstrainedToSize:(CGSize)maxSize fitRange:(NSRange*)fitRange {
+	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self);
+	CFRange fitCFRange = CFRangeMake(0,0);
+	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,maxSize,&fitCFRange);
+	if (framesetter) CFRelease(framesetter);
+	if (fitRange) *fitRange = NSMakeRange(fitCFRange.location, fitCFRange.length);
+	return CGSizeMake( floorf(sz.width+1) , floorf(sz.height+1) ); // take 1pt of margin for security
+}
 @end
+
+
+
 
 @implementation NSMutableAttributedString (OHCommodityStyleModifiers)
 

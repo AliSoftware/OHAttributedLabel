@@ -471,11 +471,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 - (CGSize)sizeThatFits:(CGSize)size {
 	NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
 	if (!attrStrWithLinks) return CGSizeZero;
-	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
-	CGFloat w = size.width;
-	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(w,CGFLOAT_MAX),NULL);
-	if (framesetter) CFRelease(framesetter);
-	return CGSizeMake( floorf(sz.width+1) , floorf(sz.height+1) ); // take 1pt of margin for security
+	return [attrStrWithLinks sizeConstrainedToSize:size fitRange:NULL];
 }
 
 
