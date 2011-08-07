@@ -135,16 +135,6 @@
 	CFRelease(aStyle);
 }
 
-
--(void)setSuperscript:(BOOL)isSuperscript range:(NSRange)range {
-	[self removeAttribute:(NSString * )kCTSuperscriptAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTSuperscriptAttributeName value:[NSNumber numberWithInt:(isSuperscript?1:0)] range:range];
-}
--(void)setSubscript:(BOOL)isSubscript range:(NSRange)range {
-	[self removeAttribute:(NSString * )kCTSuperscriptAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTSuperscriptAttributeName value:[NSNumber numberWithInt:(isSubscript?-1:0)] range:range];
-}
-
 @end
 
 
