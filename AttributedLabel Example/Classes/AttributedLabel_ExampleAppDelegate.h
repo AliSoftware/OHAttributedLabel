@@ -19,7 +19,7 @@
 }
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 -(IBAction)fillLabel1;
--(IBAction)makeWorldBold;
+-(IBAction)toggleBold:(UISwitch*)aSwitch;
 -(IBAction)fillLabel2;
 -(IBAction)changeHAlignment;
 -(IBAction)changeVAlignment;

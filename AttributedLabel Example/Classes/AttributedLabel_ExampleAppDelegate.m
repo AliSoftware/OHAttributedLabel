@@ -43,12 +43,14 @@
 
 
 
-#define TXT_BEGIN "Hello World! How are you? Don't forget to "
+#define TXT_BEGIN "Discover "
+#define TXT_BOLD "FoodReporter"
+#define TXT_MIDDLE " to "
 #define TXT_LINK "share your food"
-#define TXT_END "!"
+#define TXT_END " with your friends!"
 
 -(IBAction)fillLabel1 {
-	NSString* txt = @ TXT_BEGIN TXT_LINK TXT_END; // concat the 3 (#define) constant parts in a single NSString
+	NSString* txt = @ TXT_BEGIN TXT_BOLD TXT_MIDDLE TXT_LINK TXT_END; // concat the 3 (#define) constant parts in a single NSString
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:txt];
 	// for those calls we don't specify a range so it affects the whole string
@@ -56,7 +58,8 @@
 	[attrStr setTextColor:[UIColor grayColor]];
 
 	// now we only change the color of "Hello"
-	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(0,5)];	
+	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.f blue:0.5 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
+	[attrStr setTextIsBold:YES range:[txt rangeOfString:@TXT_BOLD]];
 	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	label1.attributedText = attrStr;
@@ -68,13 +71,13 @@
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.	
 }
 
--(IBAction)makeWorldBold
+-(IBAction)toggleBold:(UISwitch*)aSwitch
 {
 	/**(3)** (... later ...) Modify again the existing string *******/
 	// Get the current attributedString and make it a mutable copy so we can modify it
 	NSMutableAttributedString* mas = [label1.attributedText mutableCopy];
-	// Modify the the font of "World!" to bold, 24pt
-	[mas setFont:[UIFont boldSystemFontOfSize:24] range:NSMakeRange(6,6)];
+	// Modify the the font of "FoodReporter" to bold
+	[mas setTextIsBold:aSwitch.on range:[[label1.attributedText string] rangeOfString:@TXT_BOLD]];
 	// Affect back the attributed string to the label
 	label1.attributedText = mas;
 	// Cleaning: balance the "mutableCopy" call with a "release"
@@ -150,7 +153,9 @@
 // MARK: Visited Links
 /////////////////////////////////////////////////////////////////////////////
 
-id objectForLinkInfo(NSTextCheckingResult* linkInfo) { return linkInfo.URL?:linkInfo.addressComponents?:linkInfo.phoneNumber?:linkInfo.date?:[linkInfo description]; }
+id objectForLinkInfo(NSTextCheckingResult* linkInfo) {
+	return (id)linkInfo.URL ?: (id)linkInfo.phoneNumber ?: (id)linkInfo.addressComponents ?: (id)linkInfo.date ?: (id)[linkInfo description];
+}
 
 -(UIColor*)colorForLink:(NSTextCheckingResult*)link underlineStyle:(int32_t*)pUnderline {
 	if ([visitedLinks containsObject:objectForLinkInfo(link)]) {

@@ -77,7 +77,7 @@
 	// kCTFontAttributeName
 	CTFontRef aFont = CTFontCreateWithName((CFStringRef)fontName, size, NULL);
 	if (!aFont) return;
-	[self removeAttribute:(NSString * )kCTFontAttributeName range:range]; // Work around for Apple leak
+	[self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
 	CFRelease(aFont);
 }
@@ -119,6 +119,26 @@
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range {
 	[self removeAttribute:(NSString * )kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
+}
+
+-(void)setTextIsBold:(BOOL)bold range:(NSRange)range {
+	NSUInteger startPoint = range.location;
+	NSRange effectiveRange;
+	do {
+		// Get font at startPoint
+		CTFontRef currentFont = (CTFontRef)[self attribute:(NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
+		// The range for which this font is effective
+		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
+		// Create bold/unbold font variant for this font and apply
+		CTFontRef newFont = CTFontCreateCopyWithSymbolicTraits(currentFont, 0.0, NULL, (bold?kCTFontBoldTrait:0), kCTFontBoldTrait);
+		if (newFont) {
+			[self removeAttribute:(NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
+			[self addAttribute:(NSString*)kCTFontAttributeName value:(id)newFont range:fontRange];
+			CFRelease(newFont);
+		}
+		// If the fontRange was not covering the whole range, continue with next run
+		startPoint = NSMaxRange(effectiveRange);
+	} while(startPoint<NSMaxRange(range));
 }
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode {
