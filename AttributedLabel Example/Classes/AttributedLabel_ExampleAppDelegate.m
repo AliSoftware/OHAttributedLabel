@@ -104,13 +104,13 @@
 	// and only change the color of "Hello"
 	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(0,5)];
 	
-	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	label2.attributedText = attrStr;
 	// Use the "Justified" alignment
 	label2.textAlignment = UITextAlignmentCenter;
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
-	
+	label2.automaticallyAddLinksForType = NSTextCheckingTypeDate|NSTextCheckingTypeAddress|NSTextCheckingTypeLink|NSTextCheckingTypePhoneNumber;
+
 	[attrStr release];
 }
 
@@ -150,8 +150,10 @@
 // MARK: Visited Links
 /////////////////////////////////////////////////////////////////////////////
 
+id objectForLinkInfo(NSTextCheckingResult* linkInfo) { return linkInfo.URL?:linkInfo.addressComponents?:linkInfo.phoneNumber?:linkInfo.date?:[linkInfo description]; }
+
 -(UIColor*)colorForLink:(NSTextCheckingResult*)link underlineStyle:(int32_t*)pUnderline {
-	if ([visitedLinks containsObject:link.URL]) {
+	if ([visitedLinks containsObject:objectForLinkInfo(link)]) {
 		// Visited link
 		*pUnderline = kCTUnderlineStyleSingle|kCTUnderlinePatternDot;
 		return [UIColor purpleColor];
@@ -160,24 +162,43 @@
 		return [UIColor blueColor];
 	}
 }
+
+void DisplayAlert(NSString* title, NSString* message) {
+	UIAlertView* alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	[alert show];
+	[alert release];					
+}
+
 -(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo {
-	[visitedLinks addObject:linkInfo.URL];
+	[visitedLinks addObject:objectForLinkInfo(linkInfo)];
 	[attributedLabel setNeedsDisplay];
 	
 	if ([[linkInfo.URL scheme] isEqualToString:@"user"]) {
 		// We use this arbitrary URL scheme to handle custom actions
 		// So URLs like "user://xxx" will be handled here instead of opening in Safari.
 		// Note: in the above example, "xxx" is the 'host' of the URL
-
 		NSString* user = [linkInfo.URL host];
-		NSString* msg = [NSString stringWithFormat:@"Here you should display the profile of user %@ on a new screen.",user];
-		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"User Profile" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
+		DisplayAlert(@"User Profile",[NSString stringWithFormat:@"Here you should display the profile of user %@ on a new screen.",user]);
 		
 		// Prevent the URL from opening as we handled here manually instead
 		return NO;
 	} else {
+		switch (linkInfo.resultType) {
+			case NSTextCheckingTypeLink:
+				break;
+			case NSTextCheckingTypeAddress:
+				DisplayAlert(@"Address",[linkInfo.addressComponents description]);
+				break;
+			case NSTextCheckingTypeDate:
+				DisplayAlert(@"Date",[linkInfo.date description]);
+				break;
+			case NSTextCheckingTypePhoneNumber:
+				DisplayAlert(@"Phone Number",linkInfo.phoneNumber);
+				break;
+			default:
+				DisplayAlert(@"Unknown link type",[NSString stringWithFormat:@"You typed on an unknown link type (NSTextCheckingType %d)",linkInfo.resultType]);
+				break;
+		}
 		// Execute the default behavior, which is opening the URL in Safari.
 		return YES;
 	}

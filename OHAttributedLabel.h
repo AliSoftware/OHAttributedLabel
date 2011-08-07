@@ -69,7 +69,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 -(void)resetAttributedText; //!< rebuild the attributedString based on UILabel's text/font/color/alignment/... properties
 
 /* Links configuration */
-@property(nonatomic, assign) BOOL automaticallyDetectLinks; //!< Defaults to YES
+@property(nonatomic, assign) NSTextCheckingTypes automaticallyAddLinksForType; //!< Defaults to NSTextCheckingTypeLink
 @property(nonatomic, retain) UIColor* linkColor; //!< Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
 @property(nonatomic, retain) UIColor* highlightedLinkColor; //[UIColor colorWithWhite:0.2 alpha:0.5]
 @property(nonatomic, assign) BOOL underlineLinks; //!< Defaults to YES. See also OHAttributedLabelDelegate

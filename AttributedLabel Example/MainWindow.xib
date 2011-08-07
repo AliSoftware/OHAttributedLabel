@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1056</int>
-		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.SystemVersion">10K549</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
-		<string key="IBDocument.AppKitVersion">1038.35</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -92,10 +92,12 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Hello World! How are you? Hope everything is OK! Visit http://www.foodreporter.net to post your food!</string>
-						<object class="NSFont" key="IBUIFont">
+						<string type="base64-UTF8" key="IBUIText">VmlzaXQgaHR0cDovL3d3dy5mb29kcmVwb3J0ZXIubmV0IHRvIHBvc3QgeW91ciBmb29kIQoKSSBzaG91
+bGQgY2FsbCBBcHBsZSBpbiBDdXBlcnRpbm8sIENhbGlmb3JuaWEgKCsxIDQwOC05OTYtMTAxMCkgbmV4
+dCBzdW5kYXkuA</string>
+						<object class="NSFont" key="IBUIFont" id="605141269">
 							<string key="NSName">Helvetica</string>
-							<double key="NSSize">18</double>
+							<double key="NSSize">14</double>
 							<int key="NSfFlags">16</int>
 						</object>
 						<reference key="IBUITextColor" ref="995786979"/>
@@ -103,7 +105,7 @@
 						<int key="IBUIBaselineAdjustment">1</int>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 						<float key="IBUIMinimumFontSize">10</float>
-						<int key="IBUINumberOfLines">4</int>
+						<int key="IBUINumberOfLines">6</int>
 						<int key="IBUILineBreakMode">0</int>
 					</object>
 					<object class="IBUIButton" id="992531389">
@@ -287,11 +289,7 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string key="IBUIText">You can also use links for internal navigation!</string>
-						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica</string>
-							<double key="NSSize">14</double>
-							<int key="NSfFlags">16</int>
-						</object>
+						<reference key="IBUIFont" ref="605141269"/>
 						<reference key="IBUITextColor" ref="995786979"/>
 						<reference key="IBUIHighlightedColor" ref="585316935"/>
 						<int key="IBUIBaselineAdjustment">1</int>

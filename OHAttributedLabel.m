@@ -127,7 +127,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 @implementation OHAttributedLabel
 @synthesize linkColor, highlightedLinkColor, underlineLinks;
-@synthesize centerVertically, automaticallyDetectLinks, onlyCatchTouchesOnLinks, extendBottomToFit;
+@synthesize centerVertically, automaticallyAddLinksForType, onlyCatchTouchesOnLinks, extendBottomToFit;
 @synthesize delegate;
 
 
@@ -143,7 +143,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	linkColor = [[UIColor blueColor] retain];
 	highlightedLinkColor = [[UIColor colorWithWhite:0.4 alpha:0.3] retain];
 	underlineLinks = YES;
-	automaticallyDetectLinks = YES;
+	automaticallyAddLinksForType = NSTextCheckingTypeLink;
 	onlyCatchTouchesOnLinks = NO;
 	self.userInteractionEnabled = YES;
 	self.contentMode = UIViewContentModeRedraw;
@@ -202,9 +202,9 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	NSMutableAttributedString* str = [self.attributedText mutableCopy];
 	if (!str) return nil;
 	
-	if (self.automaticallyDetectLinks) {
+	if (self.automaticallyAddLinksForType > 0) {
 		NSError* error = nil;
-		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
+		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:&error];
 		[linkDetector enumerateMatchesInString:[str string] options:0 range:NSMakeRange(0,[[str string] length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
@@ -237,9 +237,9 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx {
 	__block NSTextCheckingResult* foundResult = nil;
 	
-	if (self.automaticallyDetectLinks) {
+	if (self.automaticallyAddLinksForType > 0) {
 		NSError* error = nil;
-		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
+		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:&error];
 		[linkDetector enumerateMatchesInString:[_attributedText string] options:0 range:NSMakeRange(0,[[_attributedText string] length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
@@ -332,8 +332,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	
 	NSTextCheckingResult *linkAtTouchesEnded = [self linkAtPoint:pt];
 	
-	// we can check on equality of the links themselfes since the data detectors create new results
-	if (activeLink.URL && [activeLink.URL isEqual:linkAtTouchesEnded.URL]) {
+	// we can check on equality of the ranges themselfes since the data detectors create new results
+	if (activeLink && NSEqualRanges(activeLink.range,linkAtTouchesEnded.range)) {
 		BOOL openLink = (delegate && [delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
 		? [delegate attributedLabel:self shouldFollowLink:activeLink] : YES;
 		if (openLink) [[UIApplication sharedApplication] openURL:activeLink.URL];
@@ -538,8 +538,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[self setNeedsDisplay];
 }
 
--(void)setAutomaticallyDetectLinks:(BOOL)detect {
-	automaticallyDetectLinks = detect;
+-(void)setAutomaticallyAddLinksForType:(NSTextCheckingTypes)types {
+	automaticallyAddLinksForType = types;
 	[self setNeedsDisplay];
 }
 
