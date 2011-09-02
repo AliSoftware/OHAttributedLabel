@@ -33,6 +33,21 @@
 #import "OHAttributedLabel.h"
 #import "NSAttributedString+Attributes.h"
 
+/////////////////////////////////////////////////////////////////////////////
+// MARK: Private Utility methods
+
+CGPoint CGPointFlipped(CGPoint point, CGRect bounds);
+CGRect CGRectFlipped(CGRect rect, CGRect bounds);
+NSRange NSRangeFromCFRange(CFRange range);
+CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin);
+CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin);
+BOOL CTLineContainsCharactersFromStringRange(CTLineRef line, NSRange range);
+BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range);
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+/////////////////////////////////////////////////////////////////////////////
+
 
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment) {
 	switch (alignment) {
@@ -113,7 +128,13 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	return (intersectedRange.length > 0);
 }
 
+
+
 /////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Private interface
+/////////////////////////////////////////////////////////////////////////////
+
 
 @interface OHAttributedLabel(/* Private */)
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
@@ -123,6 +144,13 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect;
 @end
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
+// MARK: Implementation
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -496,6 +524,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 @synthesize centerVertically, automaticallyAddLinksForType, onlyCatchTouchesOnLinks, extendBottomToFit;
 @synthesize delegate;
 
+/////////////////////////////////////////////////////////////////////////////
+// MARK: -
 /////////////////////////////////////////////////////////////////////////////
 
 -(void)resetAttributedText {

@@ -95,7 +95,7 @@
 	CFRelease(desc);
 	if (!aFont) return;
 
-	[self removeAttribute:(NSString * )kCTFontAttributeName range:range]; // Work around for Apple leak
+	[self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
 	CFRelease(aFont);
 }
@@ -105,7 +105,7 @@
 }
 -(void)setTextColor:(UIColor*)color range:(NSRange)range {
 	// kCTForegroundColorAttributeName
-	[self removeAttribute:(NSString * )kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
+	[self removeAttribute:(NSString*)kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:range];
 }
 
@@ -117,7 +117,7 @@
 	[self setTextUnderlineStyle:style range:range];
 }
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range {
-	[self removeAttribute:(NSString * )kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
+	[self removeAttribute:(NSString*)kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
