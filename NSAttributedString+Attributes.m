@@ -121,7 +121,7 @@
 	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
--(void)setTextIsBold:(BOOL)bold range:(NSRange)range {
+-(void)setTextBold:(BOOL)bold range:(NSRange)range {
 	NSUInteger startPoint = range.location;
 	NSRange effectiveRange;
 	do {

@@ -69,7 +69,7 @@
 -(void)setTextIsUnderlined:(BOOL)underlined;
 -(void)setTextIsUnderlined:(BOOL)underlined range:(NSRange)range;
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range; //!< style is a combination of CTUnderlineStyle & CTUnderlineStyleModifiers
--(void)setTextIsBold:(BOOL)bold range:(NSRange)range;
+-(void)setTextBold:(BOOL)bold range:(NSRange)range;
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;

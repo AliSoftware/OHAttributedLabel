@@ -72,6 +72,7 @@ NSRange NSRangeFromCFRange(CFRange range) {
 	return NSMakeRange(range.location, range.length);
 }
 
+// Font Metrics: http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/FontHandling/Tasks/GettingFontMetrics.html
 CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin) {
 	CGFloat ascent = 0;
 	CGFloat descent = 0;
@@ -90,13 +91,13 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 	CGFloat descent = 0;
 	CGFloat leading = 0;
 	CGFloat width = CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &descent, &leading);
-	CGFloat height = ascent + descent;
+	CGFloat height = ascent + descent /* + leading */;
 	
 	CGFloat xOffset = CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL);
 	
-	return CGRectMake(lineOrigin.x + xOffset - leading,
+	return CGRectMake(lineOrigin.x + xOffset,
 					  lineOrigin.y - descent,
-					  width + leading,
+					  width,
 					  height);
 }
 
@@ -126,10 +127,6 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 
 @implementation OHAttributedLabel
-@synthesize linkColor, highlightedLinkColor, underlineLinks;
-@synthesize centerVertically, automaticallyAddLinksForType, onlyCatchTouchesOnLinks, extendBottomToFit;
-@synthesize delegate;
-
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -140,14 +137,14 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 - (void)commonInit
 {
 	customLinks = [[NSMutableArray alloc] init];
-	linkColor = [[UIColor blueColor] retain];
-	highlightedLinkColor = [[UIColor colorWithWhite:0.4 alpha:0.3] retain];
-	underlineLinks = YES;
-	automaticallyAddLinksForType = NSTextCheckingTypeLink;
+	self.linkColor = [UIColor blueColor];
+	self.highlightedLinkColor = [UIColor colorWithWhite:0.4 alpha:0.3];
+	self.underlineLinks = YES;
+	self.automaticallyAddLinksForType = NSTextCheckingTypeLink;
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]]) {
-		automaticallyAddLinksForType |= NSTextCheckingTypePhoneNumber;
+		self.automaticallyAddLinksForType |= NSTextCheckingTypePhoneNumber;
 	}
-	onlyCatchTouchesOnLinks = NO;
+	self.onlyCatchTouchesOnLinks = YES;
 	self.userInteractionEnabled = YES;
 	self.contentMode = UIViewContentModeRedraw;
 	[self resetAttributedText];
@@ -177,8 +174,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[self resetTextFrame];
 
 	[customLinks release];
-	[linkColor release];
-	[highlightedLinkColor release];
+	self.linkColor = nil;
+	self.highlightedLinkColor = nil;
 	[activeLink release];
 	
 	[super dealloc];
@@ -205,15 +202,16 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	NSMutableAttributedString* str = [self.attributedText mutableCopy];
 	if (!str) return nil;
 	
-	if (self.automaticallyAddLinksForType > 0) {
+	NSString* plainText = [str string];
+	if (plainText && (self.automaticallyAddLinksForType > 0)) {
 		NSError* error = nil;
 		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:&error];
-		[linkDetector enumerateMatchesInString:[str string] options:0 range:NSMakeRange(0,[[str string] length])
+		[linkDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
 			 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-			 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
-			 ? [delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+			 UIColor* thisLinkColor = (self.delegate && [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
+			 ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
 			 
 			 if (thisLinkColor)
 				 [str setTextColor:thisLinkColor range:[result range]];
@@ -226,13 +224,23 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
 		 
 		 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-		 UIColor* thisLinkColor = (delegate && [delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
-		 ? [delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+		 UIColor* thisLinkColor = (self.delegate && [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
+		 ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
 		 
-		 if (thisLinkColor)
-			 [str setTextColor:thisLinkColor range:[result range]];
-		 if (uStyle>0)
-			 [str setTextUnderlineStyle:uStyle range:[result range]];
+		 @try {
+			 if (thisLinkColor)
+				 [str setTextColor:thisLinkColor range:[result range]];
+			 if (uStyle>0)
+				 [str setTextUnderlineStyle:uStyle range:[result range]];
+		 }
+		 @catch (NSException * e) {
+			 // Protection against NSRangeException
+			 if ([[e name] isEqualToString:NSRangeException]) {
+				 NSLog(@"[OHAttributedLabel] exception: %@",e);
+			 } else {
+				 @throw;
+			 }
+		 }
 	 }];
 	return [str autorelease];
 }
@@ -240,10 +248,11 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx {
 	__block NSTextCheckingResult* foundResult = nil;
 	
-	if (self.automaticallyAddLinksForType > 0) {
+	NSString* plainText = [_attributedText string];
+	if (plainText && (self.automaticallyAddLinksForType > 0)) {
 		NSError* error = nil;
 		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:&error];
-		[linkDetector enumerateMatchesInString:[_attributedText string] options:0 range:NSMakeRange(0,[[_attributedText string] length])
+		[linkDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
 			 NSRange r = [result range];
@@ -337,8 +346,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	
 	// we can check on equality of the ranges themselfes since the data detectors create new results
 	if (activeLink && NSEqualRanges(activeLink.range,linkAtTouchesEnded.range)) {
-		BOOL openLink = (delegate && [delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
-		? [delegate attributedLabel:self shouldFollowLink:activeLink] : YES;
+		BOOL openLink = (self.delegate && [self.delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
+		? [self.delegate attributedLabel:self shouldFollowLink:activeLink] : YES;
 		if (openLink) [[UIApplication sharedApplication] openURL:activeLink.URL];
 	}
 	
@@ -483,6 +492,11 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 // MARK: Setters/Getters
 /////////////////////////////////////////////////////////////////////////////
 
+@synthesize linkColor, highlightedLinkColor, underlineLinks;
+@synthesize centerVertically, automaticallyAddLinksForType, onlyCatchTouchesOnLinks, extendBottomToFit;
+@synthesize delegate;
+
+/////////////////////////////////////////////////////////////////////////////
 
 -(void)resetAttributedText {
 	NSMutableAttributedString* mutAttrStr = [NSMutableAttributedString attributedStringWithString:self.text];
@@ -503,7 +517,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 -(void)setAttributedText:(NSAttributedString*)attributedText {
 	[_attributedText release];
 	_attributedText = [attributedText mutableCopy];
-	
+	[self removeAllCustomLinks];
 	[self setNeedsDisplay];
 }
 
@@ -555,8 +569,5 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[self resetTextFrame];
 	[super setNeedsDisplay];
 }
-
-/////////////////////////////////////////////////////////////////////////////
-
 
 @end

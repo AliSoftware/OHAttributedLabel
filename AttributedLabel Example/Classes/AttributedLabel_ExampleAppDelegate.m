@@ -59,7 +59,7 @@
 
 	// now we only change the color of "Hello"
 	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.f blue:0.5 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
-	[attrStr setTextIsBold:YES range:[txt rangeOfString:@TXT_BOLD]];
+	[attrStr setTextBold:YES range:[txt rangeOfString:@TXT_BOLD]];
 	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	label1.attributedText = attrStr;
@@ -77,7 +77,7 @@
 	// Get the current attributedString and make it a mutable copy so we can modify it
 	NSMutableAttributedString* mas = [label1.attributedText mutableCopy];
 	// Modify the the font of "FoodReporter" to bold
-	[mas setTextIsBold:aSwitch.on range:[[label1.attributedText string] rangeOfString:@TXT_BOLD]];
+	[mas setTextBold:aSwitch.on range:[[label1.attributedText string] rangeOfString:@TXT_BOLD]];
 	// Affect back the attributed string to the label
 	label1.attributedText = mas;
 	// Cleaning: balance the "mutableCopy" call with a "release"
