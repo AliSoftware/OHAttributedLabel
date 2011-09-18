@@ -30,6 +30,6 @@ There is no explicit documentation of the class yet (never had time to right one
 
 * The method names should be self-explanatory (hopefully)
 * There are doxygen/javadoc-like documentation in the headers that should also help you describe the methods
-* The sample code provided in this github repository tries to demonstrate quite every standard usages of this class, including text alignment, dynamically changing the style of a range of text, adding custom links, and catching the touch on links to change the default behavior.
+* The sample code provided in this github repository ("AttributedLabel Example") tries to demonstrate quite every standard usages of this class, including text alignment, dynamically changing the style of a range of text, adding custom links, catching the touch on links to change the default behavior, and customizing the appearance/color of links.
 
 Happy coding!
