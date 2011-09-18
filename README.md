@@ -2,9 +2,7 @@
 
 ## OHAttributedLabel
 
-This class allows you to use a **UILabel with NSAttributedStrings**, in order to **display styled text** with mixed style (mixed fonts, color, size, ...) in a unique label.
-
-It is a subclass of UILabel, which adds an "attributedText" property. Use this property, instead of the "text" property, to set and get the NSAttributedString to display.
+This class allows you to use a **UILabel with NSAttributedStrings**, in order to **display styled text** with mixed style (mixed fonts, color, size, ...) in a unique label. It is a subclass of UILabel, which adds an "attributedText" property. Use this property, instead of the "text" property, to set and get the NSAttributedString to display.
 
 This class **also support hyperlinks and URLs**. It can **automatically detect links** in your text, color them and make them touchable; you can also **add "custom links" in your text** by attaching an URL to a range of your text and thus make it touchable, and even then catch the event of a touch on a link to act as you wish to.
 
@@ -18,7 +16,7 @@ In addition to this class, you will also find a category of NS(Mutable)Attribute
 To use this classes in your project:
 
 * include the "OHAttributedLabel" and "NSAttributedString+Attributes" header (.h) and source (.m) files in your Xcode project
-* don't forget to import the CoreText framework in your project (otherwise you will have linker errors when you will compile)
+* **Don't forget to import the CoreText framework** in your project (otherwise you will have linker errors when you will compile)
 
 # Sample code
 
