@@ -151,6 +151,7 @@
 		{.spec = kCTParagraphStyleSpecifierLineBreakMode, .valueSize = sizeof(CTLineBreakMode), .value = (const void*)&lineBreakMode},
 	};
 	CTParagraphStyleRef aStyle = CTParagraphStyleCreate(paraStyles, 2);
+	[self removeAttribute:(NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(id)aStyle range:range];
 	CFRelease(aStyle);
 }

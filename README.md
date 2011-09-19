@@ -1,4 +1,4 @@
-# About this classes
+# About these classes
 
 ### OHAttributedLabel
 
