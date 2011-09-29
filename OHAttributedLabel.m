@@ -534,7 +534,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[mutAttrStr setTextColor:self.textColor];
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
-	[mutAttrStr setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+	[mutAttrStr setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode lineHeight:self.font.lineHeight];
 	self.attributedText = mutAttrStr;
 }
 
@@ -571,13 +571,13 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 -(void)setTextAlignment:(UITextAlignment)alignment {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(alignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
-	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode lineHeight:self.font.lineHeight];
 	[super setTextAlignment:alignment]; // will call setNeedsDisplay too
 }
 -(void)setLineBreakMode:(UILineBreakMode)lineBreakMode {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(lineBreakMode);
-	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode lineHeight:self.font.lineHeight];
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
 }
 -(void)setCenterVertically:(BOOL)val {
