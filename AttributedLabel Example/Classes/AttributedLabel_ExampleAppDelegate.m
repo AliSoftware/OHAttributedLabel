@@ -94,7 +94,12 @@
 // MARK: Label 2 : Alignment, Size, etc
 /////////////////////////////////////////////////////////////////////////////
 
-
+-(IBAction)changeLineHeight:(id)sender{
+    NSMutableAttributedString* attrStr = [label2.attributedText mutableCopy];
+    [attrStr setTextAlignment:label2.textAlignment lineBreakMode:label2.lineBreakMode lineHeight:sliderLineHeight.value];
+    label2.attributedText = attrStr;
+    [label2 setNeedsDisplay];
+}
 
 
 -(IBAction)fillLabel2 {
