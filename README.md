@@ -20,7 +20,7 @@ To use this classes in your project:
 
 # Sample code & Other documentation
 
-There is no explicit documentation of the class yet (never had time to right one).
+There is no explicit documentation of the class yet (never had time to write one).
 
 Anyway, **see the "AttributedLabel Example" sample project** which tries to demonstrate quite every standard usage of this class — including text alignment, dynamically changing the style of a range of text, adding custom links, catching the touch on links to change the default behavior, and customizing the appearance/color of links.
 
