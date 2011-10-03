@@ -17,7 +17,7 @@
 	
 	NSMutableSet* visitedLinks;
 }
-@property (nonatomic, retain) IBOutlet UIWindow* window;
+@property (nonatomic, strong) IBOutlet UIWindow* window;
 -(IBAction)fillLabel1;
 -(IBAction)toggleBold:(UISwitch*)aSwitch;
 -(IBAction)fillLabel2;
