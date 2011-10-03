@@ -14,7 +14,7 @@
 	IBOutlet OHAttributedLabel* label1;
 	IBOutlet OHAttributedLabel* label2;
 	IBOutlet OHAttributedLabel* label3;
-	
+	IBOutlet UISlider * sliderLineHeight;
 	NSMutableSet* visitedLinks;
 }
 @property (nonatomic, retain) IBOutlet UIWindow* window;
@@ -26,5 +26,6 @@
 -(IBAction)changeSize;
 -(IBAction)fillLabel3;
 -(IBAction)resetVisitedLinks;
+-(IBAction)changeLineHeight:(id)sender;
 @end
 

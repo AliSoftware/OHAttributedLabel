@@ -94,7 +94,14 @@
 // MARK: Label 2 : Alignment, Size, etc
 /////////////////////////////////////////////////////////////////////////////
 
-
+-(IBAction)changeLineHeight:(id)sender{
+    NSMutableAttributedString* attrStr = [label2.attributedText mutableCopy];
+    [attrStr setTextAlignment:label2.textAlignment lineBreakMode:label2.lineBreakMode lineHeight:sliderLineHeight.value];
+    label2.attributedText = attrStr;
+    CGSize s = [attrStr sizeConstrainedToSize:CGSizeMake(label2.frame.size.width, CGFLOAT_MAX)];
+    label2.frame = CGRectMake(label2.frame.origin.x, label2.frame.origin.y, label2.frame.size.width, s.height);
+    [label2 setNeedsDisplay];
+}
 
 
 -(IBAction)fillLabel2 {
