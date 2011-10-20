@@ -30,7 +30,9 @@
     return YES;
 }
 - (void)applicationWillTerminate:(UIApplication *)application {
+#if !OBJC_ARC_ENABLED
 	[visitedLinks release];
+#endif
 }
 
 
@@ -81,7 +83,9 @@
 	// Affect back the attributed string to the label
 	label1.attributedText = mas;
 	// Cleaning: balance the "mutableCopy" call with a "release"
+#if !OBJC_ARC_ENABLED
 	[mas release];
+#endif
 }
 
 
@@ -114,7 +118,9 @@
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 	label2.automaticallyAddLinksForType = NSTextCheckingTypeDate|NSTextCheckingTypeAddress|NSTextCheckingTypeLink|NSTextCheckingTypePhoneNumber;
 
+#if !OBJC_ARC_ENABLED
 	[attrStr release];
+#endif
 }
 
 
@@ -171,7 +177,9 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo) {
 void DisplayAlert(NSString* title, NSString* message) {
 	UIAlertView* alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];					
+#if !OBJC_ARC_ENABLED
+	[alert release];
+#endif
 }
 
 -(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo {
@@ -218,11 +226,11 @@ void DisplayAlert(NSString* title, NSString* message) {
 
 /////////////////////////////////////////////////////////////////////////////
 
-
+#if !OBJC_ARC_ENABLED
 - (void)dealloc {
     [window release];
     [super dealloc];
 }
-
+#endif
 
 @end
