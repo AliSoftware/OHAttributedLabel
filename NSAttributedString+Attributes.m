@@ -40,17 +40,17 @@
 
 @implementation NSAttributedString (OHCommodityConstructors)
 +(id)attributedStringWithString:(NSString*)string {
-	return string ? [[[self alloc] initWithString:string] autorelease] : nil;
+	return string ? [[self alloc] initWithString:string] : nil;
 }
 +(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr {
-	return attrStr ? [[[self alloc] initWithAttributedString:attrStr] autorelease] : nil;
+	return attrStr ? [[self alloc] initWithAttributedString:attrStr] : nil;
 }
 
 -(CGSize)sizeConstrainedToSize:(CGSize)maxSize {
 	return [self sizeConstrainedToSize:maxSize fitRange:NULL];
 }
 -(CGSize)sizeConstrainedToSize:(CGSize)maxSize fitRange:(NSRange*)fitRange {
-	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self);
+	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self);
 	CFRange fitCFRange = CFRangeMake(0,0);
 	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,maxSize,&fitCFRange);
 	if (framesetter) CFRelease(framesetter);
@@ -75,10 +75,10 @@
 }
 -(void)setFontName:(NSString*)fontName size:(CGFloat)size range:(NSRange)range {
 	// kCTFontAttributeName
-	CTFontRef aFont = CTFontCreateWithName((CFStringRef)fontName, size, NULL);
+	CTFontRef aFont = CTFontCreateWithName((__bridge CFStringRef)fontName, size, NULL);
 	if (!aFont) return;
 	[self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
+	[self addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)aFont range:range];
 	CFRelease(aFont);
 }
 -(void)setFontFamily:(NSString*)fontFamily size:(CGFloat)size bold:(BOOL)isBold italic:(BOOL)isItalic range:(NSRange)range {
@@ -89,14 +89,14 @@
 						  fontFamily,kCTFontFamilyNameAttribute,
 						  trait,kCTFontTraitsAttribute,nil];
 	
-	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)attr);
+	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef)attr);
 	if (!desc) return;
 	CTFontRef aFont = CTFontCreateWithFontDescriptor(desc, size, NULL);
 	CFRelease(desc);
 	if (!aFont) return;
 
 	[self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
+	[self addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)aFont range:range];
 	CFRelease(aFont);
 }
 
@@ -126,14 +126,14 @@
 	NSRange effectiveRange;
 	do {
 		// Get font at startPoint
-		CTFontRef currentFont = (CTFontRef)[self attribute:(NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
+		CTFontRef currentFont = (__bridge CTFontRef)[self attribute:(NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
 		// Create bold/unbold font variant for this font and apply
 		CTFontRef newFont = CTFontCreateCopyWithSymbolicTraits(currentFont, 0.0, NULL, (isBold?kCTFontBoldTrait:0), kCTFontBoldTrait);
 		if (newFont) {
 			[self removeAttribute:(NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
-			[self addAttribute:(NSString*)kCTFontAttributeName value:(id)newFont range:fontRange];
+			[self addAttribute:(NSString*)kCTFontAttributeName value:(__bridge id)newFont range:fontRange];
 			CFRelease(newFont);
 		} else {
 			NSString* fontName = [(NSString*)CTFontCopyFullName(currentFont) autorelease];
@@ -158,7 +158,7 @@
 	};
 	CTParagraphStyleRef aStyle = CTParagraphStyleCreate(paraStyles, 2);
 	[self removeAttribute:(NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(id)aStyle range:range];
+	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(__bridge id)aStyle range:range];
 	CFRelease(aStyle);
 }
 

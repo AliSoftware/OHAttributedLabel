@@ -208,15 +208,9 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(void)dealloc
 {
-	[_attributedText release];
 	[self resetTextFrame];
 
-	[customLinks release];
-	self.linkColor = nil;
-	self.highlightedLinkColor = nil;
-	[activeLink release];
 	
-	[super dealloc];
 }
 
 
@@ -280,7 +274,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 			 }
 		 }
 	 }];
-	return [str autorelease];
+	return str;
 }
 
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx {
@@ -295,7 +289,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		 {
 			 NSRange r = [result range];
 			 if (NSLocationInRange(idx, r)) {
-				 foundResult = [[result retain] autorelease];
+				 foundResult = result;
 				 *stop = YES;
 			 }
 		 }];
@@ -306,7 +300,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	 {
 		 NSRange r = [(NSTextCheckingResult*)obj range];
 		 if (NSLocationInRange(idx, r)) {
-			 foundResult = [[obj retain] autorelease];
+			 foundResult = obj;
 			 *stop = YES;
 		 }
 	 }];
@@ -369,8 +363,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	UITouch* touch = [touches anyObject];
 	CGPoint pt = [touch locationInView:self];
 	
-	[activeLink release];
-	activeLink = [[self linkAtPoint:pt] retain];
+	activeLink = [self linkAtPoint:pt];
 	
 	// we're using activeLink to draw a highlight in -drawRect:
 	[self setNeedsDisplay];
@@ -389,13 +382,11 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		if (openLink) [[UIApplication sharedApplication] openURL:activeLink.URL];
 	}
 	
-	[activeLink release];
 	activeLink = nil;
 	[self setNeedsDisplay];
 }
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	[activeLink release];
 	activeLink = nil;
 	[self setNeedsDisplay];
 }
@@ -432,7 +423,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
 		}
 		if (textFrame == NULL) {
-			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
+			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attrStrWithLinks);
 			drawingRect = self.bounds;
 			if (self.centerVertically || self.extendBottomToFit) {
 				CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(drawingRect.size.width,CGFLOAT_MAX),NULL);
@@ -552,10 +543,9 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	if (!_attributedText) {
 		[self resetAttributedText];
 	}
-	return [[_attributedText copy] autorelease]; // immutable autoreleased copy
+	return [_attributedText copy]; // immutable autoreleased copy
 }
 -(void)setAttributedText:(NSAttributedString*)attributedText {
-	[_attributedText release];
 	_attributedText = [attributedText mutableCopy];
 	[self removeAllCustomLinks];
 	[self setNeedsDisplay];

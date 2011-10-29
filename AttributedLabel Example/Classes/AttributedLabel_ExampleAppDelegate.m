@@ -30,7 +30,6 @@
     return YES;
 }
 - (void)applicationWillTerminate:(UIApplication *)application {
-	[visitedLinks release];
 }
 
 
@@ -87,7 +86,6 @@
 	[label1 addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net"] inRange:[plainText rangeOfString:@TXT_LINK]];
 
 	// Cleaning: balance the "mutableCopy" call with a "release"
-	[mas release];
 }
 
 
@@ -120,7 +118,6 @@
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 	label2.automaticallyAddLinksForType = NSTextCheckingTypeDate|NSTextCheckingTypeAddress|NSTextCheckingTypeLink|NSTextCheckingTypePhoneNumber;
 
-	[attrStr release];
 }
 
 
@@ -178,7 +175,6 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo) {
 void DisplayAlert(NSString* title, NSString* message) {
 	UIAlertView* alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];					
 }
 
 -(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo {
@@ -226,10 +222,6 @@ void DisplayAlert(NSString* title, NSString* message) {
 /////////////////////////////////////////////////////////////////////////////
 
 
-- (void)dealloc {
-    [window release];
-    [super dealloc];
-}
 
 
 @end
