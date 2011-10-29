@@ -92,9 +92,9 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string type="base64-UTF8" key="IBUIText">VmlzaXQgaHR0cDovL3d3dy5mb29kcmVwb3J0ZXIubmV0IHRvIHBvc3QgeW91ciBmb29kIQoKSSBzaG91
-bGQgY2FsbCBBcHBsZSBpbiBDdXBlcnRpbm8sIENhbGlmb3JuaWEgKCsxIDQwOC05OTYtMTAxMCkgbmV4
-dCBzdW5kYXkuA</string>
+						<string type="base64-UTF8" key="IBUIText">QXV0by1kZXRlY3RlZCBsaW5rcyBkZW1vOgpWaXNpdCBodHRwOi8vd3d3LmZvb2RyZXBvcnRlci5uZXQg
+dG8gcG9zdCB5b3VyIGZvb2QhCgpJIHNob3VsZCBjYWxsIEFwcGxlIGluIEN1cGVydGlubywgQ2FsaWZv
+cm5pYSAoKzEgNDA4LTk5Ni0xMDEwKSBuZXh0IHN1bmRheS4</string>
 						<object class="NSFont" key="IBUIFont" id="605141269">
 							<string key="NSName">Helvetica</string>
 							<double key="NSSize">14</double>

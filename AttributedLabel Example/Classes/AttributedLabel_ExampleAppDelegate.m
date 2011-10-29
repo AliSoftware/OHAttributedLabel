@@ -21,7 +21,7 @@
     [self.window makeKeyAndVisible];
 
 	visitedLinks = [[NSMutableSet alloc] init];
-	
+		
 	/* Don't forget to add the CoreText framework in your project ! */
 	[self fillLabel1];
 	[self fillLabel2];
@@ -54,7 +54,7 @@
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:txt];
 	// for those calls we don't specify a range so it affects the whole string
-	[attrStr setFont:[UIFont systemFontOfSize:18]];
+	[attrStr setFont:[UIFont fontWithName:@"Helvetica" size:18]];
 	[attrStr setTextColor:[UIColor grayColor]];
 
 	// now we only change the color of "Hello"
@@ -74,12 +74,18 @@
 -(IBAction)toggleBold:(UISwitch*)aSwitch
 {
 	/**(3)** (... later ...) Modify again the existing string *******/
+	
 	// Get the current attributedString and make it a mutable copy so we can modify it
 	NSMutableAttributedString* mas = [label1.attributedText mutableCopy];
+	NSString* plainText = [mas string];
 	// Modify the the font of "FoodReporter" to bold
-	[mas setTextBold:aSwitch.on range:[[label1.attributedText string] rangeOfString:@TXT_BOLD]];
+	[mas setTextBold:aSwitch.on range:[plainText rangeOfString:@TXT_BOLD]];
 	// Affect back the attributed string to the label
 	label1.attributedText = mas;
+	
+	// Restore the link (as each time we change the attributedText we remove custom links to avoid inconsistencies
+	[label1 addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net"] inRange:[plainText rangeOfString:@TXT_LINK]];
+
 	// Cleaning: balance the "mutableCopy" call with a "release"
 	[mas release];
 }
@@ -105,7 +111,7 @@
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [label2.attributedText mutableCopy];
 	// and only change the color of "Hello"
-	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(0,5)];
+	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(26,5)];
 	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	label2.attributedText = attrStr;
@@ -154,6 +160,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 id objectForLinkInfo(NSTextCheckingResult* linkInfo) {
+	// Return the first non-nil property
 	return (id)linkInfo.URL ?: (id)linkInfo.phoneNumber ?: (id)linkInfo.addressComponents ?: (id)linkInfo.date ?: (id)[linkInfo description];
 }
 
@@ -181,15 +188,15 @@ void DisplayAlert(NSString* title, NSString* message) {
 	if ([[linkInfo.URL scheme] isEqualToString:@"user"]) {
 		// We use this arbitrary URL scheme to handle custom actions
 		// So URLs like "user://xxx" will be handled here instead of opening in Safari.
-		// Note: in the above example, "xxx" is the 'host' of the URL
+		// Note: in the above example, "xxx" is the 'host' part of the URL
 		NSString* user = [linkInfo.URL host];
 		DisplayAlert(@"User Profile",[NSString stringWithFormat:@"Here you should display the profile of user %@ on a new screen.",user]);
 		
-		// Prevent the URL from opening as we handled here manually instead
+		// Prevent the URL from opening in Safari, as we handled it here manually instead
 		return NO;
 	} else {
 		switch (linkInfo.resultType) {
-			case NSTextCheckingTypeLink:
+			case NSTextCheckingTypeLink: // use default behavior
 				break;
 			case NSTextCheckingTypeAddress:
 				DisplayAlert(@"Address",[linkInfo.addressComponents description]);
@@ -204,7 +211,7 @@ void DisplayAlert(NSString* title, NSString* message) {
 				DisplayAlert(@"Unknown link type",[NSString stringWithFormat:@"You typed on an unknown link type (NSTextCheckingType %d)",linkInfo.resultType]);
 				break;
 		}
-		// Execute the default behavior, which is opening the URL in Safari.
+		// Execute the default behavior, which is opening the URL in Safari for URLs, starting a call for phone numbers, ...
 		return YES;
 	}
 }
