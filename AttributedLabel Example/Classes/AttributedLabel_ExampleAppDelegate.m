@@ -50,7 +50,7 @@
 #define TXT_END " with your friends!"
 
 -(IBAction)fillLabel1 {
-	NSString* txt = @ TXT_BEGIN TXT_BOLD TXT_MIDDLE TXT_LINK TXT_END; // concat the 3 (#define) constant parts in a single NSString
+	NSString* txt = @ TXT_BEGIN TXT_BOLD TXT_MIDDLE TXT_LINK TXT_END; // concat the 5 (#define) constant parts in a single NSString
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:txt];
 	// for those calls we don't specify a range so it affects the whole string
