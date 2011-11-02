@@ -34,6 +34,13 @@
 #import <CoreText/CoreText.h>
 #import <UIKit/UIKit.h>
 
+#ifndef OBJC_ARC_ENABLED
+	#ifdef __has_feature
+		#define OBJC_ARC_ENABLED __has_feature(objc_arc)
+	#else
+		#define OBJC_ARC_ENABLED 0
+	#endif
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // MARK: -

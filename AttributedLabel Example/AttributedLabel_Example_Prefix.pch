@@ -2,12 +2,6 @@
 // Prefix header for all source files of the 'AttributedLabel Example' target in the 'AttributedLabel Example' project
 //
 
-#ifdef __has_feature
-	#define OBJC_ARC_ENABLED __has_feature(objc_arc)
-#else
-	#define OBJC_ARC_ENABLED 0
-#endif
-
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
