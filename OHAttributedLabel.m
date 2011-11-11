@@ -625,12 +625,12 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 #if OHAttributedLabel_WarnAboutKnownIssues
 -(void)warnAboutKnownIssues_CheckLineBreakMode {
 	BOOL truncationMode = (self.lineBreakMode == UILineBreakModeHeadTruncation)
-	| (self.lineBreakMode == UILineBreakModeMiddleTruncation)
-	| (self.lineBreakMode == UILineBreakModeTailTruncation);
+	|| (self.lineBreakMode == UILineBreakModeMiddleTruncation)
+	|| (self.lineBreakMode == UILineBreakModeTailTruncation);
 	if (truncationMode) {
 		NSLog(@"[OHAttributedLabel] Warning: \"UILineBreakMode...Truncation\" lineBreakModes not yet fully supported by CoreText and OHAttributedLabel");
 		NSLog(@"                    (truncation will appear on each paragraph instead of the whole text)");
-		NSLog(@"                    This is a known issue (Help to solve is would be greatly appreciated).");
+		NSLog(@"                    This is a known issue (Help to solve this would be greatly appreciated).");
 		NSLog(@"                    See https://github.com/AliSoftware/OHAttributedLabel/issues/3");
 	}
 }
@@ -646,7 +646,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(void)setNumberOfLines:(NSInteger)nbLines {
 	NSLog(@"[OHAttributedLabel] Warning: the numberOfLines property is not yet supported by CoreText and OHAttributedLabel. (this property is ignored right now)");
-	NSLog(@"                    This is a known issue (Help to solve is would be greatly appreciated).");
+	NSLog(@"                    This is a known issue (Help to solve this would be greatly appreciated).");
 	NSLog(@"                    See https://github.com/AliSoftware/OHAttributedLabel/issues/34");
 
 	[super setNumberOfLines:nbLines];
