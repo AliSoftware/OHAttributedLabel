@@ -371,6 +371,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	
 	[activeLink release];
 	activeLink = [[self linkAtPoint:pt] retain];
+	touchStartPoint = pt;
 	
 	// we're using activeLink to draw a highlight in -drawRect:
 	[self setNeedsDisplay];
@@ -382,8 +383,10 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	
 	NSTextCheckingResult *linkAtTouchesEnded = [self linkAtPoint:pt];
 	
+	BOOL closeToStart = (abs(touchStartPoint.x - pt.x) < 10 && abs(touchStartPoint.y - pt.y) < 10);
+
 	// we can check on equality of the ranges themselfes since the data detectors create new results
-	if (activeLink && NSEqualRanges(activeLink.range,linkAtTouchesEnded.range)) {
+	if (activeLink && (NSEqualRanges(activeLink.range,linkAtTouchesEnded.range) || closeToStart)) {
 		BOOL openLink = (self.delegate && [self.delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
 		? [self.delegate attributedLabel:self shouldFollowLink:activeLink] : YES;
 		if (openLink) [[UIApplication sharedApplication] openURL:activeLink.URL];
