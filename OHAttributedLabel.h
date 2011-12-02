@@ -62,6 +62,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 	CGRect drawingRect;
 	NSMutableArray* customLinks;
 	NSTextCheckingResult* activeLink;
+	CGPoint touchStartPoint;
 }
 
 /* Attributed String accessors */
