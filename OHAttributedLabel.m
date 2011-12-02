@@ -436,7 +436,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		}
 		if (textFrame == NULL) {
 			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
-			drawingRect = self.bounds;
+			drawingRect = aRect;
 			if (self.centerVertically || self.extendBottomToFit) {
 				CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(drawingRect.size.width,CGFLOAT_MAX),NULL);
 				if (self.extendBottomToFit) {
