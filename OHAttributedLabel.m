@@ -170,7 +170,6 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 - (void)commonInit
 {
-	customLinks = [[NSMutableArray alloc] init];
 	self.linkColor = [UIColor blueColor];
 	self.highlightedLinkColor = [UIColor colorWithWhite:0.4 alpha:0.3];
 	self.underlineLinks = YES;
@@ -228,6 +227,9 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range {
 	NSTextCheckingResult* link = [NSTextCheckingResult linkCheckingResultWithRange:range URL:linkUrl];
+	if (customLinks == nil) {
+		customLinks = [[NSMutableArray alloc] init];
+	}
 	[customLinks addObject:link];
 	[self setNeedsDisplay];
 }
