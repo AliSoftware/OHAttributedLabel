@@ -246,16 +246,16 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		return _attributedText;
 	}
 
+	BOOL hasLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
+
 	NSString* plainText = [_attributedText string];
 	if (plainText && (self.automaticallyAddLinksForType > 0)) {
-		NSError* error = nil;
-		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:&error];
+		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:nil];
 		[linkDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
 			 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-			 UIColor* thisLinkColor = (self.delegate && [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
-			 ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+			 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
 			 
 			 if (thisLinkColor)
 				 [_attributedText setTextColor:thisLinkColor range:[result range]];
@@ -268,8 +268,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
 		 
 		 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-		 UIColor* thisLinkColor = (self.delegate && [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
-		 ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+		 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
 		 
 		 @try {
 			 if (thisLinkColor)
