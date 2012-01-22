@@ -242,7 +242,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	if (_attributedText == nil) {
 		return nil;
 	}
-	if (self.automaticallyAddLinksForType == 0 || customLinks.count == 0) {
+	if (self.automaticallyAddLinksForType == 0 && customLinks.count == 0) {
 		return _attributedText;
 	}
 
