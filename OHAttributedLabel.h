@@ -75,6 +75,7 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 @property(nonatomic, retain) UIColor* highlightedLinkColor; //[UIColor colorWithWhite:0.2 alpha:0.5]
 @property(nonatomic, assign) BOOL underlineLinks; //!< Defaults to YES. See also OHAttributedLabelDelegate
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
+-(void)addCustomLinkToPhoneNumber:(NSString*)phoneNumber inRange:(NSRange)range;
 -(void)removeAllCustomLinks;
 
 @property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks; //!< If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to NO)
