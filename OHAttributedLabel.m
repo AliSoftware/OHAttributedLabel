@@ -231,6 +231,11 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 	[customLinks addObject:link];
 	[self setNeedsDisplay];
 }
+-(void)addCustomLinkToPhoneNumber:(NSString*)phoneNumber inRange:(NSRange)range {
+	NSTextCheckingResult* link = [NSTextCheckingResult phoneNumberCheckingResultWithRange:range phoneNumber:phoneNumber];
+	[customLinks addObject:link];
+	[self setNeedsDisplay];
+}
 -(void)removeAllCustomLinks {
 	[customLinks removeAllObjects];
 	[self setNeedsDisplay];
