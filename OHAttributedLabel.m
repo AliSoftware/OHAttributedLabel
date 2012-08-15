@@ -170,7 +170,6 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 - (void)commonInit
 {
-	customLinks = [[NSMutableArray alloc] init];
 	self.linkColor = [UIColor blueColor];
 	self.highlightedLinkColor = [UIColor colorWithWhite:0.4 alpha:0.3];
 	self.underlineLinks = YES;
@@ -228,6 +227,9 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range {
 	NSTextCheckingResult* link = [NSTextCheckingResult linkCheckingResultWithRange:range URL:linkUrl];
+	if (customLinks == nil) {
+		customLinks = [[NSMutableArray alloc] init];
+	}
 	[customLinks addObject:link];
 	[self setNeedsDisplay];
 }
@@ -237,24 +239,28 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 }
 
 -(NSMutableAttributedString*)attributedTextWithLinks {
-	NSMutableAttributedString* str = [self.attributedText mutableCopy];
-	if (!str) return nil;
-	
-	NSString* plainText = [str string];
+	if (_attributedText == nil) {
+		return nil;
+	}
+	if (self.automaticallyAddLinksForType == 0 && customLinks.count == 0) {
+		return _attributedText;
+	}
+
+	BOOL hasLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
+
+	NSString* plainText = [_attributedText string];
 	if (plainText && (self.automaticallyAddLinksForType > 0)) {
-		NSError* error = nil;
-		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:&error];
+		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:nil];
 		[linkDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
 			 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-			 UIColor* thisLinkColor = (self.delegate && [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
-			 ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+			 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
 			 
 			 if (thisLinkColor)
-				 [str setTextColor:thisLinkColor range:[result range]];
+				 [_attributedText setTextColor:thisLinkColor range:[result range]];
 			 if (uStyle>0)
-				 [str setTextUnderlineStyle:uStyle range:[result range]];
+				 [_attributedText setTextUnderlineStyle:uStyle range:[result range]];
 		 }];
 	}
 	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
@@ -262,14 +268,13 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
 		 
 		 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-		 UIColor* thisLinkColor = (self.delegate && [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)])
-		 ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+		 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
 		 
 		 @try {
 			 if (thisLinkColor)
-				 [str setTextColor:thisLinkColor range:[result range]];
+				 [_attributedText setTextColor:thisLinkColor range:[result range]];
 			 if (uStyle>0)
-				 [str setTextUnderlineStyle:uStyle range:[result range]];
+				 [_attributedText setTextUnderlineStyle:uStyle range:[result range]];
 		 }
 		 @catch (NSException * e) {
 			 // Protection against NSRangeException
@@ -280,7 +285,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 			 }
 		 }
 	 }];
-	return [str autorelease];
+	return _attributedText;
 }
 
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx {
