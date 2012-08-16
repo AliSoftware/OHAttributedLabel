@@ -29,8 +29,11 @@
 	
     return YES;
 }
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+#if ! __has_feature(objc_arc)
 	[visitedLinks release];
+#endif
 }
 
 
@@ -49,7 +52,8 @@
 #define TXT_LINK "share your food"
 #define TXT_END " with your friends!"
 
--(IBAction)fillLabel1 {
+-(IBAction)fillLabel1
+{
 	NSString* txt = @ TXT_BEGIN TXT_BOLD TXT_MIDDLE TXT_LINK TXT_END; // concat the 5 (#define) constant parts in a single NSString
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:txt];
@@ -86,8 +90,10 @@
 	// Restore the link (as each time we change the attributedText we remove custom links to avoid inconsistencies
 	[label1 addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net"] inRange:[plainText rangeOfString:@TXT_LINK]];
 
+#if ! __has_feature(objc_arc)
 	// Cleaning: balance the "mutableCopy" call with a "release"
 	[mas release];
+#endif
 }
 
 
@@ -103,7 +109,8 @@
 
 
 
--(IBAction)fillLabel2 {
+-(IBAction)fillLabel2
+{
 	// Suppose you already have set the following properties of the myAttributedLabel object in InterfaceBuilder:
 	// - 'text' set to "Hello World!"
 	// - fontSize set to 12, text color set to gray
@@ -120,19 +127,24 @@
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 	label2.automaticallyAddLinksForType = NSTextCheckingTypeDate|NSTextCheckingTypeAddress|NSTextCheckingTypeLink|NSTextCheckingTypePhoneNumber;
 
+#if ! __has_feature(objc_arc)
 	[attrStr release];
+#endif
 }
 
 
--(IBAction)changeHAlignment {
+-(IBAction)changeHAlignment
+{
 	label2.textAlignment = (label2.textAlignment+1) % 4;
 }
 
--(IBAction)changeVAlignment {
+-(IBAction)changeVAlignment
+{
 	label2.centerVertically = !label2.centerVertically;
 }
 
--(IBAction)changeSize {
+-(IBAction)changeSize
+{
 	CGRect r = label2.frame;
 	r.size.width = 500 - r.size.width; // switch between 200 and 300px
 	label2.frame = r;
@@ -147,7 +159,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
--(IBAction)fillLabel3 {
+-(IBAction)fillLabel3
+{
 	NSRange linkRange = [label3.text rangeOfString:@"internal navigation"];
 	[label3 addCustomLink:[NSURL URLWithString:@"user://tom1362"] inRange:linkRange];
 	label3.centerVertically = YES;
@@ -159,12 +172,14 @@
 // MARK: Visited Links
 /////////////////////////////////////////////////////////////////////////////
 
-id objectForLinkInfo(NSTextCheckingResult* linkInfo) {
+id objectForLinkInfo(NSTextCheckingResult* linkInfo)
+{
 	// Return the first non-nil property
 	return (id)linkInfo.URL ?: (id)linkInfo.phoneNumber ?: (id)linkInfo.addressComponents ?: (id)linkInfo.date ?: (id)[linkInfo description];
 }
 
--(UIColor*)colorForLink:(NSTextCheckingResult*)link underlineStyle:(int32_t*)pUnderline {
+-(UIColor*)colorForLink:(NSTextCheckingResult*)link underlineStyle:(int32_t*)pUnderline
+{
 	if ([visitedLinks containsObject:objectForLinkInfo(link)]) {
 		// Visited link
 		*pUnderline = kCTUnderlineStyleSingle|kCTUnderlinePatternDot;
@@ -175,13 +190,17 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo) {
 	}
 }
 
-void DisplayAlert(NSString* title, NSString* message) {
+void DisplayAlert(NSString* title, NSString* message)
+{
 	UIAlertView* alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
-	[alert release];					
+#if ! __has_feature(objc_arc)
+	[alert release];
+#endif
 }
 
--(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo {
+-(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo
+{
 	[visitedLinks addObject:objectForLinkInfo(linkInfo)];
 	[attributedLabel setNeedsDisplay];
 	
@@ -208,7 +227,7 @@ void DisplayAlert(NSString* title, NSString* message) {
 				DisplayAlert(@"Phone Number",linkInfo.phoneNumber);
 				break;
 			default:
-				DisplayAlert(@"Unknown link type",[NSString stringWithFormat:@"You typed on an unknown link type (NSTextCheckingType %d)",linkInfo.resultType]);
+				DisplayAlert(@"Unknown link type",[NSString stringWithFormat:@"You typed on an unknown link type (NSTextCheckingType %lld)",linkInfo.resultType]);
 				break;
 		}
 		// Execute the default behavior, which is opening the URL in Safari for URLs, starting a call for phone numbers, ...
@@ -216,7 +235,8 @@ void DisplayAlert(NSString* title, NSString* message) {
 	}
 }
 
--(IBAction)resetVisitedLinks {
+-(IBAction)resetVisitedLinks
+{
 	[visitedLinks removeAllObjects];
 	[label1 setNeedsDisplay];
 	[label2 setNeedsDisplay];
@@ -225,11 +245,12 @@ void DisplayAlert(NSString* title, NSString* message) {
 
 /////////////////////////////////////////////////////////////////////////////
 
-
-- (void)dealloc {
+#if ! __has_feature(objc_arc)
+- (void)dealloc
+{
     [window release];
     [super dealloc];
 }
-
+#endif
 
 @end

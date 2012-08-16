@@ -32,112 +32,167 @@
 
 #import "NSAttributedString+Attributes.h"
 
+#if __has_feature(objc_arc)
+#define BRIDGE_CAST __bridge
+#else
+#define BRIDGE_CAST
+#endif
 
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: NS(Mutable)AttributedString Additions
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - NSAttributedString Additions
 
 @implementation NSAttributedString (OHCommodityConstructors)
-+(id)attributedStringWithString:(NSString*)string {
-	return string ? [[[self alloc] initWithString:string] autorelease] : nil;
++(NSAttributedString*)attributedStringWithString:(NSString*)string
+{
+    if (string)
+    {
+        NSAttributedString* as = [[self alloc] initWithString:string];
+#if ! __has_feature(objc_arc)
+        [as autorelease];
+#endif
+        return as;
+    } else {
+        return nil;
+    }
 }
-+(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr {
-	return attrStr ? [[[self alloc] initWithAttributedString:attrStr] autorelease] : nil;
++(NSAttributedString*)attributedStringWithAttributedString:(NSAttributedString*)attrStr
+{
+    if (attrStr)
+    {
+        NSAttributedString* as =[[self alloc] initWithAttributedString:attrStr];
+#if ! __has_feature(objc_arc)
+        [as autorelease];
+#endif
+        return as;
+    } else {
+        return nil;
+    }
 }
 
--(CGSize)sizeConstrainedToSize:(CGSize)maxSize {
+-(CGSize)sizeConstrainedToSize:(CGSize)maxSize
+{
 	return [self sizeConstrainedToSize:maxSize fitRange:NULL];
 }
--(CGSize)sizeConstrainedToSize:(CGSize)maxSize fitRange:(NSRange*)fitRange {
-	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)self);
-	CFRange fitCFRange = CFRangeMake(0,0);
-	CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,maxSize,&fitCFRange);
-	if (framesetter) CFRelease(framesetter);
-	if (fitRange) *fitRange = NSMakeRange(fitCFRange.location, fitCFRange.length);
-	return CGSizeMake( floorf(sz.width+1) , floorf(sz.height+1) ); // take 1pt of margin for security
+
+-(CGSize)sizeConstrainedToSize:(CGSize)maxSize fitRange:(NSRange*)fitRange
+{
+	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((BRIDGE_CAST CFAttributedStringRef)self);
+    CGSize sz = CGSizeMake(0.f, 0.f);
+    if (framesetter)
+    {
+        CFRange fitCFRange = CFRangeMake(0,0);
+        sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,maxSize,&fitCFRange);
+        sz = CGSizeMake( floorf(sz.width+1) , floorf(sz.height+1) ); // take 1pt of margin for security
+        CFRelease(framesetter);
+
+        if (fitRange)
+        {
+            *fitRange = NSMakeRange(fitCFRange.location, fitCFRange.length);
+        }
+    }
+    return sz;
 }
+
 @end
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - NSMutableAttributedString Additions
 
 @implementation NSMutableAttributedString (OHCommodityStyleModifiers)
 
--(void)setFont:(UIFont*)font {
+-(void)setFont:(UIFont*)font
+{
 	[self setFontName:font.fontName size:font.pointSize];
 }
--(void)setFont:(UIFont*)font range:(NSRange)range {
+-(void)setFont:(UIFont*)font range:(NSRange)range
+{
 	[self setFontName:font.fontName size:font.pointSize range:range];
 }
--(void)setFontName:(NSString*)fontName size:(CGFloat)size {
+-(void)setFontName:(NSString*)fontName size:(CGFloat)size
+{
 	[self setFontName:fontName size:size range:NSMakeRange(0,[self length])];
 }
--(void)setFontName:(NSString*)fontName size:(CGFloat)size range:(NSRange)range {
+-(void)setFontName:(NSString*)fontName size:(CGFloat)size range:(NSRange)range
+{
 	// kCTFontAttributeName
-	CTFontRef aFont = CTFontCreateWithName((CFStringRef)fontName, size, NULL);
-	if (!aFont) return;
-	[self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
-	CFRelease(aFont);
+	CTFontRef aFont = CTFontCreateWithName((BRIDGE_CAST CFStringRef)fontName, size, NULL);
+	if (aFont)
+    {
+        [self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
+        [self addAttribute:(NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
+        CFRelease(aFont);
+    }
 }
--(void)setFontFamily:(NSString*)fontFamily size:(CGFloat)size bold:(BOOL)isBold italic:(BOOL)isItalic range:(NSRange)range {
+-(void)setFontFamily:(NSString*)fontFamily size:(CGFloat)size bold:(BOOL)isBold italic:(BOOL)isItalic range:(NSRange)range
+{
 	// kCTFontFamilyNameAttribute + kCTFontTraitsAttribute
 	CTFontSymbolicTraits symTrait = (isBold?kCTFontBoldTrait:0) | (isItalic?kCTFontItalicTrait:0);
-	NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:symTrait] forKey:(NSString*)kCTFontSymbolicTrait];
+	NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:symTrait]
+                                                      forKey:(NSString*)kCTFontSymbolicTrait];
 	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
 						  fontFamily,kCTFontFamilyNameAttribute,
 						  trait,kCTFontTraitsAttribute,nil];
 	
-	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((CFDictionaryRef)attr);
+	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((BRIDGE_CAST CFDictionaryRef)attr);
 	if (!desc) return;
 	CTFontRef aFont = CTFontCreateWithFontDescriptor(desc, size, NULL);
 	CFRelease(desc);
 	if (!aFont) return;
 
 	[self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTFontAttributeName value:(id)aFont range:range];
+	[self addAttribute:(NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
 	CFRelease(aFont);
 }
 
--(void)setTextColor:(UIColor*)color {
+-(void)setTextColor:(UIColor*)color
+{
 	[self setTextColor:color range:NSMakeRange(0,[self length])];
 }
--(void)setTextColor:(UIColor*)color range:(NSRange)range {
+-(void)setTextColor:(UIColor*)color range:(NSRange)range
+{
 	// kCTForegroundColorAttributeName
 	[self removeAttribute:(NSString*)kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:range];
 }
 
--(void)setTextIsUnderlined:(BOOL)underlined {
+-(void)setTextIsUnderlined:(BOOL)underlined
+{
 	[self setTextIsUnderlined:underlined range:NSMakeRange(0,[self length])];
 }
--(void)setTextIsUnderlined:(BOOL)underlined range:(NSRange)range {
+-(void)setTextIsUnderlined:(BOOL)underlined range:(NSRange)range
+{
 	int32_t style = underlined ? (kCTUnderlineStyleSingle|kCTUnderlinePatternSolid) : kCTUnderlineStyleNone;
 	[self setTextUnderlineStyle:style range:range];
 }
--(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range {
+-(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range
+{
 	[self removeAttribute:(NSString*)kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
--(void)setTextBold:(BOOL)isBold range:(NSRange)range {
+-(void)setTextBold:(BOOL)isBold range:(NSRange)range
+{
 	NSUInteger startPoint = range.location;
 	NSRange effectiveRange;
 	do {
 		// Get font at startPoint
-		CTFontRef currentFont = (CTFontRef)[self attribute:(NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
+		CTFontRef currentFont = (BRIDGE_CAST CTFontRef)[self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
 		// Create bold/unbold font variant for this font and apply
 		CTFontRef newFont = CTFontCreateCopyWithSymbolicTraits(currentFont, 0.0, NULL, (isBold?kCTFontBoldTrait:0), kCTFontBoldTrait);
-		if (newFont) {
+		if (newFont)
+        {
 			[self removeAttribute:(NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
-			[self addAttribute:(NSString*)kCTFontAttributeName value:(id)newFont range:fontRange];
+			[self addAttribute:(NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)newFont range:fontRange];
 			CFRelease(newFont);
 		} else {
-			NSString* fontName = [(NSString*)CTFontCopyFullName(currentFont) autorelease];
-			NSLog(@"[OHAttributedLabel] Warning: can't find a bold font variant for font %@. Try another font family (like Helvetica) instead.",fontName);
+			CFStringRef fontName = CTFontCopyFullName(currentFont);
+			NSLog(@"[OHAttributedLabel] Warning: can't find a bold font variant for font %@. Try another font family (like Helvetica) instead.",
+                  (BRIDGE_CAST NSString*)fontName);
+            CFRelease(fontName);
 		}
 		////[self removeAttribute:(NSString*)kCTFontWeightTrait range:fontRange]; // Work around for Apple leak
 		////[self addAttribute:(NSString*)kCTFontWeightTrait value:(id)[NSNumber numberWithInt:1.0f] range:fontRange];
@@ -147,10 +202,12 @@
 	} while(startPoint<NSMaxRange(range));
 }
 
--(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode {
+-(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode
+{
 	[self setTextAlignment:alignment lineBreakMode:lineBreakMode range:NSMakeRange(0,[self length])];
 }
--(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range {
+-(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range
+{
 	// kCTParagraphStyleAttributeName > kCTParagraphStyleSpecifierAlignment
 	CTParagraphStyleSetting paraStyles[2] = {
 		{.spec = kCTParagraphStyleSpecifierAlignment, .valueSize = sizeof(CTTextAlignment), .value = (const void*)&alignment},
@@ -158,7 +215,7 @@
 	};
 	CTParagraphStyleRef aStyle = CTParagraphStyleCreate(paraStyles, 2);
 	[self removeAttribute:(NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(id)aStyle range:range];
+	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(BRIDGE_CAST id)aStyle range:range];
 	CFRelease(aStyle);
 }
 

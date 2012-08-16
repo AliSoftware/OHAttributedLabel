@@ -35,15 +35,13 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MARK: -
-// MARK: Utility Functions
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark Utility Functions
 
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment);
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode);
 
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 
 @class OHAttributedLabel;
 @protocol OHAttributedLabelDelegate <NSObject>
@@ -54,16 +52,12 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 
 #define UITextAlignmentJustify ((UITextAlignment)kCTJustifiedTextAlignment)
 
-/////////////////////////////////////////////////////////////////////////////
 
-@interface OHAttributedLabel : UILabel {
-	NSMutableAttributedString* _attributedText; //!< Internally mutable, but externally immutable copy access only
-	CTFrameRef textFrame;
-	CGRect drawingRect;
-	NSMutableArray* customLinks;
-	NSTextCheckingResult* activeLink;
-	CGPoint touchStartPoint;
-}
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Public Interface
+
+@interface OHAttributedLabel : UILabel
 
 /* Attributed String accessors */
 @property(nonatomic, copy) NSAttributedString* attributedText; //!< Use this instead of the "text" property inherited from UILabel to set and get text
@@ -71,8 +65,8 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 
 /* Links configuration */
 @property(nonatomic, assign) NSTextCheckingTypes automaticallyAddLinksForType; //!< Defaults to NSTextCheckingTypeLink, + NSTextCheckingTypePhoneNumber if "tel:" scheme supported
-@property(nonatomic, retain) UIColor* linkColor; //!< Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
-@property(nonatomic, retain) UIColor* highlightedLinkColor; //[UIColor colorWithWhite:0.2 alpha:0.5]
+@property(nonatomic, strong) UIColor* linkColor; //!< Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
+@property(nonatomic, strong) UIColor* highlightedLinkColor; //[UIColor colorWithWhite:0.2 alpha:0.5]
 @property(nonatomic, assign) BOOL underlineLinks; //!< Defaults to YES. See also OHAttributedLabelDelegate
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
 -(void)removeAllCustomLinks;
