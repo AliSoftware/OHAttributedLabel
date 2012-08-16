@@ -18,6 +18,10 @@ To use this classes in your project:
 * include the "OHAttributedLabel" and "NSAttributedString+Attributes" header (.h) and source (.m) files in your Xcode project
 * **Don't forget to import the CoreText framework** in your project (otherwise you will have linker errors when you will compile)
 
+# ARC Support
+
+This project is compatible with ARC since its version of August 16th, 2012.
+
 # Sample code & Other documentation
 
 There is no explicit documentation of the class yet (never had time to write one).

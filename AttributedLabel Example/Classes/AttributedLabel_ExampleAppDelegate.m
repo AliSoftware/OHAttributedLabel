@@ -60,6 +60,7 @@
 	// for those calls we don't specify a range so it affects the whole string
 	[attrStr setFont:[UIFont fontWithName:@"Helvetica" size:18]];
 	[attrStr setTextColor:[UIColor grayColor]];
+    [attrStr setTextAlignment:kCTJustifiedTextAlignment lineBreakMode:kCTLineBreakByWordWrapping];
 
 	// now we only change the color of "Hello"
 	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.f blue:0.5 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
@@ -70,9 +71,7 @@
 	// and add a link to the "share your food!" text
 	[label1 addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net"] inRange:[txt rangeOfString:@TXT_LINK]];
 	 
-	// Use the "Justified" alignment
-	label1.textAlignment = UITextAlignmentJustify;
-	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.	
+	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 }
 
 -(IBAction)toggleBold:(UISwitch*)aSwitch

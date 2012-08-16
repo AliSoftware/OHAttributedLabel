@@ -51,7 +51,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range);
 
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment)
 {
-    if (alignment == UITextAlignmentJustify)
+    if (alignment == (UITextAlignment)kCTJustifiedTextAlignment)
     {
         /* special OOB value, so test it outside of the switch to avoid warning */
         return kCTJustifiedTextAlignment;
@@ -147,6 +147,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private interface
 
+const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
 @interface OHAttributedLabel(/* Private */)
 {
@@ -156,7 +157,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 	NSMutableArray* customLinks;
 	CGPoint touchStartPoint;
 }
-@property(nonatomic, retain) NSTextCheckingResult* ppactiveLink;
+@property(nonatomic, retain) NSTextCheckingResult* activeLink;
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
 -(NSMutableAttributedString*)attributedTextWithLinks;
@@ -178,7 +179,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 
 
 @implementation OHAttributedLabel
-@synthesize ppactiveLink = _activeLink;
+@synthesize activeLink = _activeLink;
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Init/Dealloc
@@ -232,7 +233,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 
 	self.linkColor = nil;
 	self.highlightedLinkColor = nil;
-	self.ppactiveLink = nil;
+	self.activeLink = nil;
 #if ! __has_feature(objc_arc)
 	[super dealloc];
 #endif
@@ -416,7 +417,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 	UITouch* touch = [touches anyObject];
 	CGPoint pt = [touch locationInView:self];
 	
-	self.ppactiveLink = [self linkAtPoint:pt];
+	self.activeLink = [self linkAtPoint:pt];
 	touchStartPoint = pt;
 	
 	// we're using activeLink to draw a highlight in -drawRect:
@@ -440,13 +441,13 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 		if (openLink) [[UIApplication sharedApplication] openURL:_activeLink.URL];
 	}
 	
-	self.ppactiveLink = nil;
+	self.activeLink = nil;
 	[self setNeedsDisplay];
 }
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	self.ppactiveLink = nil;
+	self.activeLink = nil;
 	[self setNeedsDisplay];
 }
 

@@ -50,7 +50,13 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 -(UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo underlineStyle:(int32_t*)underlineStyle; //!< Combination of CTUnderlineStyle and CTUnderlineStyleModifiers
 @end
 
-#define UITextAlignmentJustify ((UITextAlignment)kCTJustifiedTextAlignment)
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
+extern const int UITextAlignmentJustify
+__attribute__((deprecated("You should use 'setTextAlignment:lineBreakMode:' on your NSAttributedString instead.")));
+#else
+extern const int UITextAlignmentJustify
+__attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:lineBreakMode:' on your NSAttributedString instead.")));
+#endif
 
 
 
