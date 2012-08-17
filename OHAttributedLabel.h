@@ -77,7 +77,7 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
 -(void)removeAllCustomLinks;
 
-@property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks; //!< If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to NO)
+@property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks; //!< If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to YES)
 @property(nonatomic, assign) IBOutlet id<OHAttributedLabelDelegate> delegate;
 
 @property(nonatomic, assign) BOOL centerVertically;
