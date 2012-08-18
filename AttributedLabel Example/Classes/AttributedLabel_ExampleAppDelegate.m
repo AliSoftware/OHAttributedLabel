@@ -62,7 +62,7 @@
 	[attrStr setTextColor:[UIColor grayColor]];
     [attrStr setTextAlignment:kCTJustifiedTextAlignment lineBreakMode:kCTLineBreakByWordWrapping];
 
-	// now we only change the color of "Hello"
+	// now we only change the color of "FoodReporter"
 	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.f blue:0.5 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
 	[attrStr setTextBold:YES range:[txt rangeOfString:@TXT_BOLD]];
 	
@@ -116,13 +116,12 @@
 	
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [label2.attributedText mutableCopy];
+    [attrStr setTextAlignment:kCTCenterTextAlignment lineBreakMode:kCTLineBreakByWordWrapping];
 	// and only change the color of "Hello"
 	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(26,5)];
 	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	label2.attributedText = attrStr;
-	// Use the "Justified" alignment
-	label2.textAlignment = UITextAlignmentCenter;
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 	label2.automaticallyAddLinksForType = NSTextCheckingTypeDate|NSTextCheckingTypeAddress|NSTextCheckingTypeLink|NSTextCheckingTypePhoneNumber;
 
@@ -134,7 +133,19 @@
 
 -(IBAction)changeHAlignment
 {
-	label2.textAlignment = (((int)(label2.textAlignment))+1) % 3;
+    // NOTE: You could use label2.textAlignment but this does not support the "Justified" text alignement
+    // label2.textAlignment = ( (int)label2.textAlignment + 1 ) % 3;
+    // So we prefer to set the CTTextAlignment on the whole NSAttributedString instead
+    
+    static CTTextAlignment textAlign = kCTCenterTextAlignment;
+    textAlign = (CTTextAlignment)  ( ((int)textAlign + 1) % 4 );
+    
+    NSMutableAttributedString* attrStr = [label2.attributedText mutableCopy];
+    [attrStr setTextAlignment:textAlign lineBreakMode:kCTLineBreakByWordWrapping];
+    label2.attributedText = attrStr;
+#if ! __has_feature(objc_arc)
+	[attrStr release];
+#endif
 }
 
 -(IBAction)changeVAlignment
