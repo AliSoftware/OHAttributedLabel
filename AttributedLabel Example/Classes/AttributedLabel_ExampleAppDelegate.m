@@ -124,6 +124,7 @@
 	label2.attributedText = attrStr;
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 	label2.automaticallyAddLinksForType = NSTextCheckingTypeDate|NSTextCheckingTypeAddress|NSTextCheckingTypeLink|NSTextCheckingTypePhoneNumber;
+    label2.centerVertically = NO;
 
 #if ! __has_feature(objc_arc)
 	[attrStr release];
@@ -137,11 +138,13 @@
     // label2.textAlignment = ( (int)label2.textAlignment + 1 ) % 3;
     // So we prefer to set the CTTextAlignment on the whole NSAttributedString instead
     
-    static CTTextAlignment textAlign = kCTCenterTextAlignment;
-    textAlign = (CTTextAlignment)  ( ((int)textAlign + 1) % 4 );
     
     NSMutableAttributedString* attrStr = [label2.attributedText mutableCopy];
+    
+    CTTextAlignment textAlign = [attrStr textAlignmentAtIndex:0 effectiveRange:NULL];
+    textAlign = (CTTextAlignment)  ( ((int)textAlign + 1) % 4 ); // loop thru enum values 0 to 3 (left, center, right, justified)
     [attrStr setTextAlignment:textAlign lineBreakMode:kCTLineBreakByWordWrapping];
+    
     label2.attributedText = attrStr;
 #if ! __has_feature(objc_arc)
 	[attrStr release];
@@ -219,7 +222,7 @@ void DisplayAlert(NSString* title, NSString* message)
 		// So URLs like "user://xxx" will be handled here instead of opening in Safari.
 		// Note: in the above example, "xxx" is the 'host' part of the URL
 		NSString* user = [linkInfo.URL host];
-		DisplayAlert(@"User Profile",[NSString stringWithFormat:@"Here you should display the profile of user %@ on a new screen.",user]);
+		DisplayAlert(@"User Profile",[NSString stringWithFormat:@"Here you could display the profile of user %@ on a new screen.",user]);
 		
 		// Prevent the URL from opening in Safari, as we handled it here manually instead
 		return NO;

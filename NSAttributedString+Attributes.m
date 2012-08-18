@@ -93,7 +93,59 @@
     return sz;
 }
 
+-(CTFontRef)fontAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:index effectiveRange:aRange];
+    return (BRIDGE_CAST CTFontRef)attr;
+}
+
+-(UIColor*)textColorAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTForegroundColorAttributeName atIndex:index effectiveRange:aRange];
+    return [UIColor colorWithCGColor:(BRIDGE_CAST CGColorRef)attr];
+}
+
+-(BOOL)textIsUnderlinedAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    int32_t underlineStyle = [self textUnderlineStyleAtIndex:index effectiveRange:aRange];
+    return (underlineStyle & 0xFF) == kCTUnderlineStyleNone;
+}
+
+-(int32_t)textUnderlineStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTUnderlineStyleAttributeName atIndex:index effectiveRange:aRange];
+    return [(NSNumber*)attr intValue];
+}
+
+-(BOOL)textIsBoldAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    CTFontRef font = [self fontAtIndex:index effectiveRange:aRange];
+    CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(font);
+    return (traits & kCTFontBoldTrait) != 0;
+}
+
+-(CTTextAlignment)textAlignmentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
+    CTParagraphStyleRef style = (BRIDGE_CAST CTParagraphStyleRef)attr;
+    CTTextAlignment textAlign = kCTNaturalTextAlignment;
+    CTParagraphStyleGetValueForSpecifier(style, kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &textAlign);
+    return textAlign;
+}
+
+-(CTLineBreakMode)lineBreakModeAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
+    CTParagraphStyleRef style = (BRIDGE_CAST CTParagraphStyleRef)attr;
+    CTLineBreakMode lineBreakMode = kCTLineBreakByWordWrapping;
+    CTParagraphStyleGetValueForSpecifier(style, kCTParagraphStyleSpecifierLineBreakMode, sizeof(CTLineBreakMode), &lineBreakMode);
+    return lineBreakMode;
+}
 @end
+
+
+
+
 
 
 
@@ -120,8 +172,8 @@
 	CTFontRef aFont = CTFontCreateWithName((BRIDGE_CAST CFStringRef)fontName, size, NULL);
 	if (aFont)
     {
-        [self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-        [self addAttribute:(NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
+        [self removeAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
+        [self addAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
         CFRelease(aFont);
     }
 }
@@ -130,7 +182,7 @@
 	// kCTFontFamilyNameAttribute + kCTFontTraitsAttribute
 	CTFontSymbolicTraits symTrait = (isBold?kCTFontBoldTrait:0) | (isItalic?kCTFontItalicTrait:0);
 	NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:symTrait]
-                                                      forKey:(NSString*)kCTFontSymbolicTrait];
+                                                      forKey:(BRIDGE_CAST NSString*)kCTFontSymbolicTrait];
 	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
 						  fontFamily,kCTFontFamilyNameAttribute,
 						  trait,kCTFontTraitsAttribute,nil];
@@ -141,8 +193,8 @@
 	CFRelease(desc);
 	if (!aFont) return;
 
-	[self removeAttribute:(NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
+	[self removeAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
+	[self addAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
 	CFRelease(aFont);
 }
 
@@ -153,8 +205,8 @@
 -(void)setTextColor:(UIColor*)color range:(NSRange)range
 {
 	// kCTForegroundColorAttributeName
-	[self removeAttribute:(NSString*)kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTForegroundColorAttributeName value:(id)color.CGColor range:range];
+	[self removeAttribute:(BRIDGE_CAST NSString*)kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
+	[self addAttribute:(BRIDGE_CAST NSString*)kCTForegroundColorAttributeName value:(BRIDGE_CAST id)color.CGColor range:range];
 }
 
 -(void)setTextIsUnderlined:(BOOL)underlined
@@ -168,8 +220,8 @@
 }
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range
 {
-	[self removeAttribute:(NSString*)kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
+	[self removeAttribute:(BRIDGE_CAST NSString*)kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
+	[self addAttribute:(BRIDGE_CAST NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
 -(void)setTextBold:(BOOL)isBold range:(NSRange)range
@@ -185,8 +237,8 @@
 		CTFontRef newFont = CTFontCreateCopyWithSymbolicTraits(currentFont, 0.0, NULL, (isBold?kCTFontBoldTrait:0), kCTFontBoldTrait);
 		if (newFont)
         {
-			[self removeAttribute:(NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
-			[self addAttribute:(NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)newFont range:fontRange];
+			[self removeAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
+			[self addAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)newFont range:fontRange];
 			CFRelease(newFont);
 		} else {
 			CFStringRef fontName = CTFontCopyFullName(currentFont);
@@ -214,8 +266,8 @@
 		{.spec = kCTParagraphStyleSpecifierLineBreakMode, .valueSize = sizeof(CTLineBreakMode), .value = (const void*)&lineBreakMode},
 	};
 	CTParagraphStyleRef aStyle = CTParagraphStyleCreate(paraStyles, 2);
-	[self removeAttribute:(NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(NSString*)kCTParagraphStyleAttributeName value:(BRIDGE_CAST id)aStyle range:range];
+	[self removeAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
+	[self addAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName value:(BRIDGE_CAST id)aStyle range:range];
 	CFRelease(aStyle);
 }
 
