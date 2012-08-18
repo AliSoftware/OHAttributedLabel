@@ -134,7 +134,7 @@
 
 -(IBAction)changeHAlignment
 {
-	label2.textAlignment = (label2.textAlignment+1) % 4;
+	label2.textAlignment = (((int)(label2.textAlignment))+1) % 3;
 }
 
 -(IBAction)changeVAlignment
