@@ -484,6 +484,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		if (self.highlighted && self.highlightedTextColor != nil)
         {
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
+		} else {
+			[attrStrWithLinks setTextColor:self.textColor];
 		}
 		if (textFrame == NULL)
         {
