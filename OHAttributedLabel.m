@@ -433,6 +433,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range) {
 		NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
 		if (self.highlighted && self.highlightedTextColor != nil) {
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
+		} else {
+			[attrStrWithLinks setTextColor:self.textColor];
 		}
 		if (textFrame == NULL) {
 			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attrStrWithLinks);
