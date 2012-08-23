@@ -265,6 +265,10 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     {
 		return nil;
 	}
+
+    // Reset the main text color
+    [_attributedText setTextColor:self.textColor];
+    
     if (self.automaticallyAddLinksForType == 0 && customLinks.count == 0)
     {
 		return _attributedText;
@@ -484,8 +488,6 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		if (self.highlighted && self.highlightedTextColor != nil)
         {
 			[attrStrWithLinks setTextColor:self.highlightedTextColor];
-		} else {
-			[attrStrWithLinks setTextColor:self.textColor];
 		}
 		if (textFrame == NULL)
         {
