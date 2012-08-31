@@ -157,7 +157,7 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
     }
     else if (self.resultType == NSTextCheckingTypePhoneNumber)
     {
-        url = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", self.phoneNumber]];
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", [self.phoneNumber stringByReplacingOccurrencesOfString:@" " withString:@""]]];
     }
     return url;
 }
