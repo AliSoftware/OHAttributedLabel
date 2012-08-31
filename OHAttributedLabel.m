@@ -151,7 +151,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
 @interface OHAttributedLabel(/* Private */)
 {
-	NSMutableAttributedString* _attributedText; //!< Internally mutable, but externally immutable copy access only
+	NSAttributedString* _attributedText;
+    NSAttributedString* _attributedTextWithLinks;
 	CTFrameRef textFrame;
 	CGRect drawingRect;
 	NSMutableArray* customLinks;
@@ -160,7 +161,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 @property(nonatomic, retain) NSTextCheckingResult* activeLink;
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
--(NSMutableAttributedString*)attributedTextWithLinks;
+-(void)computeAttributedTextWithLinks;
 -(void)resetTextFrame;
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect;
 #if OHAttributedLabel_WarnAboutKnownIssues
@@ -227,6 +228,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 {
 #if ! __has_feature(objc_arc)
 	[_attributedText release];
+    [_attributedTextWithLinks release];
 	[customLinks release];
 #endif
 	[self resetTextFrame];
@@ -251,6 +253,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		customLinks = [[NSMutableArray alloc] init];
 	}
 	[customLinks addObject:link];
+    [self computeAttributedTextWithLinks];
 	[self setNeedsDisplay];
 }
 -(void)removeAllCustomLinks
@@ -259,20 +262,23 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	[self setNeedsDisplay];
 }
 
--(NSMutableAttributedString*)attributedTextWithLinks
+-(void)computeAttributedTextWithLinks
 {
-    if (_attributedText == nil)
-    {
-		return nil;
-	}
+#if ! __has_feature(objc_arc)
+    [_attributedTextWithLinks release];
+#endif
 
-    // Reset the main text color
-    [_attributedText setTextColor:self.textColor];
-    
-    if (self.automaticallyAddLinksForType == 0 && customLinks.count == 0)
+    if (!_attributedText || (self.automaticallyAddLinksForType == 0 && customLinks.count == 0))
     {
-		return _attributedText;
+#if ! __has_feature(objc_arc)
+        _attributedTextWithLinks = [_attributedText retain];
+#else
+		_attributedTextWithLinks = _attributedText;
+#endif
+        return;
 	}
+    
+    NSMutableAttributedString* mutAS = [_attributedText mutableCopy];
 	
     BOOL hasLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
 
@@ -287,9 +293,9 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 			 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
 			 
 			 if (thisLinkColor)
-				 [_attributedText setTextColor:thisLinkColor range:[result range]];
+				 [mutAS setTextColor:thisLinkColor range:[result range]];
 			 if (uStyle>0)
-				 [_attributedText setTextUnderlineStyle:uStyle range:[result range]];
+				 [mutAS setTextUnderlineStyle:uStyle range:[result range]];
 		 }];
 	}
 	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
@@ -301,9 +307,9 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		 
 		 @try {
 			 if (thisLinkColor)
-				 [_attributedText setTextColor:thisLinkColor range:[result range]];
+				 [mutAS setTextColor:thisLinkColor range:[result range]];
 			 if (uStyle>0)
-				 [_attributedText setTextUnderlineStyle:uStyle range:[result range]];
+				 [mutAS setTextUnderlineStyle:uStyle range:[result range]];
 		 }
 		 @catch (NSException * e) {
 			 // Protection against NSRangeException
@@ -315,7 +321,10 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		 }
 	 }];
 
-	return _attributedText;
+	_attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
+#if ! __has_feature(objc_arc)
+    [mutAS release];
+#endif
 }
 
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx
@@ -484,17 +493,22 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 			CGContextSetShadowWithColor(ctx, self.shadowOffset, 0.0, self.shadowColor.CGColor);
 		}
 		
-		NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
+        NSAttributedString* attributedStringToDisplay = _attributedTextWithLinks;
 		if (self.highlighted && self.highlightedTextColor != nil)
         {
-			[attrStrWithLinks setTextColor:self.highlightedTextColor];
+            NSMutableAttributedString* mutAS = [attributedStringToDisplay mutableCopy];
+			[mutAS setTextColor:self.highlightedTextColor];
+            attributedStringToDisplay = mutAS;
+#if ! __has_feature(objc_arc)
+            [mutAS autorelease];
+#endif
 		}
 		if (textFrame == NULL)
         {
 #if __has_feature(objc_arc)
-            CFAttributedStringRef cfAttrStrWithLinks = (__bridge CFAttributedStringRef)attrStrWithLinks;
+            CFAttributedStringRef cfAttrStrWithLinks = (__bridge CFAttributedStringRef)attributedStringToDisplay;
 #else
-            CFAttributedStringRef cfAttrStrWithLinks = (CFAttributedStringRef)attrStrWithLinks;
+            CFAttributedStringRef cfAttrStrWithLinks = (CFAttributedStringRef)attributedStringToDisplay;
 #endif
 			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(cfAttrStrWithLinks);
 			drawingRect = self.bounds;
@@ -594,9 +608,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-	NSMutableAttributedString* attrStrWithLinks = [self attributedTextWithLinks];
-	if (!attrStrWithLinks) return CGSizeZero;
-	return [attrStrWithLinks sizeConstrainedToSize:size fitRange:NULL];
+	if (!_attributedTextWithLinks) return CGSizeZero;
+	return [_attributedTextWithLinks sizeConstrainedToSize:size fitRange:NULL];
 }
 
 
@@ -617,7 +630,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
 	[mutAttrStr setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
-	self.attributedText = mutAttrStr;
+    
+	self.attributedText = [NSAttributedString attributedStringWithAttributedString:mutAttrStr];
 }
 
 -(NSAttributedString*)attributedText
@@ -626,20 +640,17 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     {
 		[self resetAttributedText];
 	}
-#if __has_feature(objc_arc)
-    return [_attributedText copy]; // immutable autoreleased copy
-#else
-	return [[_attributedText copy] autorelease]; // immutable autoreleased copy
-#endif
+    return _attributedText;
 }
 -(void)setAttributedText:(NSAttributedString*)attributedText
 {
 #if ! __has_feature(objc_arc)
 	[_attributedText release];
 #endif
-	_attributedText = [attributedText mutableCopy];
+	_attributedText = [attributedText copy];
 	[self setAccessibilityLabel:_attributedText.string];
 	[self removeAllCustomLinks];
+    [self computeAttributedTextWithLinks];
 	[self setNeedsDisplay];
 }
 
@@ -655,27 +666,46 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 }
 -(void)setFont:(UIFont *)font
 {
-	[_attributedText setFont:font];
+    NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
+	[mutAS setFont:font];
+#if ! __has_feature(objc_arc)
+    [_attributedText release];
+#endif
+    _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
 	[super setFont:font]; // will call setNeedsDisplay too
 }
 -(void)setTextColor:(UIColor *)color
 {
-	[_attributedText setTextColor:color];
+    NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
+	[mutAS setTextColor:color];
+#if ! __has_feature(objc_arc)
+    [_attributedText release];
+#endif
+    _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
 	[super setTextColor:color]; // will call setNeedsDisplay too
 }
 -(void)setTextAlignment:(UITextAlignment)alignment
 {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(alignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
-	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+    NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
+	[mutAS setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+#if ! __has_feature(objc_arc)
+    [_attributedText release];
+#endif
+    _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
 	[super setTextAlignment:alignment]; // will call setNeedsDisplay too
 }
 -(void)setLineBreakMode:(UILineBreakMode)lineBreakMode
 {
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(lineBreakMode);
-	[_attributedText setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
-	
+    NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
+	[mutAS setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
+#if ! __has_feature(objc_arc)
+    [_attributedText release];
+#endif
+    _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
 	
 #if OHAttributedLabel_WarnAboutKnownIssues
@@ -691,6 +721,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(void)setAutomaticallyAddLinksForType:(NSTextCheckingTypes)types
 {
 	automaticallyAddLinksForType = types;
+    [self computeAttributedTextWithLinks];
 	[self setNeedsDisplay];
 }
 
