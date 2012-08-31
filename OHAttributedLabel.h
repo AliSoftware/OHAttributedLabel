@@ -41,8 +41,9 @@
 
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment);
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode);
+
 @interface NSTextCheckingResult(Extended)
--(NSURL*)extendedURL;
+@property(nonatomic, readonly) NSURL* extendedURL;
 @end
 
 /////////////////////////////////////////////////////////////////////////////////////

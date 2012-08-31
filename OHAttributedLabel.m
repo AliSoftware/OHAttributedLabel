@@ -150,7 +150,8 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
     NSURL* url = self.URL;
     if (self.resultType == NSTextCheckingTypeAddress)
     {
-        NSString* mapURLString = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@",
+        NSString* baseURL = ([UIDevice currentDevice].systemVersion.floatValue >= 6.0) ? @"maps.apple.com" : @"maps.google.com";
+        NSString* mapURLString = [NSString stringWithFormat:@"http://%@/maps?q=%@", baseURL,
                                   [self.addressComponents.allValues componentsJoinedByString:@","]];
         url = [NSURL URLWithString:mapURLString];
     }
