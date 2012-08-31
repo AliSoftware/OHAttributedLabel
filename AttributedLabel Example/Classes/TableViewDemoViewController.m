@@ -10,10 +10,12 @@
 #import "OHAttributedLabel.h"
 #import "UIAlertView+Commodity.h"
 
+
 @interface TableViewDemoViewController () <OHAttributedLabelDelegate>
 @property(nonatomic, retain) NSArray* texts;
 @end
 
+static NSInteger const kAttributedLabelTag = 100;
 
 @implementation TableViewDemoViewController
 @synthesize texts = _texts;
@@ -56,7 +58,6 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const kCellIdentifier = @"SomeCell";
-    static NSInteger const kAttributedLabelTag = 100;
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
     OHAttributedLabel* attrLabel = nil;
     
@@ -70,6 +71,7 @@
         attrLabel.font = [UIFont systemFontOfSize:16];
         attrLabel.automaticallyAddLinksForType = NSTextCheckingAllTypes;
         attrLabel.delegate = self;
+        attrLabel.highlightedTextColor = [UIColor whiteColor];
         attrLabel.tag = kAttributedLabelTag;
         [cell addSubview:attrLabel];
         
@@ -84,7 +86,22 @@
     return cell;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+#pragma mark - TableView Delegate
+/////////////////////////////////////////////////////////////////////////////
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+    OHAttributedLabel* attrLabel = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
+    
+    // Detect first link and open it
+    NSTextCheckingResult* firstLink = [[NSDataDetector dataDetectorWithTypes:attrLabel.automaticallyAddLinksForType error:nil]
+                                        firstMatchInString:attrLabel.text options:0 range:NSMakeRange(0, attrLabel.text.length)];
+    
+    [[UIApplication sharedApplication] openURL:firstLink.extendedURL];
+}
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - OHAttributedLabel Delegate Method
