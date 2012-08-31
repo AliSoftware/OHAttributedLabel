@@ -51,7 +51,8 @@
 -(CTFontRef)fontAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(UIColor*)textColorAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(BOOL)textIsUnderlinedAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
--(int32_t)textUnderlineStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange; //!< returns a combination of CTUnderlineStyle & CTUnderlineStyleModifiers
+//! @return a combination of CTUnderlineStyle & CTUnderlineStyleModifiers
+-(int32_t)textUnderlineStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(BOOL)textIsBoldAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(CTTextAlignment)textAlignmentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(CTLineBreakMode)lineBreakModeAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
@@ -72,7 +73,8 @@
 -(void)setTextColor:(UIColor*)color range:(NSRange)range;
 -(void)setTextIsUnderlined:(BOOL)underlined;
 -(void)setTextIsUnderlined:(BOOL)underlined range:(NSRange)range;
--(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range; //!< style is a combination of CTUnderlineStyle & CTUnderlineStyleModifiers
+//! @param style is a combination of CTUnderlineStyle & CTUnderlineStyleModifiers
+-(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range;
 -(void)setTextBold:(BOOL)isBold range:(NSRange)range;
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;

@@ -36,11 +36,17 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Utility Functions
+#pragma mark - Utility Functions
+/////////////////////////////////////////////////////////////////////////////////////
 
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment);
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode);
+@interface NSTextCheckingResult(Extended)
+-(NSURL*)extendedURL;
+@end
 
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - OHAttributedLabel Delegate Protocol
 /////////////////////////////////////////////////////////////////////////////////////
 
 @class OHAttributedLabel;
@@ -50,11 +56,15 @@ CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode
 -(UIColor*)colorForLink:(NSTextCheckingResult*)linkInfo underlineStyle:(int32_t*)underlineStyle; //!< Combination of CTUnderlineStyle and CTUnderlineStyleModifiers
 @end
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Constants
+/////////////////////////////////////////////////////////////////////////////////////
+
 extern const int UITextAlignmentJustify
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 __attribute__((deprecated("You should use 'setTextAlignment:lineBreakMode:' on your NSAttributedString instead.")));
 #else
-extern const int UITextAlignmentJustify
 __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:lineBreakMode:' on your NSAttributedString instead.")));
 #endif
 
@@ -62,24 +72,39 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Public Interface
+/////////////////////////////////////////////////////////////////////////////////////
 
 @interface OHAttributedLabel : UILabel
 
-/* Attributed String accessors */
-@property(nonatomic, copy) NSAttributedString* attributedText; //!< Use this instead of the "text" property inherited from UILabel to set and get text
--(void)resetAttributedText; //!< rebuild the attributedString based on UILabel's text/font/color/alignment/... properties
+//! Use this instead of the "text" property inherited from UILabel to set and get attributed text
+@property(nonatomic, retain) NSAttributedString* attributedText;
+//! rebuild the attributedString based on UILabel's text/font/color/alignment/... properties, cleaning any custom attribute
+-(void)resetAttributedText;
+//! Force recomputation of automatically detected links. Useful if you changed a condition that affect link colors in your delegate implementation for example.
+-(void)recomputeLinksInText;
 
 /* Links configuration */
-@property(nonatomic, assign) NSTextCheckingTypes automaticallyAddLinksForType; //!< Defaults to NSTextCheckingTypeLink, + NSTextCheckingTypePhoneNumber if "tel:" scheme supported
-@property(nonatomic, strong) UIColor* linkColor; //!< Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
-@property(nonatomic, strong) UIColor* highlightedLinkColor; //[UIColor colorWithWhite:0.2 alpha:0.5]
-@property(nonatomic, assign) BOOL underlineLinks; //!< Defaults to YES. See also OHAttributedLabelDelegate
+//! Defaults to NSTextCheckingTypeLink, + NSTextCheckingTypePhoneNumber if "tel:" URL scheme is supported.
+@property(nonatomic, assign) NSTextCheckingTypes automaticallyAddLinksForType;
+//! Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
+@property(nonatomic, strong) UIColor* linkColor;
+//! Defaults to [UIColor colorWithWhite:0.2 alpha:0.5]
+@property(nonatomic, strong) UIColor* highlightedLinkColor;
+//! Defaults to YES. See also OHAttributedLabelDelegate
+@property(nonatomic, assign) BOOL underlineLinks;
+
+//! Add a link to some text in the label
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
+//! Remove all custom links from the label
 -(void)removeAllCustomLinks;
 
-@property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks; //!< If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to YES)
+//! If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to YES)
+@property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks;
+//! The delegate that gets informed when a link is touched and gives the opportunity to catch it
 @property(nonatomic, assign) IBOutlet id<OHAttributedLabelDelegate> delegate;
 
+//! Center text vertically inside the label
 @property(nonatomic, assign) BOOL centerVertically;
-@property(nonatomic, assign) BOOL extendBottomToFit; //!< Allows to draw text past the bottom of the view if need. May help in rare cases (like using Emoji)
+//! Allows to draw text past the bottom of the view if need. May help in rare cases (like using Emoji)
+@property(nonatomic, assign) BOOL extendBottomToFit;
 @end
