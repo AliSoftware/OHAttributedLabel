@@ -174,8 +174,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     NSAttributedString* _attributedTextWithLinks;
 	CTFrameRef textFrame;
 	CGRect drawingRect;
-	NSMutableArray* customLinks;
-	CGPoint touchStartPoint;
+	NSMutableArray* _customLinks;
+	CGPoint _touchStartPoint;
 }
 @property(nonatomic, retain) NSTextCheckingResult* activeLink;
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
@@ -244,17 +244,17 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
 -(void)dealloc
 {
-#if ! __has_feature(objc_arc)
-	[_attributedText release];
-    [_attributedTextWithLinks release];
-	[customLinks release];
-#endif
-	[self resetTextFrame];
+	[self resetTextFrame]; // CFRelease the text frame
 
-	self.linkColor = nil;
-	self.highlightedLinkColor = nil;
-	self.activeLink = nil;
 #if ! __has_feature(objc_arc)
+    [_linkColor release]; _linkColor = nil;
+	[_highlightedLinkColor release]; _highlightedLinkColor = nil;
+	[_activeLink release]; _activeLink = nil;
+
+	[_attributedText release]; _attributedText = nil;
+    [_attributedTextWithLinks release]; _attributedTextWithLinks = nil;
+	[_customLinks release]; _customLinks = nil;
+
 	[super dealloc];
 #endif
 }
@@ -270,28 +270,25 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range
 {
 	NSTextCheckingResult* link = [NSTextCheckingResult linkCheckingResultWithRange:range URL:linkUrl];
-	if (customLinks == nil) {
-		customLinks = [[NSMutableArray alloc] init];
+	if (_customLinks == nil) {
+		_customLinks = [[NSMutableArray alloc] init];
 	}
-	[customLinks addObject:link];
+	[_customLinks addObject:link];
     [self recomputeLinksInText];
 	[self setNeedsDisplay];
 }
 -(void)removeAllCustomLinks
 {
-	[customLinks removeAllObjects];
+	[_customLinks removeAllObjects];
 	[self setNeedsDisplay];
 }
 
 -(void)recomputeLinksInText
 {
-#if ! __has_feature(objc_arc)
-    [_attributedTextWithLinks release];
-#endif
-
-    if (!_attributedText || (self.automaticallyAddLinksForType == 0 && customLinks.count == 0))
+    if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0))
     {
 #if ! __has_feature(objc_arc)
+        [_attributedTextWithLinks release];
         _attributedTextWithLinks = [_attributedText retain];
 #else
 		_attributedTextWithLinks = _attributedText;
@@ -319,7 +316,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 				 [mutAS setTextUnderlineStyle:uStyle range:[result range]];
 		 }];
 	}
-	[customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+	[_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
 	 {
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
 		 
@@ -342,6 +339,9 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		 }
 	 }];
 
+#if ! __has_feature(objc_arc)
+    [_attributedTextWithLinks release];
+#endif
 	_attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
 #if ! __has_feature(objc_arc)
     [mutAS release];
@@ -376,7 +376,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	
     if (!foundResult)
     {
-        [customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
+        [_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
          {
              NSRange r = [(NSTextCheckingResult*)obj range];
              if (NSLocationInRange(idx, r))
@@ -453,7 +453,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	CGPoint pt = [touch locationInView:self];
 	
 	self.activeLink = [self linkAtPoint:pt];
-	touchStartPoint = pt;
+	_touchStartPoint = pt;
 	
 	// we're using activeLink to draw a highlight in -drawRect:
 	[self setNeedsDisplay];
@@ -466,7 +466,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	
 	NSTextCheckingResult *linkAtTouchesEnded = [self linkAtPoint:pt];
 	
-	BOOL closeToStart = (abs(touchStartPoint.x - pt.x) < 10 && abs(touchStartPoint.y - pt.y) < 10);
+	BOOL closeToStart = (abs(_touchStartPoint.x - pt.x) < 10 && abs(_touchStartPoint.y - pt.y) < 10);
 
 	// we can check on equality of the ranges themselfes since the data detectors create new results
 	if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))

@@ -44,6 +44,13 @@ static NSInteger const kAttributedLabelTag = 100;
     return self;
 }
 
+#if ! __has_feature(objc_arc)
+- (void)dealloc
+{
+    self.texts = nil;
+    [super dealloc];
+}
+#endif
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -76,7 +83,7 @@ static NSInteger const kAttributedLabelTag = 100;
         [cell addSubview:attrLabel];
         
 #if ! __has_feature(objc_arc)
-        [attrLabel autorelease];
+        [attrLabel release];
         [cell autorelease];
 #endif
     }
