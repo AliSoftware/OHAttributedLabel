@@ -42,6 +42,9 @@
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment);
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode);
 
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - NSTextCheckingResult Extension
+
 @interface NSTextCheckingResult(Extended)
 @property(nonatomic, readonly) NSURL* extendedURL;
 @end

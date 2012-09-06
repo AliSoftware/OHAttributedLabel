@@ -144,6 +144,12 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 
 
 
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - NSTextCheckingResult Extension
+
 @implementation NSTextCheckingResult(Extended)
 -(NSURL*)extendedURL
 {
@@ -163,6 +169,12 @@ BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range)
 }
 @end
 
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private interface
 
@@ -172,6 +184,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 {
 	NSAttributedString* _attributedText;
     NSAttributedString* _attributedTextWithLinks;
+    NSDataDetector* _linksDetector;
 	CTFrameRef textFrame;
 	CGRect drawingRect;
 	NSMutableArray* _customLinks;
@@ -187,6 +200,9 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(void)warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth;
 #endif
 @end
+
+
+
 
 
 
@@ -247,6 +263,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	[self resetTextFrame]; // CFRelease the text frame
 
 #if ! __has_feature(objc_arc)
+    [_linksDetector release]; _linksDetector = nil;
     [_linkColor release]; _linkColor = nil;
 	[_highlightedLinkColor release]; _highlightedLinkColor = nil;
 	[_activeLink release]; _activeLink = nil;
@@ -303,9 +320,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	NSString* plainText = [_attributedText string];
 	if (plainText && (self.automaticallyAddLinksForType > 0))
     {
-		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:nil];
-		[linkDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
-									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
+		[_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
+                                     usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
 			 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
 			 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
@@ -778,6 +794,12 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(void)setAutomaticallyAddLinksForType:(NSTextCheckingTypes)types
 {
 	_automaticallyAddLinksForType = types;
+#if ! __has_feature(objc_arc)
+    [_linksDetector release];
+    _linksDetector = [[NSDataDetector dataDetectorWithTypes:types error:nil] retain];
+#else
+    _linksDetector = [NSDataDetector dataDetectorWithTypes:types error:nil];
+#endif
     [self recomputeLinksInText];
 }
 
