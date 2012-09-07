@@ -796,9 +796,9 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	_automaticallyAddLinksForType = types;
 #if ! __has_feature(objc_arc)
     [_linksDetector release];
-    _linksDetector = [[NSDataDetector dataDetectorWithTypes:types error:nil] retain];
+    _linksDetector = (types>0) ? [[NSDataDetector dataDetectorWithTypes:types error:nil] retain] : nil;
 #else
-    _linksDetector = [NSDataDetector dataDetectorWithTypes:types error:nil];
+    _linksDetector = (types>0) ? [NSDataDetector dataDetectorWithTypes:types error:nil] : nil;
 #endif
     [self recomputeLinksInText];
 }
