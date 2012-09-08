@@ -140,8 +140,8 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo)
 		*pUnderline = kCTUnderlineStyleSingle|kCTUnderlinePatternDot;
 		return [UIColor purpleColor];
 	} else {
-		*pUnderline = kCTUnderlineStyleSingle|kCTUnderlinePatternSolid;
-		return attrLabel.linkColor; // default value
+		*pUnderline = attrLabel.linkUnderlineStyle; // use default value
+		return attrLabel.linkColor; // use default value
 	}
 }
 

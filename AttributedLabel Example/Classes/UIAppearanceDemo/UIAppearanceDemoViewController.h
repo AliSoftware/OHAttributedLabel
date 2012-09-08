@@ -10,10 +10,11 @@
 #import "OHAttributedLabel.h"
 
 @interface UIAppearanceDemoViewController : UIViewController
-@property (retain, nonatomic) IBOutlet UISegmentedControl *defaultLinkColorSegment;
-@property (retain, nonatomic) IBOutlet UISegmentedControl *defaultHighlightedLinkColorSegment;
+
 @property (retain, nonatomic) IBOutlet OHAttributedLabel *sampleLabel;
 
 - (IBAction)changeDefaultLinkColor:(UISegmentedControl *)sender;
 - (IBAction)changeDefaultHighlightedLinkColor:(UISegmentedControl *)sender;
+- (IBAction)changeDefaultLinkUnderlineStyle:(UISegmentedControl *)sender;
+
 @end

@@ -230,7 +230,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     [_linkColor retain];
     [_highlightedLinkColor retain];
 #endif
-	self.underlineLinks = YES;
+	_linkUnderlineStyle = kCTUnderlineStyleSingle | kCTUnderlinePatternSolid;
+    
 	self.automaticallyAddLinksForType = NSTextCheckingTypeLink;
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]]) {
 		self.automaticallyAddLinksForType |= NSTextCheckingTypePhoneNumber;
@@ -301,6 +302,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     [self setNeedsRecomputeLinksInText];
 	[self setNeedsDisplay];
 }
+
 -(void)removeAllCustomLinks
 {
 	[_customLinks removeAllObjects];
@@ -312,6 +314,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     _needsRecomputeLinksInText = YES;
     [self setNeedsDisplay];
 }
+
 -(void)recomputeLinksInTextIfNeeded
 {
     if (!_needsRecomputeLinksInText) return;
@@ -350,7 +353,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		[_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
                                      usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
-			 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
+			 int32_t uStyle = self.linkUnderlineStyle;
 			 UIColor* thisLinkColor = hasLinkColorSelector
              ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
              : self.linkColor;
@@ -365,7 +368,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	 {
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
 		 
-		 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
+		 int32_t uStyle = self.linkUnderlineStyle;
 		 UIColor* thisLinkColor = hasLinkColorSelector
          ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
          : self.linkColor;
@@ -703,7 +706,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 @synthesize activeLink = _activeLink;
 @synthesize linkColor = _linkColor;
 @synthesize highlightedLinkColor = _highlightedLinkColor;
-@synthesize underlineLinks = _underlineLinks;
+@synthesize linkUnderlineStyle = _linkUnderlineStyle;
 @synthesize centerVertically = _centerVertically;
 @synthesize automaticallyAddLinksForType = _automaticallyAddLinksForType;
 @synthesize onlyCatchTouchesOnLinks = _onlyCatchTouchesOnLinks;
@@ -731,6 +734,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	}
     return _attributedText;
 }
+
 -(void)setAttributedText:(NSAttributedString*)newText
 {
 #if ! __has_feature(objc_arc)
@@ -849,10 +853,15 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     [self setNeedsRecomputeLinksInText];
 }
 
+-(void)setLinkUnderlineStyle:(uint32_t)newValue
+{
+    _linkUnderlineStyle = newValue;
+    [self setNeedsRecomputeLinksInText];
+}
+
 -(void)setUnderlineLinks:(BOOL)newValue
 {
-    _underlineLinks = newValue;
-    [self setNeedsRecomputeLinksInText];
+    self.linkUnderlineStyle = newValue ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
 }
 
 -(void)setExtendBottomToFit:(BOOL)val

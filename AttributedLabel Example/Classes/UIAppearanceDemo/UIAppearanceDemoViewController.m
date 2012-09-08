@@ -9,13 +9,8 @@
 #import "UIAppearanceDemoViewController.h"
 #import "OHAttributedLabel.h"
 
-@interface UIAppearanceDemoViewController ()
-
-@end
 
 @implementation UIAppearanceDemoViewController
-@synthesize defaultLinkColorSegment = _defaultLinkColorSegment;
-@synthesize defaultHighlightedLinkColorSegment = _defaultHighlightedLinkColorSegment;
 @synthesize sampleLabel = _sampleLabel;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -27,22 +22,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.sampleLabel addCustomLink:nil inRange:NSMakeRange(8,11)];
+    self.sampleLabel.centerVertically = YES;
 }
 
 - (void)viewDidUnload
 {
-    [self setSampleLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    [self setDefaultLinkColorSegment:nil];
-    [self setDefaultHighlightedLinkColorSegment:nil];
+    [self setSampleLabel:nil];
 }
 
 - (void)dealloc
 {
-    [_defaultLinkColorSegment release];
-    [_defaultHighlightedLinkColorSegment release];
     [_sampleLabel release];
     [super dealloc];
 }
@@ -67,7 +59,11 @@
 {
     if (sender.selectedSegmentIndex >= 0)
     {
-        UIColor* colors[] = { [UIColor blueColor], [UIColor colorWithRed:0.0 green:0.4 blue:0.0 alpha:1.0], nil };
+        UIColor* colors[] = {
+            [UIColor blueColor],
+            [UIColor colorWithRed:0.0 green:0.4 blue:0.0 alpha:1.0],
+            nil
+        };
         UIColor* color = colors[sender.selectedSegmentIndex];
         [[OHAttributedLabel appearance] setLinkColor:color];
         [self forceSampleLabelNewAppearance];
@@ -78,9 +74,31 @@
 {
     if (sender.selectedSegmentIndex >= 0)
     {
-        UIColor* colors[] = { [UIColor colorWithWhite:0.4 alpha:0.3], [UIColor colorWithRed:0.3 green:0.3 blue:1.0 alpha:0.3], [UIColor colorWithRed:0.3 green:0.7 blue:0.3 alpha:0.3], nil };
+        UIColor* colors[] = {
+            [UIColor colorWithWhite:0.4 alpha:0.3],
+            [UIColor colorWithRed:0.3 green:0.3 blue:1.0 alpha:0.3],
+            [UIColor colorWithRed:0.3 green:0.7 blue:0.3 alpha:0.3],
+            nil
+        };
         UIColor* color = colors[sender.selectedSegmentIndex];
         [[OHAttributedLabel appearance] setHighlightedLinkColor:color];
+        [self forceSampleLabelNewAppearance];
+    }
+}
+
+- (IBAction)changeDefaultLinkUnderlineStyle:(UISegmentedControl *)sender
+{
+    if (sender.selectedSegmentIndex >= 0)
+    {
+        uint32_t styles[] = {
+            kCTUnderlineStyleSingle | kCTUnderlinePatternSolid,
+            kCTUnderlineStyleDouble | kCTUnderlinePatternSolid,
+            kCTUnderlineStyleSingle | kCTUnderlinePatternDot,
+            kCTUnderlineStyleSingle | kCTUnderlinePatternDash,
+            kCTUnderlineStyleNone
+        };
+        uint32_t style = styles[sender.selectedSegmentIndex];
+        [[OHAttributedLabel appearance] setLinkUnderlineStyle:style];
         [self forceSampleLabelNewAppearance];
     }
 }

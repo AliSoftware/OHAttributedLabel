@@ -95,8 +95,10 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 @property(nonatomic, strong) UIColor* linkColor UI_APPEARANCE_SELECTOR;
 //! Defaults to [UIColor colorWithWhite:0.2 alpha:0.5]
 @property(nonatomic, strong) UIColor* highlightedLinkColor UI_APPEARANCE_SELECTOR;
-//! Defaults to YES. See also OHAttributedLabelDelegate
-@property(nonatomic, assign) BOOL underlineLinks;
+//! Combination of CTUnderlineStyle and CTUnderlineStyleModifiers
+@property(nonatomic, assign) uint32_t linkUnderlineStyle UI_APPEARANCE_SELECTOR;
+//! Commodity setter to set the linkUnderlineStyle to CTUnderlineStyleSingle (YES) / CTUnderlineStyleNone (NO)
+-(void)setUnderlineLinks:(BOOL)underlineLinks;
 
 //! Add a link to some text in the label
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
