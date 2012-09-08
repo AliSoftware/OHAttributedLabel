@@ -97,6 +97,7 @@
 				0992659915F0F9CF00B909BA /* BasicDemoViewController.xib */,
 			);
 			name = "Basic Demo";
+			path = BasicDemo;
 			sourceTree = "<group>";
 		};
 		0992659B15F0FACF00B909BA /* Custom Links */ = {
@@ -107,6 +108,7 @@
 				0992659C15F0FAE400B909BA /* CustomLinksViewController.xib */,
 			);
 			name = "Custom Links";
+			path = CustomLinksDemo;
 			sourceTree = "<group>";
 		};
 		0992659E15F0FD1300B909BA /* TableView Demo */ = {
@@ -117,6 +119,7 @@
 				099265A115F0FD2800B909BA /* TableViewDemoViewController.xib */,
 			);
 			name = "TableView Demo";
+			path = TableViewDemo;
 			sourceTree = "<group>";
 		};
 		09AB4BBA130EEF9C00D4B9EB /* OHAttributedLabel */ = {
@@ -173,7 +176,7 @@
 				099265A715F10FA900B909BA /* TabIcon@2x.png */,
 				8D1107310486CEB800E47090 /* AttributedLabel_Example-Info.plist */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
@@ -281,7 +284,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
-				INFOPLIST_FILE = "AttributedLabel_Example-Info.plist";
+				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = AttribLbl;
 			};
@@ -295,7 +298,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
-				INFOPLIST_FILE = "AttributedLabel_Example-Info.plist";
+				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = AttribLbl;
 				VALIDATE_PRODUCT = YES;
