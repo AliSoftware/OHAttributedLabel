@@ -1,5 +1,5 @@
 //
-//  AttributedLabelExampleVC.h
+//  BasicDemoViewController.H
 //  AttributedLabel Example
 //
 //  Created by Olivier Halligon on 31/08/12.

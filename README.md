@@ -12,6 +12,23 @@ In addition to this `OHAttributedLabel` class, you will also find a category of 
 
 There is also a category for `NSTextCheckingResult` that adds the `extendedURL` property. This property returns the same value as the `URL` value for standard link cases, and return a formatted Maps URL for `NSTextCheckingTypeAddress` link types that will open Google Maps in iOS version before 6.0, and the Apple's Maps application in iOS 6.0 and later.
 
+### UIApperance support ###
+
+The OHAttributedLabel support the UIAppearance proxy API (available since iOS5). See selectors and properties marked using the `UI_APPEARANCE_SELECTOR` in the header.
+
+This means that if you are targetting iOS5, you can customize all of your OHAttributedLabel links color and underline style to fit your application design, only in one call at the beginning of your application, instead of having to customize these for each instance.
+
+For example, your could implement this in your `application:didFinishLoadingWithOptions:` delegate method to make **all** your `OHAttributedLabel` instances in your **whole app** display links in green and without underline instead of the default underlined blue:
+
+    - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+    {
+        [ [OHAttributedLabel appearance] setLinkColor:[UIColor colorWithRed:0.0 green:0.4 blue:0.0 alpha:1.0] ];
+        [ [OHAttributedLabel appearance] setLinkUnderlineStyle:kCTUnderlineStyleNone ];
+        return YES;
+    }
+
+----
+
 
 # How to use in your project
 
@@ -26,10 +43,14 @@ This project is compatible with ARC since its version of August 16th, 2012.
 
 # Sample code & Other documentation
 
-There is no explicit documentation of the class yet sorry (never had time to write one), but
+There is no explicit docset or documentation of the class yet sorry (never had time to write one), but
 
 * The method names should be self-explanatory (hopefully) as I respect the standard ObjC naming conventions.
 * There are doxygen/javadoc-like documentation in the headers that should also help you describe the methods
+* The provided example should also demonstrate quite every typical usages — including justifying the text,
+dynamically changing the style/attributes of a range of text, adding custom links, make special links with a custom behavior (like catching @mention and #hashtags), and customizing the appearance/color of links.
 
-Also **see the "AttributedLabel Example" sample project** which tries to demonstrate quite every standard usage of this class — including text alignment, dynamically changing the style of a range of text, adding custom links, catching the touch on links to change the default behavior, and customizing the appearance/color of links.
+# Projects that use this class
 
+Here is a non-exhaustive list of [the projects that use this class](https://github.com/AliSoftware/OHAttributedLabel/wiki/They-use-this-class) (for those who told me about it)
+Feel free to contact me if you use this class so we can cross-reference our projects and quote your app in this dedicated wiki page!

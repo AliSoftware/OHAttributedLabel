@@ -1,4 +1,6 @@
 /***********************************************************************************
+ * This software is under the MIT License quoted below:
+ ***********************************************************************************
  *
  * Copyright (c) 2010 Olivier Halligon
  * 
@@ -20,11 +22,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  * 
- ***********************************************************************************
- *
- * Created by Olivier Halligon  (AliSoftware) on 20 Jul. 2010.
- *
- * Any comment or suggestion welcome. Don't hesitate to contact me if you use this class
- * so we can cross-reference our projects
- *
  ***********************************************************************************/
