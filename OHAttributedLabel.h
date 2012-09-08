@@ -79,7 +79,7 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 #pragma mark - Public Interface
 /////////////////////////////////////////////////////////////////////////////////////
 
-@interface OHAttributedLabel : UILabel
+@interface OHAttributedLabel : UILabel <UIAppearance>
 
 //! Use this instead of the "text" property inherited from UILabel to set and get attributed text
 @property(nonatomic, retain) NSAttributedString* attributedText;
@@ -92,9 +92,9 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 //! Defaults to NSTextCheckingTypeLink, + NSTextCheckingTypePhoneNumber if "tel:" URL scheme is supported.
 @property(nonatomic, assign) NSTextCheckingTypes automaticallyAddLinksForType;
 //! Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
-@property(nonatomic, strong) UIColor* linkColor;
+@property(nonatomic, strong) UIColor* linkColor UI_APPEARANCE_SELECTOR;
 //! Defaults to [UIColor colorWithWhite:0.2 alpha:0.5]
-@property(nonatomic, strong) UIColor* highlightedLinkColor;
+@property(nonatomic, strong) UIColor* highlightedLinkColor UI_APPEARANCE_SELECTOR;
 //! Defaults to YES. See also OHAttributedLabelDelegate
 @property(nonatomic, assign) BOOL underlineLinks;
 

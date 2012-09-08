@@ -224,8 +224,12 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
 - (void)commonInit
 {
-	self.linkColor = [UIColor blueColor];
-	self.highlightedLinkColor = [UIColor colorWithWhite:0.4 alpha:0.3];
+    _linkColor = [UIColor blueColor];
+    _highlightedLinkColor = [UIColor colorWithWhite:0.4 alpha:0.3];
+#if ! __has_feature(objc_arc)
+    [_linkColor retain];
+    [_highlightedLinkColor retain];
+#endif
 	self.underlineLinks = YES;
 	self.automaticallyAddLinksForType = NSTextCheckingTypeLink;
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]]) {
@@ -622,6 +626,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect
 {
+    if (!self.highlightedLinkColor) return;
+    
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
 	CGContextSaveGState(ctx);
 	CGContextConcatCTM(ctx, CGAffineTransformMakeTranslation(rect.origin.x, rect.origin.y));

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0958C7CE13229622006A71FF /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */; };
+		0958F9C015FBDACF006429A2 /* UIAppearanceDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958F9BE15FBDACF006429A2 /* UIAppearanceDemoViewController.m */; };
+		0958F9C115FBDACF006429A2 /* UIAppearanceDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0958F9BF15FBDACF006429A2 /* UIAppearanceDemoViewController.xib */; };
 		0992659315F0EBA300B909BA /* BasicDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0992659215F0EBA300B909BA /* BasicDemoViewController.m */; };
 		0992659715F0EE1000B909BA /* CustomLinksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0992659615F0EE1000B909BA /* CustomLinksViewController.m */; };
 		0992659A15F0F9CF00B909BA /* BasicDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0992659915F0F9CF00B909BA /* BasicDemoViewController.xib */; };
@@ -32,6 +34,9 @@
 /* Begin PBXFileReference section */
 		0958C7CC13229622006A71FF /* NSAttributedString+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Attributes.h"; sourceTree = "<group>"; };
 		0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Attributes.m"; sourceTree = "<group>"; };
+		0958F9BD15FBDACF006429A2 /* UIAppearanceDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAppearanceDemoViewController.h; sourceTree = "<group>"; };
+		0958F9BE15FBDACF006429A2 /* UIAppearanceDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAppearanceDemoViewController.m; sourceTree = "<group>"; };
+		0958F9BF15FBDACF006429A2 /* UIAppearanceDemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIAppearanceDemoViewController.xib; sourceTree = "<group>"; };
 		0992659115F0EBA300B909BA /* BasicDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicDemoViewController.h; sourceTree = "<group>"; };
 		0992659215F0EBA300B909BA /* BasicDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicDemoViewController.m; sourceTree = "<group>"; };
 		0992659515F0EE1000B909BA /* CustomLinksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomLinksViewController.h; sourceTree = "<group>"; };
@@ -85,8 +90,19 @@
 				0992659815F0F9B800B909BA /* Basic Demo */,
 				0992659B15F0FACF00B909BA /* Custom Links */,
 				0992659E15F0FD1300B909BA /* TableView Demo */,
+				0958F9BC15FBDACF006429A2 /* UIAppearanceDemo */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		0958F9BC15FBDACF006429A2 /* UIAppearanceDemo */ = {
+			isa = PBXGroup;
+			children = (
+				0958F9BD15FBDACF006429A2 /* UIAppearanceDemoViewController.h */,
+				0958F9BE15FBDACF006429A2 /* UIAppearanceDemoViewController.m */,
+				0958F9BF15FBDACF006429A2 /* UIAppearanceDemoViewController.xib */,
+			);
+			path = UIAppearanceDemo;
 			sourceTree = "<group>";
 		};
 		0992659815F0F9B800B909BA /* Basic Demo */ = {
@@ -251,6 +267,7 @@
 				099265A515F10E9700B909BA /* Icon@2x.png in Resources */,
 				099265A815F10FA900B909BA /* TabIcon.png in Resources */,
 				099265A915F10FA900B909BA /* TabIcon@2x.png in Resources */,
+				0958F9C115FBDACF006429A2 /* UIAppearanceDemoViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +285,7 @@
 				0992659315F0EBA300B909BA /* BasicDemoViewController.m in Sources */,
 				0992659715F0EE1000B909BA /* CustomLinksViewController.m in Sources */,
 				099265A215F0FD2800B909BA /* TableViewDemoViewController.m in Sources */,
+				0958F9C015FBDACF006429A2 /* UIAppearanceDemoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
