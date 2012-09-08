@@ -199,8 +199,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect;
 -(void)recomputeLinksInTextIfNeeded;
 #if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
--(void)warnAboutKnownIssues_CheckLineBreakMode;
--(void)warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth;
+-(void)warnAboutKnownIssues_CheckLineBreakMode_FromXIB:(BOOL)fromXIB;
+-(void)warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth_FromXIB:(BOOL)fromXIB;
 #endif
 @end
 
@@ -254,8 +254,8 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     {
 		[self commonInit];
 #if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
-		[self warnAboutKnownIssues_CheckLineBreakMode];
-		[self warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth];
+		[self warnAboutKnownIssues_CheckLineBreakMode_FromXIB:YES];
+		[self warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth_FromXIB:YES];
 #endif
 	}
 	return self;
@@ -809,7 +809,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
 	
 #if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
-	[self warnAboutKnownIssues_CheckLineBreakMode];
+	[self warnAboutKnownIssues_CheckLineBreakMode_FromXIB:NO];
 #endif	
 }
 
@@ -869,42 +869,49 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 /////////////////////////////////////////////////////////////////////////////////////
 
 #if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
--(void)warnAboutKnownIssues_CheckLineBreakMode
+-(void)warnAboutKnownIssues_CheckLineBreakMode_FromXIB:(BOOL)fromXIB
 {
 	BOOL truncationMode = (self.lineBreakMode == UILineBreakModeHeadTruncation)
 	|| (self.lineBreakMode == UILineBreakModeMiddleTruncation)
 	|| (self.lineBreakMode == UILineBreakModeTailTruncation);
 	if (truncationMode)
     {
-		NSLog(@"[OHAttributedLabel] Warning: \"UILineBreakMode...Truncation\" lineBreakModes are not yet fully supported by CoreText and OHAttributedLabel");
-		NSLog(@"                    (truncation will appear on each paragraph instead of the whole text)");
-		NSLog(@"                    This is a known issue (Help to solve this would be greatly appreciated).");
-		NSLog(@"                    See https://github.com/AliSoftware/OHAttributedLabel/issues/3");
+		NSLog(@"[OHAttributedLabel] Warning: \"UILineBreakMode...Truncation\" lineBreakModes are not yet fully supported"
+              "by CoreText and OHAttributedLabel. See https://github.com/AliSoftware/OHAttributedLabel/issues/3");
+        if (fromXIB)
+        {
+            NSLog(@"  (To avoid this warning, change this property in your XIB file to another lineBreakMode value)");
+        }
 	}
 }
 
--(void)warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth
+-(void)warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth_FromXIB:(BOOL)fromXIB
 {
 	if (self.adjustsFontSizeToFitWidth)
     {
-		NSLog(@"[OHAttributedLabel] Warning: \"adjustsFontSizeToFitWidth\" property not supported by CoreText. OHAttributedLabel will ignore this property.");
-	}	
+		NSLog(@"[OHAttributedLabel] Warning: the \"adjustsFontSizeToFitWidth\" property is not supported by CoreText. "
+              "It will be ignored by OHAttributedLabel.");
+        if (fromXIB)
+        {
+            NSLog(@"  (To avoid this warning, uncheck the 'Autoshrink' property in your XIB file)");
+        }
+
+	}
 }
 
 -(void)setAdjustsFontSizeToFitWidth:(BOOL)value
 {
 	[super setAdjustsFontSizeToFitWidth:value];
-	[self warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth];
+	[self warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth_FromXIB:NO];
 }
 
 -(void)setNumberOfLines:(NSInteger)nbLines
 {
     if (nbLines > 0)
     {
-        NSLog(@"[OHAttributedLabel] Warning: the numberOfLines property is not yet supported by CoreText, so this property is ignored by OHAttributedLabel.");
-        NSLog(@"                    This is a known issue (Help to solve this would be greatly appreciated).");
-        NSLog(@"                    See https://github.com/AliSoftware/OHAttributedLabel/issues/34");
-        NSLog(@"                    To remove this warning, set the numberOfLines property to 0.");
+        NSLog(@"[OHAttributedLabel] Warning: the \"numberOfLines\" property is not yet supported by CoreText. "
+              "It will be ignored by OHAttributedLabel. See https://github.com/AliSoftware/OHAttributedLabel/issues/34");
+        NSLog(@"  (To avoid this warning, set the numberOfLines property to 0)");
     }
 
 	[super setNumberOfLines:nbLines];
