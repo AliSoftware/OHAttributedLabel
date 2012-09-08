@@ -86,7 +86,7 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 //! rebuild the attributedString based on UILabel's text/font/color/alignment/... properties, cleaning any custom attribute
 -(void)resetAttributedText;
 //! Force recomputation of automatically detected links. Useful if you changed a condition that affect link colors in your delegate implementation for example.
--(void)recomputeLinksInText;
+-(void)setNeedsRecomputeLinksInText;
 
 /* Links configuration */
 //! Defaults to NSTextCheckingTypeLink, + NSTextCheckingTypePhoneNumber if "tel:" URL scheme is supported.

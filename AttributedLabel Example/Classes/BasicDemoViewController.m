@@ -118,7 +118,7 @@
 -(IBAction)resetVisitedLinks
 {
 	[self.visitedLinks removeAllObjects];
-	[self.demoLabel recomputeLinksInText];
+	[self.demoLabel setNeedsRecomputeLinksInText];
 }
 
 
@@ -148,7 +148,7 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo)
 -(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo
 {
 	[self.visitedLinks addObject:objectForLinkInfo(linkInfo)];
-	[attributedLabel recomputeLinksInText];
+	[attributedLabel setNeedsRecomputeLinksInText];
 	
     if ([[UIApplication sharedApplication] canOpenURL:linkInfo.extendedURL])
     {

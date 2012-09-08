@@ -185,6 +185,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 {
 	NSAttributedString* _attributedText;
     NSAttributedString* _attributedTextWithLinks;
+    BOOL _needsRecomputeLinksInText;
     NSDataDetector* _linksDetector;
 	CTFrameRef textFrame;
 	CGRect drawingRect;
@@ -196,6 +197,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
 -(void)resetTextFrame;
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect;
+-(void)recomputeLinksInTextIfNeeded;
 #if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 -(void)warnAboutKnownIssues_CheckLineBreakMode;
 -(void)warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth;
@@ -292,7 +294,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		_customLinks = [[NSMutableArray alloc] init];
 	}
 	[_customLinks addObject:link];
-    [self recomputeLinksInText];
+    [self setNeedsRecomputeLinksInText];
 	[self setNeedsDisplay];
 }
 -(void)removeAllCustomLinks
@@ -301,8 +303,16 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	[self setNeedsDisplay];
 }
 
--(void)recomputeLinksInText
+-(void)setNeedsRecomputeLinksInText
 {
+    _needsRecomputeLinksInText = YES;
+    [self setNeedsDisplay];
+}
+-(void)recomputeLinksInTextIfNeeded
+{
+    if (!_needsRecomputeLinksInText) return;
+    _needsRecomputeLinksInText = NO;
+    
     if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0))
     {
 #if ! __has_feature(objc_arc)
@@ -556,6 +566,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 			CGContextSetShadowWithColor(ctx, self.shadowOffset, 0.0, self.shadowColor.CGColor);
 		}
 		
+        [self recomputeLinksInTextIfNeeded];
         NSAttributedString* attributedStringToDisplay = _attributedTextWithLinks;
 		if (self.highlighted && self.highlightedTextColor != nil)
         {
@@ -724,7 +735,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 #endif
 	[self setAccessibilityLabel:_attributedText.string];
 	[self removeAllCustomLinks];
-    [self recomputeLinksInText];
+    [self setNeedsRecomputeLinksInText];
 }
 
 
@@ -817,7 +828,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 #else
     _linksDetector = (types>0) ? [NSDataDetector dataDetectorWithTypes:types error:nil] : nil;
 #endif
-    [self recomputeLinksInText];
+    [self setNeedsRecomputeLinksInText];
 }
 
 -(void)setLinkColor:(UIColor *)newLinkColor
@@ -829,13 +840,13 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     _linkColor = newLinkColor;
 #endif
     
-    [self recomputeLinksInText];
+    [self setNeedsRecomputeLinksInText];
 }
 
 -(void)setUnderlineLinks:(BOOL)newValue
 {
     _underlineLinks = newValue;
-    [self recomputeLinksInText];
+    [self setNeedsRecomputeLinksInText];
 }
 
 -(void)setExtendBottomToFit:(BOOL)val
