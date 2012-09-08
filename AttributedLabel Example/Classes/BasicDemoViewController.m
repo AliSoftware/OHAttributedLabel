@@ -133,7 +133,7 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo)
 	return (id)linkInfo.URL ?: (id)linkInfo.phoneNumber ?: (id)linkInfo.addressComponents ?: (id)linkInfo.date ?: (id)[linkInfo description];
 }
 
--(UIColor*)colorForLink:(NSTextCheckingResult*)link underlineStyle:(int32_t*)pUnderline
+-(UIColor*)attributedLabel:(OHAttributedLabel*)attrLabel colorForLink:(NSTextCheckingResult*)link underlineStyle:(int32_t*)pUnderline
 {
 	if ([self.visitedLinks containsObject:objectForLinkInfo(link)]) {
 		// Visited link
@@ -141,7 +141,7 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo)
 		return [UIColor purpleColor];
 	} else {
 		*pUnderline = kCTUnderlineStyleSingle|kCTUnderlinePatternSolid;
-		return [UIColor blueColor];
+		return attrLabel.linkColor; // default value
 	}
 }
 

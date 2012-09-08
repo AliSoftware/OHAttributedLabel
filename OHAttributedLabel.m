@@ -33,7 +33,8 @@
 #import "OHAttributedLabel.h"
 #import "NSAttributedString+Attributes.h"
 
-#define OHAttributedLabel_WarnAboutKnownIssues 1
+#define OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES 1
+#define OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API 1
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private Utility methods
@@ -195,7 +196,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)pt;
 -(void)resetTextFrame;
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect;
-#if OHAttributedLabel_WarnAboutKnownIssues
+#if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 -(void)warnAboutKnownIssues_CheckLineBreakMode;
 -(void)warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth;
 #endif
@@ -250,7 +251,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	if (self != nil)
     {
 		[self commonInit];
-#if OHAttributedLabel_WarnAboutKnownIssues
+#if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 		[self warnAboutKnownIssues_CheckLineBreakMode];
 		[self warnAboutKnownIssues_CheckAdjustsFontSizeToFitWidth];
 #endif
@@ -315,7 +316,19 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     
     NSMutableAttributedString* mutAS = [_attributedText mutableCopy];
 	
-    BOOL hasLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
+    BOOL hasLinkColorSelector = [self.delegate respondsToSelector:@selector(attributedLabel:colorForLink:underlineStyle:)];
+    
+#if OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BOOL hasOldLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
+        if (hasOldLinkColorSelector)
+        {
+            NSLog(@"[OHAttributedLabel] Warning: \"-colorForLink:underlineStyle:\" delegate method is deprecated and has been replaced"
+                  "by \"-attributedLabel:colorForLink:underlineStyle:\" to be more compliant with naming conventions.");
+        }
+    });
+#endif
 
 	NSString* plainText = [_attributedText string];
 	if (plainText && (self.automaticallyAddLinksForType > 0))
@@ -324,7 +337,9 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
                                      usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
 			 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-			 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+			 UIColor* thisLinkColor = hasLinkColorSelector
+             ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
+             : self.linkColor;
 			 
 			 if (thisLinkColor)
 				 [mutAS setTextColor:thisLinkColor range:[result range]];
@@ -337,7 +352,9 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
 		 
 		 int32_t uStyle = self.underlineLinks ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
-		 UIColor* thisLinkColor = hasLinkColorSelector ? [self.delegate colorForLink:result underlineStyle:&uStyle] : self.linkColor;
+		 UIColor* thisLinkColor = hasLinkColorSelector
+         ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
+         : self.linkColor;
 		 
 		 @try {
 			 if (thisLinkColor)
@@ -780,7 +797,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
     }
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
 	
-#if OHAttributedLabel_WarnAboutKnownIssues
+#if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 	[self warnAboutKnownIssues_CheckLineBreakMode];
 #endif	
 }
@@ -840,7 +857,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 #pragma mark - UILabel unsupported features/known issues warnings
 /////////////////////////////////////////////////////////////////////////////////////
 
-#if OHAttributedLabel_WarnAboutKnownIssues
+#if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 -(void)warnAboutKnownIssues_CheckLineBreakMode
 {
 	BOOL truncationMode = (self.lineBreakMode == UILineBreakModeHeadTruncation)
