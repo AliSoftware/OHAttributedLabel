@@ -39,7 +39,7 @@ To use this classes in your project:
 
 # ARC Support
 
-This project is compatible with ARC since its version of August 16th, 2012.
+This project is compatible with both ARC and non-ARC projects.
 
 # Sample code & Other documentation
 
@@ -50,7 +50,11 @@ There is no explicit docset or documentation of the class yet sorry (never had t
 * The provided example should also demonstrate quite every typical usages — including justifying the text,
 dynamically changing the style/attributes of a range of text, adding custom links, make special links with a custom behavior (like catching @mention and #hashtags), and customizing the appearance/color of links.
 
+# ChangeLog — Revisions History
+
+The [_ChangeLog_](http://github.com/AliSoftware/OHAttributedLabel/wiki/Revisions-History) is maintained as a [wiki page accessible here](http://github.com/AliSoftware/OHAttributedLabel/wiki/Revisions-History).
+
 # Projects that use this class
 
-Here is a non-exhaustive list of [the projects that use this class](https://github.com/AliSoftware/OHAttributedLabel/wiki/They-use-this-class) (for those who told me about it)
+Here is a non-exhaustive list of [the projects that use this class](http://github.com/AliSoftware/OHAttributedLabel/wiki/They-use-this-class) (for those who told me about it)
 Feel free to contact me if you use this class so we can cross-reference our projects and quote your app in this dedicated wiki page!

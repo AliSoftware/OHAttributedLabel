@@ -10,6 +10,7 @@
 		0958C7CE13229622006A71FF /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */; };
 		0958F9C015FBDACF006429A2 /* UIAppearanceDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958F9BE15FBDACF006429A2 /* UIAppearanceDemoViewController.m */; };
 		0958F9C115FBDACF006429A2 /* UIAppearanceDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0958F9BF15FBDACF006429A2 /* UIAppearanceDemoViewController.xib */; };
+		0958F9C315FC17FE006429A2 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 0958F9C215FC17FE006429A2 /* CHANGELOG */; };
 		0992659315F0EBA300B909BA /* BasicDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0992659215F0EBA300B909BA /* BasicDemoViewController.m */; };
 		0992659715F0EE1000B909BA /* CustomLinksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0992659615F0EE1000B909BA /* CustomLinksViewController.m */; };
 		0992659A15F0F9CF00B909BA /* BasicDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0992659915F0F9CF00B909BA /* BasicDemoViewController.xib */; };
@@ -37,6 +38,7 @@
 		0958F9BD15FBDACF006429A2 /* UIAppearanceDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAppearanceDemoViewController.h; sourceTree = "<group>"; };
 		0958F9BE15FBDACF006429A2 /* UIAppearanceDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAppearanceDemoViewController.m; sourceTree = "<group>"; };
 		0958F9BF15FBDACF006429A2 /* UIAppearanceDemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIAppearanceDemoViewController.xib; sourceTree = "<group>"; };
+		0958F9C215FC17FE006429A2 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		0992659115F0EBA300B909BA /* BasicDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicDemoViewController.h; sourceTree = "<group>"; };
 		0992659215F0EBA300B909BA /* BasicDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicDemoViewController.m; sourceTree = "<group>"; };
 		0992659515F0EE1000B909BA /* CustomLinksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomLinksViewController.h; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				0958F9C215FC17FE006429A2 /* CHANGELOG */,
 				09978CDA138730F700801886 /* README.md */,
 				09978CD9138730F700801886 /* LICENSE */,
 				09AB4BBA130EEF9C00D4B9EB /* OHAttributedLabel */,
@@ -268,6 +271,7 @@
 				099265A815F10FA900B909BA /* TabIcon.png in Resources */,
 				099265A915F10FA900B909BA /* TabIcon@2x.png in Resources */,
 				0958F9C115FBDACF006429A2 /* UIAppearanceDemoViewController.xib in Resources */,
+				0958F9C315FC17FE006429A2 /* CHANGELOG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
