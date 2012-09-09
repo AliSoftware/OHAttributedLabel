@@ -30,16 +30,16 @@ For example, your could implement this in your `application:didFinishLoadingWith
 ----
 
 
+# ARC Support
+
+This project is compatible with both ARC and non-ARC projects.
+
 # How to use in your project
 
 To use this classes in your project:
 
 * include the "OHAttributedLabel" and "NSAttributedString+Attributes" header (.h) and source (.m) files in your Xcode project
 * **Don't forget to import the CoreText framework** in your project (otherwise you will have linker errors when you will compile)
-
-# ARC Support
-
-This project is compatible with both ARC and non-ARC projects.
 
 # Sample code & Other documentation
 
