@@ -77,7 +77,7 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 @interface OHAttributedLabel : UILabel <UIAppearance>
 
 //! Use this instead of the "text" property inherited from UILabel to set and get attributed text
-@property(nonatomic, retain) NSAttributedString* attributedText;
+@property(nonatomic, copy) NSAttributedString* attributedText;
 //! rebuild the attributedString based on UILabel's text/font/color/alignment/... properties, cleaning any custom attribute
 -(void)resetAttributedText;
 //! Force recomputation of automatically detected links. Useful if you changed a condition that affect link colors in your delegate implementation for example.
