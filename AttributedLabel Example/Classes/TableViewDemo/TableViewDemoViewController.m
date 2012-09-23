@@ -104,8 +104,7 @@ static NSInteger const kAttributedLabelTag = 100;
     OHAttributedLabel* attrLabel = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
     
     // Detect first link and open it
-    NSTextCheckingResult* firstLink = [[NSDataDetector dataDetectorWithTypes:attrLabel.automaticallyAddLinksForType error:nil]
-                                        firstMatchInString:attrLabel.text options:0 range:NSMakeRange(0, attrLabel.text.length)];
+    NSTextCheckingResult* firstLink = [attrLabel.linksDataDetector firstMatchInString:attrLabel.text options:0 range:NSMakeRange(0, attrLabel.text.length)];
     
     [[UIApplication sharedApplication] openURL:firstLink.extendedURL];
 }

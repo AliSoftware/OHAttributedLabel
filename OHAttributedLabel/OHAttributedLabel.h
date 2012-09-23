@@ -72,6 +72,9 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 /* Links configuration */
 //! Defaults to NSTextCheckingTypeLink, + NSTextCheckingTypePhoneNumber if "tel:" URL scheme is supported.
 @property(nonatomic, assign) NSTextCheckingTypes automaticallyAddLinksForType;
+//! Accessor to the NSDataDetector used to automatically detect links according to the automaticallyAddLinksForType property value.
+//! Useful for example to enumerate links outside of the OHAttributedLabel itself (to list the links in an ActionSheet and so on)
+@property(nonatomic, readonly) NSDataDetector* linksDataDetector;
 //! Defaults to [UIColor blueColor]. See also OHAttributedLabelDelegate
 @property(nonatomic, strong) UIColor* linkColor UI_APPEARANCE_SELECTOR;
 //! Defaults to [UIColor colorWithWhite:0.2 alpha:0.5]

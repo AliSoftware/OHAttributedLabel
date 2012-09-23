@@ -35,6 +35,8 @@
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private interface
+/////////////////////////////////////////////////////////////////////////////////////
+
 
 const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
@@ -61,16 +63,40 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 #endif
 @end
 
+NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types);
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - NSDataDetector Reusable Pool
+/////////////////////////////////////////////////////////////////////////////////////
+
+NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
+{
+    static NSMutableDictionary* dataDetectorsPool = nil;
+    if (!dataDetectorsPool) dataDetectorsPool = [[NSMutableDictionary alloc] init];
+    
+    NSDataDetector* dd = nil;
+    if (types > 0)
+    {
+        // Dequeue a reusable data detector from the pool, only allocate one if none exist yet
+        id typesKey = [NSNumber numberWithInteger:types];
+        dd = [dataDetectorsPool objectForKey:typesKey];
+        if (!dd)
+        {
+            dd = [NSDataDetector dataDetectorWithTypes:types error:nil];
+            [dataDetectorsPool setObject:dd forKey:typesKey];
+        }
+    }
+    return dd;
+}
 
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Implementation
-
+/////////////////////////////////////////////////////////////////////////////////////
 
 
 @implementation OHAttributedLabel
@@ -263,9 +289,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	NSString* plainText = [_attributedText string];
 	if (plainText && (self.automaticallyAddLinksForType > 0))
     {
-		NSError* error = nil;
-		NSDataDetector* linkDetector = [NSDataDetector dataDetectorWithTypes:self.automaticallyAddLinksForType error:&error];
-		[linkDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
+		[_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
 									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
 			 NSRange r = [result range];
@@ -689,13 +713,19 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 -(void)setAutomaticallyAddLinksForType:(NSTextCheckingTypes)types
 {
 	_automaticallyAddLinksForType = types;
+
+    NSDataDetector* dd = sharedReusableDataDetector(types);
 #if ! __has_feature(objc_arc)
     [_linksDetector release];
-    _linksDetector = (types>0) ? [[NSDataDetector dataDetectorWithTypes:types error:nil] retain] : nil;
+    _linksDetector = [dd retain];
 #else
-    _linksDetector = (types>0) ? [NSDataDetector dataDetectorWithTypes:types error:nil] : nil;
+    _linksDetector = dd;
 #endif
     [self setNeedsRecomputeLinksInText];
+}
+-(NSDataDetector*)linksDataDetector
+{
+    return _linksDetector;
 }
 
 -(void)setLinkColor:(UIColor *)newLinkColor
