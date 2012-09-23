@@ -29,11 +29,6 @@ For example, your could implement this in your `application:didFinishLoadingWith
 
 ----
 
-
-# ARC Support
-
-This project is compatible with both ARC and non-ARC projects.
-
 # How to use in your project
 
 To use this classes in your project:
@@ -44,6 +39,8 @@ To use this classes in your project:
 * Also add the `-ObjC` flag in the "Other Linker Flags" build settings(*)
 
 _(*) Note: If you use an Xcode version prior to 4.2 (and LLVM version prior to 3.0), you will need to add the `-force_load "$(BUILT_PRODUCTS_DIR)/libOHAttributedLabel.a"` flags too (or the `-all_load` flag) in addition to the `-ObjC` flag, for the category to be loaded from the library. This is due to a bug in LLVM which has been fixed in LLVM 3.0 / Xcode 4.2 since._
+
+This project is compatible with both ARC and non-ARC projects. _Besides, as it is included as a stand-alone library, the build settings of the library won't affect the build settings of your own application._
 
 # Sample code & Other documentation
 
