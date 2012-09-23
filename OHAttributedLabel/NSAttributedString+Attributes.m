@@ -36,8 +36,6 @@
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NSAttributedString Additions
 
-@implementation NSAttributedString$ForceLoadCategory @end
-
 @implementation NSAttributedString (OHCommodityConstructors)
 +(NSAttributedString*)attributedStringWithString:(NSString*)string
 {
