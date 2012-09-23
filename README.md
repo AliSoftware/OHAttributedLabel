@@ -38,12 +38,12 @@ This project is compatible with both ARC and non-ARC projects.
 
 To use this classes in your project:
 
-* include the "OHAttributedLabel.xcodeproj" in your Xcode4 workspace
-* Add `"$(BUILT_PRODUCTS_DIR)"` to the "User Header Search Path" build settings of your application project (so that you will be able to `#import` the header files of OHAttributedLabel, that are copied there when the library project is build). _Alternatively, you can specify the path to the OHAttributedLabel folder containing the headers instead._
-* Also add the `-ObjC` flag in the "Other Linker Flags" build settings(*)
+* Include the "OHAttributedLabel.xcodeproj" in your Xcode4 workspace
 * Add the `libOHAttributedLabel.a` library **and the `CoreText.framework`** to your "Link binary with libraries" Build Phase.
+* Add `"$(BUILT_PRODUCTS_DIR)"` to the "User Header Search Path" build settings of your application project (so that you will be able to `#import` the header files of OHAttributedLabel, that are copied there when the library project is build).
+* Also add the `-ObjC` flag in the "Other Linker Flags" build settings(*)
 
-_(*) Note: If you use an Xcode version prior to 4.2 (and LLVM version prior to 3.0), you will need to add the `-force_load "$(TARGET_BUILD_DIR)/libOHAttributedLabel.a"` flags too (or the `-all_load` flag) in addition to the `-ObjC` flag, for the category to be loaded from the library. This is due to a bug in LLVM which has been fixed in LLVM 3.0 / Xcode 4.2 since._
+_(*) Note: If you use an Xcode version prior to 4.2 (and LLVM version prior to 3.0), you will need to add the `-force_load "$(BUILT_PRODUCTS_DIR)/libOHAttributedLabel.a"` flags too (or the `-all_load` flag) in addition to the `-ObjC` flag, for the category to be loaded from the library. This is due to a bug in LLVM which has been fixed in LLVM 3.0 / Xcode 4.2 since._
 
 # Sample code & Other documentation
 
