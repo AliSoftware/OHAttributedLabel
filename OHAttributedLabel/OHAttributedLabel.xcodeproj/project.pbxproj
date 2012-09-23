@@ -83,14 +83,14 @@
 		09E159FF160F57D5003025B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */,
-				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
 				09E15A02160F57E2003025B4 /* OHAttributedLabel.h */,
 				09E15A03160F57E2003025B4 /* OHAttributedLabel.m */,
-				09E15A23160F63DE003025B4 /* CoreTextUtils.h */,
-				09E15A24160F63DE003025B4 /* CoreTextUtils.m */,
+				09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */,
+				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
 				09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */,
 				09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */,
+				09E15A23160F63DE003025B4 /* CoreTextUtils.h */,
+				09E15A24160F63DE003025B4 /* CoreTextUtils.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";

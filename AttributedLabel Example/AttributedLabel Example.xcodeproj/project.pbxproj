@@ -285,10 +285,7 @@
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
 				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/AttributedLabel_Example-exbwxcethwhedlgrvfpbfjpgxxwm/Build/Products/Debug-iphoneos\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AttribLbl;
 				USER_HEADER_SEARCH_PATHS = "$(TARGET_BUILD_DIR)";
@@ -305,10 +302,7 @@
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
 				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/AttributedLabel_Example-exbwxcethwhedlgrvfpbfjpgxxwm/Build/Products/Debug-iphoneos\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AttribLbl;
 				USER_HEADER_SEARCH_PATHS = "$(TARGET_BUILD_DIR)";
