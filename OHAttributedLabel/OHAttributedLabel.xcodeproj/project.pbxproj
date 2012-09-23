@@ -13,6 +13,11 @@
 		09E15A05160F57E2003025B4 /* OHAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A03160F57E2003025B4 /* OHAttributedLabel.m */; };
 		09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A02160F57E2003025B4 /* OHAttributedLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		09E15A25160F63DE003025B4 /* CoreTextUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A23160F63DE003025B4 /* CoreTextUtils.h */; };
+		09E15A26160F63DE003025B4 /* CoreTextUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A24160F63DE003025B4 /* CoreTextUtils.m */; };
+		09E15A29160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		09E15A2A160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */; };
+		09E15A2C160F64EB003025B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E15A2B160F64EB003025B4 /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +30,11 @@
 		09E15A03160F57E2003025B4 /* OHAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHAttributedLabel.m; sourceTree = "<group>"; };
 		09E15A06160F57F4003025B4 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		09E15A07160F57F4003025B4 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		09E15A23160F63DE003025B4 /* CoreTextUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreTextUtils.h; sourceTree = "<group>"; };
+		09E15A24160F63DE003025B4 /* CoreTextUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreTextUtils.m; sourceTree = "<group>"; };
+		09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextCheckingResult+ExtendedURL.h"; sourceTree = "<group>"; };
+		09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextCheckingResult+ExtendedURL.m"; sourceTree = "<group>"; };
+		09E15A2B160F64EB003025B4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09E15A2C160F64EB003025B4 /* UIKit.framework in Frameworks */,
 				09E159FE160F57AB003025B4 /* CoreText.framework in Frameworks */,
 				09E159EC160F573A003025B4 /* Foundation.framework in Frameworks */,
 			);
@@ -63,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				09E159FD160F57AB003025B4 /* CoreText.framework */,
+				09E15A2B160F64EB003025B4 /* UIKit.framework */,
 				09E159EB160F573A003025B4 /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -75,6 +87,10 @@
 				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
 				09E15A02160F57E2003025B4 /* OHAttributedLabel.h */,
 				09E15A03160F57E2003025B4 /* OHAttributedLabel.m */,
+				09E15A23160F63DE003025B4 /* CoreTextUtils.h */,
+				09E15A24160F63DE003025B4 /* CoreTextUtils.m */,
+				09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */,
+				09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -88,6 +104,8 @@
 			files = (
 				09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */,
 				09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */,
+				09E15A25160F63DE003025B4 /* CoreTextUtils.h in Headers */,
+				09E15A29160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +162,8 @@
 			files = (
 				09E15A04160F57E2003025B4 /* NSAttributedString+Attributes.m in Sources */,
 				09E15A05160F57E2003025B4 /* OHAttributedLabel.m in Sources */,
+				09E15A26160F63DE003025B4 /* CoreTextUtils.m in Sources */,
+				09E15A2A160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

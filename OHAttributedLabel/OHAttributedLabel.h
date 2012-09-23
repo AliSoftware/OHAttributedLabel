@@ -27,22 +27,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreText/CoreText.h>
+#import "NSTextCheckingResult+ExtendedURL.h"
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - Utility Functions
-/////////////////////////////////////////////////////////////////////////////////////
-
-CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment);
-CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode);
-
-/////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - NSTextCheckingResult Extension
-
-@interface NSTextCheckingResult(Extended)
-@property(nonatomic, readonly) NSURL* extendedURL;
-@end
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - OHAttributedLabel Delegate Protocol
