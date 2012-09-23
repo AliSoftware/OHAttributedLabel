@@ -39,7 +39,7 @@ This project is compatible with both ARC and non-ARC projects.
 To use this classes in your project:
 
 * include the "OHAttributedLabel.xcodeproj" in your Xcode4 workspace
-* Add `"$(TARGET_BUILD_DIR)"` to the "User Header Search Path" build settings of your application project (so that you will be able to `#import` the header files of OHAttributedLabel, that are copied there when the library project is build). _Alternatively, you can specify the path to the OHAttributedLabel folder containing the headers instead._
+* Add `"$(BUILT_PRODUCTS_DIR)"` to the "User Header Search Path" build settings of your application project (so that you will be able to `#import` the header files of OHAttributedLabel, that are copied there when the library project is build). _Alternatively, you can specify the path to the OHAttributedLabel folder containing the headers instead._
 * Also add the `-ObjC` flag in the "Other Linker Flags" build settings(*)
 * Add the `libOHAttributedLabel.a` library **and the `CoreText.framework`** to your "Link binary with libraries" Build Phase.
 
