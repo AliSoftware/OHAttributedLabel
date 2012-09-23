@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0958C7CE13229622006A71FF /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */; };
 		0958F9C015FBDACF006429A2 /* UIAppearanceDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0958F9BE15FBDACF006429A2 /* UIAppearanceDemoViewController.m */; };
 		0958F9C115FBDACF006429A2 /* UIAppearanceDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0958F9BF15FBDACF006429A2 /* UIAppearanceDemoViewController.xib */; };
-		0958F9C315FC17FE006429A2 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 0958F9C215FC17FE006429A2 /* CHANGELOG */; };
 		0992659315F0EBA300B909BA /* BasicDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0992659215F0EBA300B909BA /* BasicDemoViewController.m */; };
 		0992659715F0EE1000B909BA /* CustomLinksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0992659615F0EE1000B909BA /* CustomLinksViewController.m */; };
 		0992659A15F0F9CF00B909BA /* BasicDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0992659915F0F9CF00B909BA /* BasicDemoViewController.xib */; };
@@ -21,9 +19,9 @@
 		099265A815F10FA900B909BA /* TabIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 099265A615F10FA900B909BA /* TabIcon.png */; };
 		099265A915F10FA900B909BA /* TabIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 099265A715F10FA900B909BA /* TabIcon@2x.png */; };
 		099788DC137A06F000801886 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 099788DB137A06F000801886 /* Icon.png */; };
-		099A45131427CB6E0011BE0F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 09978CD9138730F700801886 /* LICENSE */; };
-		09AB4BBD130EEFC700D4B9EB /* OHAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */; };
-		09AB4BD6130EF1D700D4B9EB /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB4BD5130EF1D700D4B9EB /* CoreText.framework */; };
+		09E15A1A160F5AAD003025B4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 09E15A19160F5AAD003025B4 /* Default-568h@2x.png */; };
+		09E15A1C160F5CB5003025B4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E15A1B160F5CB5003025B4 /* CoreText.framework */; };
+		09E15A1E160F5D7A003025B4 /* libOHAttributedLabel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E15A1D160F5D7A003025B4 /* libOHAttributedLabel.a */; };
 		1D3623260D0F684500981E51 /* UIAlertView+Commodity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* UIAlertView+Commodity.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -33,12 +31,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0958C7CC13229622006A71FF /* NSAttributedString+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Attributes.h"; sourceTree = "<group>"; };
-		0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Attributes.m"; sourceTree = "<group>"; };
 		0958F9BD15FBDACF006429A2 /* UIAppearanceDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAppearanceDemoViewController.h; sourceTree = "<group>"; };
 		0958F9BE15FBDACF006429A2 /* UIAppearanceDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAppearanceDemoViewController.m; sourceTree = "<group>"; };
 		0958F9BF15FBDACF006429A2 /* UIAppearanceDemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIAppearanceDemoViewController.xib; sourceTree = "<group>"; };
-		0958F9C215FC17FE006429A2 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		0992659115F0EBA300B909BA /* BasicDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicDemoViewController.h; sourceTree = "<group>"; };
 		0992659215F0EBA300B909BA /* BasicDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicDemoViewController.m; sourceTree = "<group>"; };
 		0992659515F0EE1000B909BA /* CustomLinksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomLinksViewController.h; sourceTree = "<group>"; };
@@ -52,11 +47,9 @@
 		099265A615F10FA900B909BA /* TabIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TabIcon.png; sourceTree = "<group>"; };
 		099265A715F10FA900B909BA /* TabIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabIcon@2x.png"; sourceTree = "<group>"; };
 		099788DB137A06F000801886 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		09978CD9138730F700801886 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = SOURCE_ROOT; };
-		09978CDA138730F700801886 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = SOURCE_ROOT; };
-		09AB4BBB130EEFC700D4B9EB /* OHAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHAttributedLabel.h; sourceTree = "<group>"; };
-		09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHAttributedLabel.m; sourceTree = "<group>"; };
-		09AB4BD5130EF1D700D4B9EB /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		09E15A19160F5AAD003025B4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		09E15A1B160F5CB5003025B4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		09E15A1D160F5D7A003025B4 /* libOHAttributedLabel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOHAttributedLabel.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* UIAlertView+Commodity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Commodity.h"; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* UIAlertView+Commodity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Commodity.m"; sourceTree = "<group>"; };
@@ -74,10 +67,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09E15A1E160F5D7A003025B4 /* libOHAttributedLabel.a in Frameworks */,
+				09E15A1C160F5CB5003025B4 /* CoreText.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
-				09AB4BD6130EF1D700D4B9EB /* CoreText.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,18 +134,6 @@
 			path = TableViewDemo;
 			sourceTree = "<group>";
 		};
-		09AB4BBA130EEF9C00D4B9EB /* OHAttributedLabel */ = {
-			isa = PBXGroup;
-			children = (
-				0958C7CC13229622006A71FF /* NSAttributedString+Attributes.h */,
-				0958C7CD13229622006A71FF /* NSAttributedString+Attributes.m */,
-				09AB4BBB130EEFC700D4B9EB /* OHAttributedLabel.h */,
-				09AB4BBC130EEFC700D4B9EB /* OHAttributedLabel.m */,
-			);
-			name = OHAttributedLabel;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -163,10 +145,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				0958F9C215FC17FE006429A2 /* CHANGELOG */,
-				09978CDA138730F700801886 /* README.md */,
-				09978CD9138730F700801886 /* LICENSE */,
-				09AB4BBA130EEF9C00D4B9EB /* OHAttributedLabel */,
+				09E15A1D160F5D7A003025B4 /* libOHAttributedLabel.a */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -193,6 +172,7 @@
 				099265A415F10E9700B909BA /* Icon@2x.png */,
 				099265A615F10FA900B909BA /* TabIcon.png */,
 				099265A715F10FA900B909BA /* TabIcon@2x.png */,
+				09E15A19160F5AAD003025B4 /* Default-568h@2x.png */,
 				8D1107310486CEB800E47090 /* AttributedLabel_Example-Info.plist */,
 			);
 			path = Resources;
@@ -201,10 +181,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				09E15A1B160F5CB5003025B4 /* CoreText.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
-				09AB4BD5130EF1D700D4B9EB /* CoreText.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -263,7 +243,6 @@
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				099788DC137A06F000801886 /* Icon.png in Resources */,
-				099A45131427CB6E0011BE0F /* LICENSE in Resources */,
 				0992659A15F0F9CF00B909BA /* BasicDemoViewController.xib in Resources */,
 				0992659D15F0FAE400B909BA /* CustomLinksViewController.xib in Resources */,
 				099265A315F0FD2800B909BA /* TableViewDemoViewController.xib in Resources */,
@@ -271,7 +250,7 @@
 				099265A815F10FA900B909BA /* TabIcon.png in Resources */,
 				099265A915F10FA900B909BA /* TabIcon@2x.png in Resources */,
 				0958F9C115FBDACF006429A2 /* UIAppearanceDemoViewController.xib in Resources */,
-				0958F9C315FC17FE006429A2 /* CHANGELOG in Resources */,
+				09E15A1A160F5AAD003025B4 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,8 +263,6 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* UIAlertView+Commodity.m in Sources */,
-				09AB4BBD130EEFC700D4B9EB /* OHAttributedLabel.m in Sources */,
-				0958C7CE13229622006A71FF /* NSAttributedString+Attributes.m in Sources */,
 				0992659315F0EBA300B909BA /* BasicDemoViewController.m in Sources */,
 				0992659715F0EE1000B909BA /* CustomLinksViewController.m in Sources */,
 				099265A215F0FD2800B909BA /* TableViewDemoViewController.m in Sources */,
@@ -308,7 +285,13 @@
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
 				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/AttributedLabel_Example-exbwxcethwhedlgrvfpbfjpgxxwm/Build/Products/Debug-iphoneos\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AttribLbl;
+				USER_HEADER_SEARCH_PATHS = "$(TARGET_BUILD_DIR)";
 			};
 			name = Debug;
 		};
@@ -322,7 +305,13 @@
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
 				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/AttributedLabel_Example-exbwxcethwhedlgrvfpbfjpgxxwm/Build/Products/Debug-iphoneos\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AttribLbl;
+				USER_HEADER_SEARCH_PATHS = "$(TARGET_BUILD_DIR)";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

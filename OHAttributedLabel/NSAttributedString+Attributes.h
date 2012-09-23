@@ -33,6 +33,8 @@
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NSAttributedString Additions
 
+@interface NSAttributedString$ForceLoadCategory @end
+
 @interface NSAttributedString (OHCommodityConstructors)
 +(id)attributedStringWithString:(NSString*)string;
 +(id)attributedStringWithAttributedString:(NSAttributedString*)attrStr;

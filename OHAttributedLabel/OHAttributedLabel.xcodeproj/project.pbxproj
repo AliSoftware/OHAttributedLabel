@@ -1,0 +1,249 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09E159EC160F573A003025B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E159EB160F573A003025B4 /* Foundation.framework */; };
+		09E159FE160F57AB003025B4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E159FD160F57AB003025B4 /* CoreText.framework */; };
+		09E15A04160F57E2003025B4 /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */; };
+		09E15A05160F57E2003025B4 /* OHAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A03160F57E2003025B4 /* OHAttributedLabel.m */; };
+		09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A02160F57E2003025B4 /* OHAttributedLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		09E159E8160F573A003025B4 /* libOHAttributedLabel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOHAttributedLabel.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		09E159EB160F573A003025B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		09E159FD160F57AB003025B4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Attributes.h"; sourceTree = "<group>"; };
+		09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Attributes.m"; sourceTree = "<group>"; };
+		09E15A02160F57E2003025B4 /* OHAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHAttributedLabel.h; sourceTree = "<group>"; };
+		09E15A03160F57E2003025B4 /* OHAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHAttributedLabel.m; sourceTree = "<group>"; };
+		09E15A06160F57F4003025B4 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
+		09E15A07160F57F4003025B4 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		09E159E5160F573A003025B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09E159FE160F57AB003025B4 /* CoreText.framework in Frameworks */,
+				09E159EC160F573A003025B4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		09E159DD160F573A003025B4 = {
+			isa = PBXGroup;
+			children = (
+				09E15A06160F57F4003025B4 /* CHANGELOG */,
+				09E15A07160F57F4003025B4 /* LICENSE */,
+				09E159FF160F57D5003025B4 /* Source */,
+				09E159EA160F573A003025B4 /* Frameworks */,
+				09E159E9160F573A003025B4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		09E159E9160F573A003025B4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				09E159E8160F573A003025B4 /* libOHAttributedLabel.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		09E159EA160F573A003025B4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				09E159FD160F57AB003025B4 /* CoreText.framework */,
+				09E159EB160F573A003025B4 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		09E159FF160F57D5003025B4 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */,
+				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
+				09E15A02160F57E2003025B4 /* OHAttributedLabel.h */,
+				09E15A03160F57E2003025B4 /* OHAttributedLabel.m */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		09E15A1F160F5DA8003025B4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */,
+				09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		09E159E7160F573A003025B4 /* OHAttributedLabel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 09E159F6160F573A003025B4 /* Build configuration list for PBXNativeTarget "OHAttributedLabel" */;
+			buildPhases = (
+				09E159E4160F573A003025B4 /* Sources */,
+				09E159E5160F573A003025B4 /* Frameworks */,
+				09E15A1F160F5DA8003025B4 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OHAttributedLabel;
+			productName = OHAttributedLabel;
+			productReference = 09E159E8160F573A003025B4 /* libOHAttributedLabel.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		09E159DF160F573A003025B4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = AliSoftware;
+			};
+			buildConfigurationList = 09E159E2160F573A003025B4 /* Build configuration list for PBXProject "OHAttributedLabel" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 09E159DD160F573A003025B4;
+			productRefGroup = 09E159E9160F573A003025B4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				09E159E7160F573A003025B4 /* OHAttributedLabel */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		09E159E4160F573A003025B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09E15A04160F57E2003025B4 /* NSAttributedString+Attributes.m in Sources */,
+				09E15A05160F57E2003025B4 /* OHAttributedLabel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		09E159F4160F573A003025B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		09E159F5160F573A003025B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		09E159F7160F573A003025B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		09E159F8160F573A003025B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		09E159E2160F573A003025B4 /* Build configuration list for PBXProject "OHAttributedLabel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09E159F4160F573A003025B4 /* Debug */,
+				09E159F5160F573A003025B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		09E159F6160F573A003025B4 /* Build configuration list for PBXNativeTarget "OHAttributedLabel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09E159F7160F573A003025B4 /* Debug */,
+				09E159F8160F573A003025B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 09E159DF160F573A003025B4 /* Project object */;
+}

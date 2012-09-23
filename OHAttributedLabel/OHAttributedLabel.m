@@ -54,22 +54,38 @@ CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment)
     }
 	switch (alignment)
     {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 		case UITextAlignmentLeft: return kCTLeftTextAlignment;
 		case UITextAlignmentCenter: return kCTCenterTextAlignment;
 		case UITextAlignmentRight: return kCTRightTextAlignment;
+#else
+		case NSTextAlignmentLeft: return kCTLeftTextAlignment;
+		case NSTextAlignmentCenter: return kCTCenterTextAlignment;
+		case NSTextAlignmentRight: return kCTRightTextAlignment;
+#endif
 		default: return kCTNaturalTextAlignment;
 	}
 }
 
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode)
 {
-	switch (lineBreakMode) {
+	switch (lineBreakMode)
+    {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 		case UILineBreakModeWordWrap: return kCTLineBreakByWordWrapping;
 		case UILineBreakModeCharacterWrap: return kCTLineBreakByCharWrapping;
 		case UILineBreakModeClip: return kCTLineBreakByClipping;
 		case UILineBreakModeHeadTruncation: return kCTLineBreakByTruncatingHead;
 		case UILineBreakModeTailTruncation: return kCTLineBreakByTruncatingTail;
 		case UILineBreakModeMiddleTruncation: return kCTLineBreakByTruncatingMiddle;
+#else
+		case NSLineBreakByWordWrapping: return kCTLineBreakByWordWrapping;
+		case NSLineBreakByCharWrapping: return kCTLineBreakByCharWrapping;
+		case NSLineBreakByClipping: return kCTLineBreakByClipping;
+		case NSLineBreakByTruncatingHead: return kCTLineBreakByTruncatingHead;
+		case NSLineBreakByTruncatingTail: return kCTLineBreakByTruncatingTail;
+		case NSLineBreakByTruncatingMiddle: return kCTLineBreakByTruncatingMiddle;
+#endif
 		default: return 0;
 	}
 }
@@ -881,9 +897,15 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 #if OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 -(void)warnAboutKnownIssues_CheckLineBreakMode_FromXIB:(BOOL)fromXIB
 {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 	BOOL truncationMode = (self.lineBreakMode == UILineBreakModeHeadTruncation)
 	|| (self.lineBreakMode == UILineBreakModeMiddleTruncation)
 	|| (self.lineBreakMode == UILineBreakModeTailTruncation);
+#else
+	BOOL truncationMode = (self.lineBreakMode == NSLineBreakByTruncatingHead)
+	|| (self.lineBreakMode == NSLineBreakByTruncatingMiddle)
+	|| (self.lineBreakMode == NSLineBreakByTruncatingTail);
+#endif
 	if (truncationMode)
     {
 		NSLog(@"[OHAttributedLabel] Warning: \"UILineBreakMode...Truncation\" lineBreakModes are not yet fully supported"
