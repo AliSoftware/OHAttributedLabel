@@ -73,19 +73,23 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types);
 
 NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 {
-    static NSMutableDictionary* dataDetectorsPool = nil;
-    if (!dataDetectorsPool) dataDetectorsPool = [[NSMutableDictionary alloc] init];
+    static NSCache* dataDetectorsCache = nil;
+    if (!dataDetectorsCache)
+    {
+        dataDetectorsCache = [[NSCache alloc] init];
+        dataDetectorsCache.name = @"OHAttributedLabel::DataDetectorCache";
+    }
     
     NSDataDetector* dd = nil;
     if (types > 0)
     {
         // Dequeue a reusable data detector from the pool, only allocate one if none exist yet
         id typesKey = [NSNumber numberWithInteger:types];
-        dd = [dataDetectorsPool objectForKey:typesKey];
+        dd = [dataDetectorsCache objectForKey:typesKey];
         if (!dd)
         {
             dd = [NSDataDetector dataDetectorWithTypes:types error:nil];
-            [dataDetectorsPool setObject:dd forKey:typesKey];
+            [dataDetectorsCache setObject:dd forKey:typesKey];
         }
     }
     return dd;
