@@ -12,6 +12,8 @@
 @interface BasicDemoViewController : UIViewController <OHAttributedLabelDelegate>
 
 @property(nonatomic, retain) IBOutlet OHAttributedLabel* demoLabel;
+@property(retain, nonatomic) IBOutlet OHAttributedLabel* htmlLabel;
+@property(retain, nonatomic) IBOutlet OHAttributedLabel* basicMarkupLabel;
 
 -(IBAction)fillDemoLabel;
 -(IBAction)changeHAlignment;

@@ -9,6 +9,8 @@
 #import "BasicDemoViewController.h"
 #import "NSAttributedString+Attributes.h"
 #import "UIAlertView+Commodity.h"
+#import "OHASTagParserHTML.h"
+#import "OHASTagParserBasicMarkup.h"
 
 @interface BasicDemoViewController ()
 @property(nonatomic, retain) NSMutableSet* visitedLinks;
@@ -16,6 +18,8 @@
 
 @implementation BasicDemoViewController
 @synthesize demoLabel = _demoLabel;
+@synthesize htmlLabel = _htmlLabel;
+@synthesize basicMarkupLabel = _basicMarkupLabel;
 @synthesize visitedLinks = _visitedLinks;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -38,6 +42,8 @@
 {
     [_visitedLinks release];
     [_demoLabel release];
+    [_htmlLabel release];
+    [_basicMarkupLabel release];
     [super dealloc];
 }
 #endif
@@ -45,12 +51,16 @@
 -(void)viewDidLoad
 {
 	[self fillDemoLabel];
+    self.htmlLabel.attributedText = [OHASTagParserHTML attributedStringByReplacingTagsInAttributedString:self.htmlLabel.attributedText];
+    self.basicMarkupLabel.attributedText = [OHASTagParserBasicMarkup attributedStringByReplacingTagsInAttributedString:self.basicMarkupLabel.attributedText];
     [super viewDidLoad];
 }
 
 -(void)viewDidUnload
 {
     [super viewDidUnload];
+    self.htmlLabel = nil;
+    self.basicMarkupLabel = nil;
     self.demoLabel = nil;
 }
 
@@ -68,6 +78,7 @@
 	
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [self.demoLabel.attributedText mutableCopy];
+    
     [attrStr setTextAlignment:kCTCenterTextAlignment lineBreakMode:kCTLineBreakByWordWrapping];
 	// and only change the color of "Hello"
 	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(26,5)];

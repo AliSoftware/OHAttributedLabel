@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09793558161393F2006DB5D5 /* OHASTagParserBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 09793556161393F2006DB5D5 /* OHASTagParserBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		09793559161393F2006DB5D5 /* OHASTagParserBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 09793557161393F2006DB5D5 /* OHASTagParserBase.m */; };
+		0979355C1613A5AE006DB5D5 /* OHASTagParserHTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 0979355A1613A5AE006DB5D5 /* OHASTagParserHTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0979355D1613A5AE006DB5D5 /* OHASTagParserHTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 0979355B1613A5AE006DB5D5 /* OHASTagParserHTML.m */; };
+		097935601613B276006DB5D5 /* OHASTagParserBasicMarkup.h in Headers */ = {isa = PBXBuildFile; fileRef = 0979355E1613B276006DB5D5 /* OHASTagParserBasicMarkup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		097935611613B276006DB5D5 /* OHASTagParserBasicMarkup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0979355F1613B276006DB5D5 /* OHASTagParserBasicMarkup.m */; };
 		09E159EC160F573A003025B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E159EB160F573A003025B4 /* Foundation.framework */; };
 		09E159FE160F57AB003025B4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E159FD160F57AB003025B4 /* CoreText.framework */; };
 		09E15A04160F57E2003025B4 /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */; };
@@ -21,6 +27,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09793556161393F2006DB5D5 /* OHASTagParserBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHASTagParserBase.h; sourceTree = "<group>"; };
+		09793557161393F2006DB5D5 /* OHASTagParserBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHASTagParserBase.m; sourceTree = "<group>"; };
+		0979355A1613A5AE006DB5D5 /* OHASTagParserHTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHASTagParserHTML.h; sourceTree = "<group>"; };
+		0979355B1613A5AE006DB5D5 /* OHASTagParserHTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHASTagParserHTML.m; sourceTree = "<group>"; };
+		0979355E1613B276006DB5D5 /* OHASTagParserBasicMarkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHASTagParserBasicMarkup.h; sourceTree = "<group>"; };
+		0979355F1613B276006DB5D5 /* OHASTagParserBasicMarkup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHASTagParserBasicMarkup.m; sourceTree = "<group>"; };
 		09E159E8160F573A003025B4 /* libOHAttributedLabel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOHAttributedLabel.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		09E159EB160F573A003025B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		09E159FD160F57AB003025B4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -51,6 +63,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		09793554161393AE006DB5D5 /* TagParsers */ = {
+			isa = PBXGroup;
+			children = (
+				09793556161393F2006DB5D5 /* OHASTagParserBase.h */,
+				09793557161393F2006DB5D5 /* OHASTagParserBase.m */,
+				0979355A1613A5AE006DB5D5 /* OHASTagParserHTML.h */,
+				0979355B1613A5AE006DB5D5 /* OHASTagParserHTML.m */,
+				0979355E1613B276006DB5D5 /* OHASTagParserBasicMarkup.h */,
+				0979355F1613B276006DB5D5 /* OHASTagParserBasicMarkup.m */,
+			);
+			path = TagParsers;
+			sourceTree = "<group>";
+		};
+		097935621613B419006DB5D5 /* Private Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				09E15A23160F63DE003025B4 /* CoreTextUtils.h */,
+				09E15A24160F63DE003025B4 /* CoreTextUtils.m */,
+			);
+			name = "Private Utilities";
+			sourceTree = "<group>";
+		};
 		09E159DD160F573A003025B4 = {
 			isa = PBXGroup;
 			children = (
@@ -83,14 +117,14 @@
 		09E159FF160F57D5003025B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				09793554161393AE006DB5D5 /* TagParsers */,
 				09E15A02160F57E2003025B4 /* OHAttributedLabel.h */,
 				09E15A03160F57E2003025B4 /* OHAttributedLabel.m */,
 				09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */,
 				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
 				09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */,
 				09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */,
-				09E15A23160F63DE003025B4 /* CoreTextUtils.h */,
-				09E15A24160F63DE003025B4 /* CoreTextUtils.m */,
+				097935621613B419006DB5D5 /* Private Utilities */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -106,6 +140,9 @@
 				09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */,
 				09E15A25160F63DE003025B4 /* CoreTextUtils.h in Headers */,
 				09E15A29160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h in Headers */,
+				09793558161393F2006DB5D5 /* OHASTagParserBase.h in Headers */,
+				0979355C1613A5AE006DB5D5 /* OHASTagParserHTML.h in Headers */,
+				097935601613B276006DB5D5 /* OHASTagParserBasicMarkup.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +201,9 @@
 				09E15A05160F57E2003025B4 /* OHAttributedLabel.m in Sources */,
 				09E15A26160F63DE003025B4 /* CoreTextUtils.m in Sources */,
 				09E15A2A160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m in Sources */,
+				09793559161393F2006DB5D5 /* OHASTagParserBase.m in Sources */,
+				0979355D1613A5AE006DB5D5 /* OHASTagParserHTML.m in Sources */,
+				097935611613B276006DB5D5 /* OHASTagParserBasicMarkup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
