@@ -103,7 +103,7 @@
 -(BOOL)textIsUnderlinedAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
     int32_t underlineStyle = [self textUnderlineStyleAtIndex:index effectiveRange:aRange];
-    return (underlineStyle & 0xFF) == kCTUnderlineStyleNone;
+    return (underlineStyle & 0xFF) != kCTUnderlineStyleNone;
 }
 
 -(int32_t)textUnderlineStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
