@@ -226,6 +226,11 @@
 	do {
 		// Get font at startPoint
 		CTFontRef currentFont = (BRIDGE_CAST CTFontRef)[self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
+        if (!currentFont)
+        {
+            currentFont = CTFontCreateUIFontForLanguage(kCTFontLabelFontType, 0.0, NULL);
+            [(BRIDGE_CAST id)currentFont autorelease];
+        }
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
 		// Create bold/unbold font variant for this font and apply
@@ -239,7 +244,7 @@
 			CFStringRef fontName = CTFontCopyFullName(currentFont);
 			NSLog(@"[OHAttributedLabel] Warning: can't find a bold font variant for font %@. Try another font family (like Helvetica) instead.",
                   (BRIDGE_CAST NSString*)fontName);
-            CFRelease(fontName);
+            if (fontName) CFRelease(fontName);
 		}
 		////[self removeAttribute:(NSString*)kCTFontWeightTrait range:fontRange]; // Work around for Apple leak
 		////[self addAttribute:(NSString*)kCTFontWeightTrait value:(id)[NSNumber numberWithInt:1.0f] range:fontRange];
