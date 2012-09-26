@@ -102,7 +102,7 @@ UIColor* UIColorFromString(NSString* colorString)
         SEL selector = NSSelectorFromString(selectorName);
         NSMethodSignature* sign = [UIColor.class methodSignatureForSelector:selector];
         // Check that the selector exists and return an NSObject/id, so that we can call it and retrieve the return value
-        if ([UIColor.class respondsToSelector:selector] && (0 == strcmp([sign methodReturnType],"@")) )
+        if ([UIColor.class respondsToSelector:selector] && (0 == strcmp([sign methodReturnType],@encode(id))) )
         {
             id clr = [UIColor.class performSelector:selector];
             // Check that the returned object is really an UIColor, just in case
