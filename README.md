@@ -12,6 +12,15 @@ In addition to this `OHAttributedLabel` class, you will also find a category of 
 
 There is also a category for `NSTextCheckingResult` that adds the `extendedURL` property. This property returns the same value as the `URL` value for standard link cases, and return a formatted Maps URL for `NSTextCheckingTypeAddress` link types, that will open Google Maps in iOS version before 6.0 and the Apple's Maps application in iOS 6.0 and later.
 
+### OHASTagParsers and simple tags support ###
+
+The library also comes with very simple tag parsers to help you build `NSAttributedStrings` easily using very simple tags.
+
+* the class `OHASTagParserHTML` can parse simple HTML tags like `<b>` and `<u>` to make bold and underlined text, change the font color using `<font color='…'>`, etc
+* the class `OHASTagParserBasicMarkup` can parse simple markup like `*bold text*`, `_underlined text_` and change the font color using markup like `{red|some red text}` or `{#ff6600|Yeah}`.
+
+_(For improvements of this feature, like adding other tags or markup languages, refer to [issue #88](http://github.com/AliSoftware/OHAttributedLabel/issues/88))_
+
 ### UIAppearance support ###
 
 The `OHAttributedLabel` class support the `UIAppearance` proxy API (available since iOS5). See selectors and properties marked using the `UI_APPEARANCE_SELECTOR` in the header.

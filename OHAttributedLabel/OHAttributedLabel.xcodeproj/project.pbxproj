@@ -33,6 +33,7 @@
 		0979355B1613A5AE006DB5D5 /* OHASTagParserHTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHASTagParserHTML.m; sourceTree = "<group>"; };
 		0979355E1613B276006DB5D5 /* OHASTagParserBasicMarkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHASTagParserBasicMarkup.h; sourceTree = "<group>"; };
 		0979355F1613B276006DB5D5 /* OHASTagParserBasicMarkup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHASTagParserBasicMarkup.m; sourceTree = "<group>"; };
+		097935631613CD6E006DB5D5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		09E159E8160F573A003025B4 /* libOHAttributedLabel.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libOHAttributedLabel.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		09E159EB160F573A003025B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		09E159FD160F57AB003025B4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -88,6 +89,7 @@
 		09E159DD160F573A003025B4 = {
 			isa = PBXGroup;
 			children = (
+				097935631613CD6E006DB5D5 /* README.md */,
 				09E15A06160F57F4003025B4 /* CHANGELOG */,
 				09E15A07160F57F4003025B4 /* LICENSE */,
 				09E159FF160F57D5003025B4 /* Source */,
@@ -266,8 +268,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				OTHER_LDFLAGS = "-ObjC";
+				PRIVATE_HEADERS_FOLDER_PATH = "$(TARGET_NAME)/Private";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -276,8 +279,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				OTHER_LDFLAGS = "-ObjC";
+				PRIVATE_HEADERS_FOLDER_PATH = "$(TARGET_NAME)/Private";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
