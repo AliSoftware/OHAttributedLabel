@@ -7,7 +7,6 @@
 //
 
 #import "UIAlertView+Commodity.h"
-#import "NSAttributedString+Attributes.h"
 
 @implementation UIAlertView(Commodity)
 

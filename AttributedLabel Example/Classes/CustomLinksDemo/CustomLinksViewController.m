@@ -7,7 +7,7 @@
 //
 
 #import "CustomLinksViewController.h"
-#import "NSAttributedString+Attributes.h"
+#import <OHAttributedLabel/NSAttributedString+Attributes.h>
 #import "UIAlertView+Commodity.h"
 
 @interface CustomLinksViewController ()

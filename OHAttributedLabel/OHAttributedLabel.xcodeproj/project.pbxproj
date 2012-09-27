@@ -84,6 +84,7 @@
 				09E15A24160F63DE003025B4 /* CoreTextUtils.m */,
 			);
 			name = "Private Utilities";
+			path = PrivateUtils;
 			sourceTree = "<group>";
 		};
 		09E159DD160F573A003025B4 = {
@@ -119,16 +120,24 @@
 		09E159FF160F57D5003025B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				47554A5A161485A200904E5E /* Source */,
 				09793554161393AE006DB5D5 /* TagParsers */,
+				097935621613B419006DB5D5 /* Private Utilities */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		47554A5A161485A200904E5E /* Source */ = {
+			isa = PBXGroup;
+			children = (
 				09E15A02160F57E2003025B4 /* OHAttributedLabel.h */,
 				09E15A03160F57E2003025B4 /* OHAttributedLabel.m */,
 				09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */,
 				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
 				09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */,
 				09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */,
-				097935621613B419006DB5D5 /* Private Utilities */,
 			);
-			name = Source;
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,22 +276,24 @@
 		09E159F7160F573A003025B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INSTALL_PATH = "/../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = "$(TARGET_NAME)/Private";
+				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PROJECT_NAME)";
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
 		09E159F8160F573A003025B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INSTALL_PATH = "/../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = "$(TARGET_NAME)/Private";
+				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PROJECT_NAME)";
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};

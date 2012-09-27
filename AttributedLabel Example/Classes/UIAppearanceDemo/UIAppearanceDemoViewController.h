@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OHAttributedLabel.h"
+
+@class OHAttributedLabel;
 
 @interface UIAppearanceDemoViewController : UIViewController
 

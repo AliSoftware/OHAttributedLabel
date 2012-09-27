@@ -7,10 +7,11 @@
 //
 
 #import "BasicDemoViewController.h"
-#import "NSAttributedString+Attributes.h"
 #import "UIAlertView+Commodity.h"
-#import "OHASTagParserHTML.h"
-#import "OHASTagParserBasicMarkup.h"
+
+#import <OHAttributedLabel/NSAttributedString+Attributes.h>
+#import <OHAttributedLabel/OHASTagParserHTML.h>
+#import <OHAttributedLabel/OHASTagParserBasicMarkup.h>
 
 @interface BasicDemoViewController ()
 @property(nonatomic, retain) NSMutableSet* visitedLinks;
