@@ -19,7 +19,14 @@ The library also comes with very simple tag parsers to help you build `NSAttribu
 * the class `OHASTagParserHTML` can parse simple HTML tags like `<b>` and `<u>` to make bold and underlined text, change the font color using `<font color='…'>`, etc
 * the class `OHASTagParserBasicMarkup` can parse simple markup like `*bold text*`, `_underlined text_` and change the font color using markup like `{red|some red text}` or `{#ff6600|Yeah}`.
 
-_(For improvements of this feature, like adding other tags or markup languages, refer to [issue #88](http://github.com/AliSoftware/OHAttributedLabel/issues/88))_
+        // Example 1:
+        basicMarkupLabel.attributedText = [OHASTagParserBasicMarkup attributedStringByReplacingTagsInAttributedString:basicMarkupLabel.attributedText];
+    
+        // Example 2:
+        NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:@"Hello *you*!"];
+        [OHASTagParserBasicMarkup replaceTagsInAttributedString:mas];
+
+_Note that `OHASTagParserHTML` is intended to be a very simple tool only to help you build attributed string easier: this is not intended to be a real and complete HTML interpreter, and will never be. For improvements of this feature, like adding other tags or markup languages, refer to [issue #88](http://github.com/AliSoftware/OHAttributedLabel/issues/88))_
 
 ### UIAppearance support ###
 
