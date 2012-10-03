@@ -576,6 +576,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
+    [self recomputeLinksInTextIfNeeded];
 	if (!_attributedTextWithLinks) return CGSizeZero;
 	return [_attributedTextWithLinks sizeConstrainedToSize:size fitRange:NULL];
 }
