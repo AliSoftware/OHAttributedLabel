@@ -98,4 +98,6 @@ __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:li
 @property(nonatomic, assign) BOOL centerVertically;
 //! Allows to draw text past the bottom of the view if need. May help in rare cases (like using Emoji)
 @property(nonatomic, assign) BOOL extendBottomToFit;
+//! Trim whitespace when setting text
+@property(nonatomic, assign) BOOL trimWhitespace;
 @end
