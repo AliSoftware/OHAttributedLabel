@@ -120,14 +120,14 @@
 		09E159FF160F57D5003025B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				47554A5A161485A200904E5E /* Source */,
+				47554A5A161485A200904E5E /* OHAttributedLabel */,
 				09793554161393AE006DB5D5 /* TagParsers */,
 				097935621613B419006DB5D5 /* Private Utilities */,
 			);
 			name = Source;
 			sourceTree = "<group>";
 		};
-		47554A5A161485A200904E5E /* Source */ = {
+		47554A5A161485A200904E5E /* OHAttributedLabel */ = {
 			isa = PBXGroup;
 			children = (
 				09E15A02160F57E2003025B4 /* OHAttributedLabel.h */,
@@ -137,6 +137,7 @@
 				09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */,
 				09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */,
 			);
+			name = OHAttributedLabel;
 			path = Source;
 			sourceTree = "<group>";
 		};
