@@ -11,11 +11,11 @@
 		09E159FE160F57AB003025B4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E159FD160F57AB003025B4 /* CoreText.framework */; };
 		09E15A04160F57E2003025B4 /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */; };
 		09E15A05160F57E2003025B4 /* OHAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A03160F57E2003025B4 /* OHAttributedLabel.m */; };
-		09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A02160F57E2003025B4 /* OHAttributedLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */; settings = {ATTRIBUTES = (); }; };
+		09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A02160F57E2003025B4 /* OHAttributedLabel.h */; settings = {ATTRIBUTES = (); }; };
 		09E15A25160F63DE003025B4 /* CoreTextUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A23160F63DE003025B4 /* CoreTextUtils.h */; };
 		09E15A26160F63DE003025B4 /* CoreTextUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A24160F63DE003025B4 /* CoreTextUtils.m */; };
-		09E15A29160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		09E15A29160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */; settings = {ATTRIBUTES = (); }; };
 		09E15A2A160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */; };
 		09E15A2C160F64EB003025B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E15A2B160F64EB003025B4 /* UIKit.framework */; };
 /* End PBXBuildFile section */
