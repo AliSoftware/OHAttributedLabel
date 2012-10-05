@@ -1,12 +1,12 @@
 //
-//  AttributedStringHTMLTagParser.h
+//  OHASBasicHTMLParser.h
 //  OHAttributedLabel
 //
 //  Created by Olivier Halligon on 26/09/12.
 //  Copyright (c) 2012 AliSoftware. All rights reserved.
 //
 
-#import "OHASTagParserBase.h"
+#import "OHASMarkupParserBase.h"
 
 /*!
  * Supported tags:
@@ -19,6 +19,6 @@
  *      or a color name like "red" "green" "blue", "purple"…
  *      (the supported names correspond to the [UIColor xxxColor] commodity constructors of the UIColor class)
  */
-@interface OHASTagParserHTML : OHASTagParserBase
+@interface OHASBasicHTMLParser : OHASMarkupParserBase
 
 @end

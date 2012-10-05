@@ -1,26 +1,26 @@
 //
-//  TagParser.m
+//  OHASMarkupParserBase.m
 //  OHAttributedLabel
 //
 //  Created by Olivier Halligon on 26/09/12.
 //  Copyright (c) 2012 AliSoftware. All rights reserved.
 //
 
-#import "OHASTagParserBase.h"
+#import "OHASMarkupParserBase.h"
 
-@interface OHASTagParserBase ()
+@interface OHASMarkupParserBase ()
 +(NSDictionary*)tagMappings; // To be overloaded by subclasses
 @end
 
-@implementation OHASTagParserBase
+@implementation OHASMarkupParserBase
 
 +(NSDictionary*)tagMappings
 {
-    [NSException raise:@"OHASTagParserBase" format:@"This method should be overridden in sublcasses"];
+    [NSException raise:@"OHASMarkupParserBase" format:@"This method should be overridden in sublcasses"];
     return nil;
 }
 
-+(void)replaceTagsInAttributedString:(NSMutableAttributedString*)mutAttrString
++(void)processMarkupInAttributedString:(NSMutableAttributedString*)mutAttrString
 {
     NSDictionary* mappings = [self tagMappings];
     
@@ -46,10 +46,10 @@
 
 }
 
-+(NSAttributedString*)attributedStringByReplacingTagsInAttributedString:(NSAttributedString*)attrString
++(NSAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)attrString
 {
     __block NSMutableAttributedString* mutAttrString = [attrString mutableCopy];
-    [self replaceTagsInAttributedString:mutAttrString];
+    [self processMarkupInAttributedString:mutAttrString];
     return [mutAttrString autorelease];
 }
 

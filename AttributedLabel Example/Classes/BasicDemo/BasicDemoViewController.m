@@ -10,8 +10,8 @@
 #import "UIAlertView+Commodity.h"
 
 #import <OHAttributedLabel/NSAttributedString+Attributes.h>
-#import <OHAttributedLabel/OHASTagParserHTML.h>
-#import <OHAttributedLabel/OHASTagParserBasicMarkup.h>
+#import <OHAttributedLabel/OHASBasicHTMLParser.h>
+#import <OHAttributedLabel/OHASBasicMarkupParser.h>
 
 @interface BasicDemoViewController ()
 @property(nonatomic, retain) NSMutableSet* visitedLinks;
@@ -52,8 +52,8 @@
 -(void)viewDidLoad
 {
 	[self fillDemoLabel];
-    self.htmlLabel.attributedText = [OHASTagParserHTML attributedStringByReplacingTagsInAttributedString:self.htmlLabel.attributedText];
-    self.basicMarkupLabel.attributedText = [OHASTagParserBasicMarkup attributedStringByReplacingTagsInAttributedString:self.basicMarkupLabel.attributedText];
+    self.htmlLabel.attributedText = [OHASBasicHTMLParser attributedStringByProcessingMarkupInAttributedString:self.htmlLabel.attributedText];
+    self.basicMarkupLabel.attributedText = [OHASBasicMarkupParser attributedStringByProcessingMarkupInAttributedString:self.basicMarkupLabel.attributedText];
     [super viewDidLoad];
 }
 

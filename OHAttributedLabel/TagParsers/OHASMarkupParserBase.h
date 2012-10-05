@@ -1,5 +1,5 @@
 //
-//  TagParser.h
+//  OHASMarkupParserBase.h
 //  OHAttributedLabel
 //
 //  Created by Olivier Halligon on 26/09/12.
@@ -31,7 +31,7 @@ typedef NSAttributedString*(^TagProcessorBlockType)(NSAttributedString*, NSTextC
  * @see OHASTagParserHTML implementation for an example
  */
 
-@interface OHASTagParserBase : NSObject
+@interface OHASMarkupParserBase : NSObject
 
 /*!
  * Call this on concrete subclasses to process tags in an NSMutableAttributedString
@@ -39,7 +39,7 @@ typedef NSAttributedString*(^TagProcessorBlockType)(NSAttributedString*, NSTextC
  *
  * e.g. attrStr = [OHASTagParserHTML replacTagsInAttributedString:mutAttrStr];
  */
-+(void)replaceTagsInAttributedString:(NSMutableAttributedString*)mutAttrString;
++(void)processMarkupInAttributedString:(NSMutableAttributedString*)mutAttrString;
 
 /*!
  * Call this on concrete subclasses to get a parsed NSAttributedString with its attributes
@@ -48,7 +48,7 @@ typedef NSAttributedString*(^TagProcessorBlockType)(NSAttributedString*, NSTextC
  * Note: this convenience method simply create a mutableCopy of string and use it to call "replaceTagsInAttributedString:".
  */
 
-+(NSAttributedString*)attributedStringByReplacingTagsInAttributedString:(NSAttributedString*)string;
++(NSAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)string;
 
 @end
 
