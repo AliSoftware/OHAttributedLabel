@@ -278,6 +278,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = "/../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -290,6 +291,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = "/../BuildProductsPath/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
 				PRODUCT_NAME = "$(TARGET_NAME)";
