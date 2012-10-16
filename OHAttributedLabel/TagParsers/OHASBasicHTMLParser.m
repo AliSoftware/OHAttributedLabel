@@ -18,14 +18,14 @@
             ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match) {
                 NSRange textRange = [match rangeAtIndex:1];
                 NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
-                [foundString setTextBold:YES range:NSMakeRange(0,textRange.length)];
+                if (textRange.length>0) [foundString setTextBold:YES range:NSMakeRange(0,textRange.length)];
                 return [foundString autorelease];
             }, @"<b>(.*?)</b>",
             
             ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match) {
                 NSRange textRange = [match rangeAtIndex:1];
                 NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
-                [foundString setTextIsUnderlined:YES];
+                if (textRange.length>0) [foundString setTextIsUnderlined:YES];
                 return [foundString autorelease];
             }, @"<u>(.*?)</u>",
             
@@ -34,7 +34,7 @@
                 CGFloat fontSize = [str attributedSubstringFromRange:[match rangeAtIndex:4]].string.floatValue;
                 NSRange textRange = [match rangeAtIndex:5];
                 NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
-                [foundString setFontName:fontName size:fontSize];
+                if (textRange.length>0) [foundString setFontName:fontName size:fontSize];
                 return [foundString autorelease];
             }, @"<font name=(['\"])(.*?)\\1 size=(['\"])(.*?)\\3>(.*?)</font>",
             
@@ -43,7 +43,7 @@
                 UIColor* color = UIColorFromString(colorName);
                 NSRange textRange = [match rangeAtIndex:3];
                 NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
-                [foundString setTextColor:color];
+                if (textRange.length>0) [foundString setTextColor:color];
                 return [foundString autorelease];
             }, @"<font color=(['\"])(.*?)\\1>(.*?)</font>",
             

@@ -45,10 +45,17 @@ typedef NSAttributedString*(^TagProcessorBlockType)(NSAttributedString*, NSTextC
  * Call this on concrete subclasses to get a parsed NSAttributedString with its attributes
  * changed according to the tags in the original attributed string.
  *
- * Note: this convenience method simply create a mutableCopy of string and use it to call "replaceTagsInAttributedString:".
+ * Note: this convenience method simply create a mutableCopy of string and use it to call "processMarkupInAttributedString:".
  */
++(NSAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)attrString;
 
-+(NSAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)string;
+/*!
+ * Call this on concrete subclasses to get a parsed NSAttributedString with its attributes
+ * set according to the tags in the original string.
+ *
+ * Note: this convenience method simply create a mutableAttributedString from string and use it to call "processMarkupInAttributedString:".
+ */
++(NSAttributedString*)attributedStringByProcessingMarkupInString:(NSString*)string;
 
 @end
 
