@@ -29,8 +29,10 @@
 
 #if __has_feature(objc_arc)
 #define BRIDGE_CAST __bridge
+#define MRC_AUTORELEASE(x) (x)
 #else
 #define BRIDGE_CAST
+#define MRC_AUTORELEASE(x) [(x) autorelease]
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -41,11 +43,7 @@
 {
     if (string)
     {
-        NSAttributedString* as = [[self alloc] initWithString:string];
-#if ! __has_feature(objc_arc)
-        [as autorelease];
-#endif
-        return as;
+        return MRC_AUTORELEASE([[self alloc] initWithString:string]);
     } else {
         return nil;
     }
@@ -54,11 +52,7 @@
 {
     if (attrStr)
     {
-        NSAttributedString* as =[[self alloc] initWithAttributedString:attrStr];
-#if ! __has_feature(objc_arc)
-        [as autorelease];
-#endif
-        return as;
+        return MRC_AUTORELEASE([[self alloc] initWithAttributedString:attrStr]);
     } else {
         return nil;
     }
@@ -229,7 +223,7 @@
         if (!currentFont)
         {
             currentFont = CTFontCreateUIFontForLanguage(kCTFontLabelFontType, 0.0, NULL);
-            [(BRIDGE_CAST id)currentFont autorelease];
+            (void)MRC_AUTORELEASE((BRIDGE_CAST id)currentFont);
         }
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
