@@ -269,7 +269,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	 }];
 
     MRC_RELEASE(_attributedTextWithLinks);
-	_attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
+    _attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
 
     MRC_RELEASE(mutAS);
     [self setNeedsDisplay];
