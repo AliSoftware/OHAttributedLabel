@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1536</int>
-		<string key="IBDocument.SystemVersion">12C54</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2840</string>
+		<string key="IBDocument.SystemVersion">12C60</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
 		<string key="IBDocument.HIToolboxVersion">625.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-			<string key="NS.object.0">1926</string>
+			<string key="NS.object.0">1929</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
@@ -261,7 +261,7 @@ cm5pYSAoKzEgNDA4LTk5Ni0xMDEwKSBuZXh0IHN1bmRheS4</string>
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string key="IBUIText">Some &lt;b&gt;basic&lt;/b&gt; &lt;font name="Courier" size="14"&gt;HTML&lt;/font&gt; support is provided for &lt;u&gt;convenience&lt;/u&gt; too. &lt;font color="red"&gt;You can add your own parsers easily&lt;/font&gt; by subclassing &lt;font name="Courier" size="14"&gt;OHASTagParserBase&lt;/font&gt; if needed.</string>
+						<string key="IBUIText">Some &lt;b&gt;basic&lt;/b&gt; &lt;font name="Courier" size="14"&gt;HTML&lt;/font&gt; support is provided for &lt;u&gt;convenience&lt;/u&gt; too. &lt;font color="red"&gt;You can add your own parsers easily&lt;/font&gt; by subclassing &lt;font name="Courier" size="14"&gt;OHASMarkupParserBase&lt;/font&gt; if needed.</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDEAA</bytes>
@@ -284,7 +284,6 @@ cm5pYSAoKzEgNDA4LTk5Ni0xMDEwKSBuZXh0IHN1bmRheS4</string>
 						<string key="NSFrame">{{10, 343}, {300, 48}}</string>
 						<reference key="NSSuperview" ref="818567079"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="222583878"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -603,6 +602,6 @@ cm5pYSAoKzEgNDA4LTk5Ni0xMDEwKSBuZXh0IHN1bmRheS4</string>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<string key="IBCocoaTouchPluginVersion">1926</string>
+		<string key="IBCocoaTouchPluginVersion">1929</string>
 	</data>
 </archive>
