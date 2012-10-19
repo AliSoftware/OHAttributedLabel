@@ -54,7 +54,15 @@ __attribute__((deprecated("You should use 'setTextAlignment:lineBreakMode:' on y
 __attribute__((unavailable("Since iOS6 SDK, you have to use 'setTextAlignment:lineBreakMode:' on your NSAttributedString instead.")));
 #endif
 
-
+//! This flags are designed to be used with the linkUnderlineStyle property and the -attributedLabel:colorForLink:underlineStyle: delegate method
+//! - If you bitewise-OR the linkUnderlineStyle with the kOHBoldStyleTraitSetBold constant, the bold attribute will be added to links in text
+//! - If you bitewise-OR the linkUnderlineStyle with the kOHBoldStyleTraitUnSetBold constant, the bold attribute will be removed from links in text
+//! - If you don't use these constants, the bold attribute of links will not be altered (so it will be bold if link was alreadt in a bold text portion, non-bold if not)
+typedef CF_OPTIONS(int32_t, OHBoldStyleTrait)  {
+    kOHBoldStyleTraitMask       = 0x030000,
+    kOHBoldStyleTraitSetBold    = 0x030000,
+    kOHBoldStyleTraitUnSetBold  = 0x020000,
+};
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Public Interface

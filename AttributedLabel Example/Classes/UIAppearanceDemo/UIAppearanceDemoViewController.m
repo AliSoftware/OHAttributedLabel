@@ -93,7 +93,7 @@
         uint32_t styles[] = {
             kCTUnderlineStyleSingle | kCTUnderlinePatternSolid,
             kCTUnderlineStyleDouble | kCTUnderlinePatternSolid,
-            kCTUnderlineStyleSingle | kCTUnderlinePatternDot,
+            kOHBoldStyleTraitSetBold,
             kCTUnderlineStyleSingle | kCTUnderlinePatternDash,
             kCTUnderlineStyleNone
         };

@@ -123,10 +123,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 - (void)commonInit
 {
-    _linkColor = [UIColor blueColor];
-    _highlightedLinkColor = [UIColor colorWithWhite:0.4 alpha:0.3];
-    (void)MRC_RETAIN(_linkColor);
-    (void)MRC_RETAIN(_highlightedLinkColor);
+    _linkColor = MRC_RETAIN([UIColor blueColor]);
+    _highlightedLinkColor = MRC_RETAIN([UIColor colorWithWhite:0.4 alpha:0.3]);
 	_linkUnderlineStyle = kCTUnderlineStyleSingle | kCTUnderlinePatternSolid;
     
 	self.automaticallyAddLinksForType = NSTextCheckingTypeLink;
@@ -241,49 +239,38 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 #endif
 
 	NSString* plainText = [_attributedText string];
+    
+    void (^applyLinkStyle)(NSTextCheckingResult*) = ^(NSTextCheckingResult* result)
+    {
+        int32_t uStyle = self.linkUnderlineStyle;
+        UIColor* thisLinkColor = hasLinkColorSelector
+        ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
+        : self.linkColor;
+        
+        if (thisLinkColor)
+            [mutAS setTextColor:thisLinkColor range:[result range]];
+        if ((uStyle & 0xFFFF) != kCTUnderlineStyleNone)
+            [mutAS setTextUnderlineStyle:uStyle range:[result range]];
+        if (uStyle & kOHBoldStyleTraitMask)
+            [mutAS setTextBold:((uStyle & kOHBoldStyleTraitSetBold) == kOHBoldStyleTraitSetBold) range:[result range]];
+    };
+    
 	if (plainText && (self.automaticallyAddLinksForType > 0))
     {
 		[_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
                                      usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
 		 {
-			 int32_t uStyle = self.linkUnderlineStyle;
-			 UIColor* thisLinkColor = hasLinkColorSelector
-             ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
-             : self.linkColor;
-			 
-			 if (thisLinkColor)
-				 [mutAS setTextColor:thisLinkColor range:[result range]];
-			 if (uStyle>0)
-				 [mutAS setTextUnderlineStyle:uStyle range:[result range]];
+			 applyLinkStyle(result);
 		 }];
 	}
 	[_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
 	 {
-		 NSTextCheckingResult* result = (NSTextCheckingResult*)obj;
-		 
-		 int32_t uStyle = self.linkUnderlineStyle;
-		 UIColor* thisLinkColor = hasLinkColorSelector
-         ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
-         : self.linkColor;
-		 
-		 @try {
-			 if (thisLinkColor)
-				 [mutAS setTextColor:thisLinkColor range:[result range]];
-			 if (uStyle>0)
-				 [mutAS setTextUnderlineStyle:uStyle range:[result range]];
-		 }
-		 @catch (NSException * e) {
-			 // Protection against NSRangeException
-			 if ([[e name] isEqualToString:NSRangeException]) {
-				 NSLog(@"[OHAttributedLabel] exception: %@",e);
-			 } else {
-				 @throw;
-			 }
-		 }
+		 applyLinkStyle((NSTextCheckingResult*)obj);
 	 }];
 
     MRC_RELEASE(_attributedTextWithLinks);
 	_attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
+
     MRC_RELEASE(mutAS);
     [self setNeedsDisplay];
 }
@@ -719,7 +706,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 -(void)setUnderlineLinks:(BOOL)newValue
 {
-    self.linkUnderlineStyle = newValue ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone;
+    self.linkUnderlineStyle = (self.linkUnderlineStyle & ~0xFF) | ((newValue ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone) & 0xFF);
 }
 
 -(void)setExtendBottomToFit:(BOOL)val
