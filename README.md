@@ -12,21 +12,24 @@ In addition to this `OHAttributedLabel` class, you will also find a category of 
 
 There is also a category for `NSTextCheckingResult` that adds the `extendedURL` property. This property returns the same value as the `URL` value for standard link cases, and return a formatted Maps URL for `NSTextCheckingTypeAddress` link types, that will open Google Maps in iOS version before 6.0 and the Apple's Maps application in iOS 6.0 and later.
 
-### OHASTagParsers and simple tags support ###
+### OHASMarkupParsers and simple tags support ###
 
 The library also comes with very simple tag parsers to help you build `NSAttributedStrings` easily using very simple tags.
 
-* the class `OHASTagParserHTML` can parse simple HTML tags like `<b>` and `<u>` to make bold and underlined text, change the font color using `<font color='…'>`, etc
-* the class `OHASTagParserBasicMarkup` can parse simple markup like `*bold text*`, `_underlined text_` and change the font color using markup like `{red|some red text}` or `{#ff6600|Yeah}`.
+* the class `OHASBasicHTMLParser` can parse simple HTML tags like `<b>` and `<u>` to make bold and underlined text, change the font color using `<font color='…'>`, etc
+* the class `OHASBasicMarkupParser` can parse simple markup like `*bold text*`, `_underlined text_` and change the font color using markup like `{red|some red text}` or `{#ff6600|Yeah}`.
 
-        // Example 1:
-        basicMarkupLabel.attributedText = [OHASTagParserBasicMarkup attributedStringByReplacingTagsInAttributedString:basicMarkupLabel.attributedText];
+        // Example 1: parse HTML in attributed string
+        basicMarkupLabel.attributedText = [OHASBasicHTMLParser attributedStringByProcessingMarkupInAttributedString:basicMarkupLabel.attributedText];
     
-        // Example 2:
-        NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:@"Hello *you*!"];
-        [OHASTagParserBasicMarkup replaceTagsInAttributedString:mas];
+        // Example 2: parse basic markup in string
+        NSAttributedString* as = [OHASBasicMarkupParser attributedStringByProcessingMarkupInString:@"Hello *you*!"];
 
-_Note that `OHASTagParserHTML` is intended to be a very simple tool only to help you build attributed string easier: this is not intended to be a real and complete HTML interpreter, and will never be. For improvements of this feature, like adding other tags or markup languages, refer to [issue #88](http://github.com/AliSoftware/OHAttributedLabel/issues/88))_
+        // Example 3: //process markup in-place in a mutable attributed string
+        NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:@"Hello *you*!"];
+        [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+
+_Note that `OHASBasicHTMLParser` is intended to be a very simple tool only to help you build attributed string easier: this is not intended to be a real and complete HTML interpreter, and will never be. For improvements of this feature, like adding other tags or markup languages, refer to [issue #88](http://github.com/AliSoftware/OHAttributedLabel/issues/88))_
 
 ### UIAppearance support ###
 
