@@ -58,9 +58,7 @@ To use this classes in your project:
 
 Then in your application code, when you want to make use of OHAttributedLabel methods, import the headers using the angle brackets syntax : `#import <OHAttributedLabel/OHAttributedLabel.h>` or `#import <OHAttributedLabel/NSAttributedString+Attributes.h>` etc.
 
-_(*) Note: If you use an Xcode version prior to 4.2 (and LLVM version prior to 3.0), you will need to add the `-force_load "$(BUILT_PRODUCTS_DIR)/libOHAttributedLabel.a"` flags too (or the `-all_load` flag) in addition to the `-ObjC` flag, for the category to be loaded from the library. This is due to a bug in LLVM which has been fixed in LLVM 3.0 / Xcode 4.2 since. Updating Xcode is strongly recommanded._
-
-This project is compatible with both ARC and non-ARC projects. _Besides, as it is included as a stand-alone library, the build settings of the library won't affect the build settings of your own application._
+For more details and import/linking troubleshooting, please see the [dedicated page](https://github.com/AliSoftware/OHAttributedLabel/wiki/How-to-use) and issue #90.
 
 # Sample code & Other documentation
 
