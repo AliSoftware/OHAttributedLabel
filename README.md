@@ -2,7 +2,7 @@
 
 ### OHAttributedLabel
 
-This class allows you to use a** `UILabel` with `NSAttributedString`s**, in order to **display styled text** with mixed style (mixed fonts, color, size, ...) in a unique label. It is a subclass of `UILabel`, which adds an `attributedText` property. Use this property, instead of the `text` property, to set and get the `NSAttributedString` to display.
+This class allows you to use a `UILabel` with `NSAttributedString`s, in order to **display styled text** with mixed style (mixed fonts, color, size, ...) in a unique label. It is a subclass of `UILabel`, which adds an `attributedText` property. Use this property, instead of the `text` property, to set and get the `NSAttributedString` to display.
 
 This class **also support hyperlinks and URLs**. It can **automatically detect links** in your text, color them and make them touchable; you can also **add "custom links" in your text** by attaching an URL to a range of your text and thus make it touchable, and even then catch the event of a touch on a link to act as you wish to.
 
@@ -50,11 +50,15 @@ For example, your could implement this in your `application:didFinishLoadingWith
 
 # How to use in your project
 
-To use this classes in your project:
+There are two methods to begin using these classes in your project:
 
-* Include the "OHAttributedLabel.xcodeproj" in your Xcode4 workspace
-* Add the `libOHAttributedLabel.a` library **and the `CoreText.framework`** to your "Link binary with libraries" Build Phase.
-* Add the `-ObjC` flag in the "Other Linker Flags" build settings if not present already(*)
+1. [Cocoapods](http://cocoapods.org): 
+    * add `pod "OHAttributedLabel"` to your Podfile
+
+2. Manually:
+    * Include the "OHAttributedLabel.xcodeproj" in your Xcode4 workspace
+    * Add the `libOHAttributedLabel.a` library **and the `CoreText.framework`** to your "Link binary with libraries" Build Phase.
+    * Add the `-ObjC` flag in the "Other Linker Flags" build settings if not present already(*)
 
 Then in your application code, when you want to make use of OHAttributedLabel methods, import the headers using the angle brackets syntax : `#import <OHAttributedLabel/OHAttributedLabel.h>` or `#import <OHAttributedLabel/NSAttributedString+Attributes.h>` etc.
 
