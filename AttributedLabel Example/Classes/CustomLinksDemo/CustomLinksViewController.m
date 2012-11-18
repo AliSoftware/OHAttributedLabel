@@ -106,7 +106,7 @@
 -(void)configureMentionLabel
 {
     // Detect all "@xxx" mention-like strings using the "@\w+" regular expression
-    NSRegularExpression* userRegex = [NSRegularExpression regularExpressionWithPattern:@"@\\w+" options:0 error:nil];
+    NSRegularExpression* userRegex = [NSRegularExpression regularExpressionWithPattern:@"\\B@\\w+" options:0 error:nil];
     NSMutableAttributedString* mas = [self.mentionDemoLabel.attributedText mutableCopy];
     [userRegex enumerateMatchesInString:self.mentionDemoLabel.text options:0 range:NSMakeRange(0,self.mentionDemoLabel.text.length)
                              usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop)
