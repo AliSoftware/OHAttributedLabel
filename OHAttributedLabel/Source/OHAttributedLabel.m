@@ -363,6 +363,14 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 			CGPoint relativePoint = CGPointMake(point.x-CGRectGetMinX(lineRect),
 												point.y-CGRectGetMinY(lineRect));
 			CFIndex idx = CTLineGetStringIndexForPosition(line, relativePoint);
+            if ((relativePoint.x < CTLineGetOffsetForStringIndex(line, idx, NULL)) && (idx>0))
+            {
+                // CTLineGetStringIndexForPosition compute the *carret* position, not the character under the CGPoint. So if the index
+                // returned correspond to the character *after* the tapped point, because we tapped on the right half of the character,
+                // then substract 1 to the index to get to the real tapped character index.
+                --idx;
+            }
+            
 			link = ([self linkAtCharacterIndex:idx]);
 			if (link)
             {
