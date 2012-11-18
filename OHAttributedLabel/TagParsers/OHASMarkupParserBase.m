@@ -49,7 +49,7 @@
 
 }
 
-+(NSAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)attrString
++(NSMutableAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)attrString
 {
     NSMutableAttributedString* mutAttrString = [attrString mutableCopy];
     [self processMarkupInAttributedString:mutAttrString];
@@ -60,7 +60,7 @@
 #endif
 }
 
-+(NSAttributedString*)attributedStringByProcessingMarkupInString:(NSString*)string
++(NSMutableAttributedString*)attributedStringByProcessingMarkupInString:(NSString*)string
 {
     NSMutableAttributedString* mutAttrString = [NSMutableAttributedString attributedStringWithString:string];
     [self processMarkupInAttributedString:mutAttrString];

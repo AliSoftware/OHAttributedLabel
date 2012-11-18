@@ -47,7 +47,7 @@ typedef NSAttributedString*(^TagProcessorBlockType)(NSAttributedString*, NSTextC
  *
  * Note: this convenience method simply create a mutableCopy of string and use it to call "processMarkupInAttributedString:".
  */
-+(NSAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)attrString;
++(NSMutableAttributedString*)attributedStringByProcessingMarkupInAttributedString:(NSAttributedString*)attrString;
 
 /*!
  * Call this on concrete subclasses to get a parsed NSAttributedString with its attributes
@@ -55,7 +55,7 @@ typedef NSAttributedString*(^TagProcessorBlockType)(NSAttributedString*, NSTextC
  *
  * Note: this convenience method simply create a mutableAttributedString from string and use it to call "processMarkupInAttributedString:".
  */
-+(NSAttributedString*)attributedStringByProcessingMarkupInString:(NSString*)string;
++(NSMutableAttributedString*)attributedStringByProcessingMarkupInString:(NSString*)string;
 
 @end
 
