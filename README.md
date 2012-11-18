@@ -8,7 +8,7 @@ This class **also support hyperlinks and URLs**. It can **automatically detect l
 
 ### NSAttributedString and NSTextChecking additions
 
-In addition to this `OHAttributedLabel` class, you will also find a category of NS(Mutable)AttributedString to ease creation and manipulation of common attributes of NSAttributedString (to easily change the font, style, color, ... of a range of the string). See the header file `NSAttributedString+Attributes.h` for a list of those comodity methods.
+In addition to this `OHAttributedLabel` class, you will also find a category of `NS(Mutable)AttributedString` to ease creation and manipulation of common attributes of `NSAttributedString` (to easily change the font, style, color, ... of a range of the string). See the header file `NSAttributedString+Attributes.h` for a list of those comodity methods.
 
 There is also a category for `NSTextCheckingResult` that adds the `extendedURL` property. This property returns the same value as the `URL` value for standard link cases, and return a formatted Maps URL for `NSTextCheckingTypeAddress` link types, that will open Google Maps in iOS version before 6.0 and the Apple's Maps application in iOS 6.0 and later.
 
