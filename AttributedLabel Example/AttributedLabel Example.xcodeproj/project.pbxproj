@@ -285,9 +285,9 @@
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
 				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AttribLbl;
+				USER_HEADER_SEARCH_PATHS = "../OHAttributedLabel/**";
 			};
 			name = Debug;
 		};
@@ -301,9 +301,9 @@
 				GCC_PREFIX_HEADER = AttributedLabel_Example_Prefix.pch;
 				INFOPLIST_FILE = "Resources/AttributedLabel_Example-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = AttribLbl;
+				USER_HEADER_SEARCH_PATHS = "../OHAttributedLabel/**";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

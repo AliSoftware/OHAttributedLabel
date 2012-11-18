@@ -50,17 +50,18 @@ For example, your could implement this in your `application:didFinishLoadingWith
 
 # How to use in your project
 
-There are two methods to begin using these classes in your project:
+There are two possible methods to include these classes in your project:
 
-1. [Cocoapods](http://cocoapods.org): 
+1. Using [Cocoapods](http://cocoapods.org):
     * add `pod "OHAttributedLabel"` to your Podfile
 
 2. Manually:
-    * Include the "OHAttributedLabel.xcodeproj" in your Xcode4 workspace
+    * Include the `OHAttributedLabel.xcodeproj` project in your Xcode4 workspace
     * Add the `libOHAttributedLabel.a` library **and the `CoreText.framework`** to your "Link binary with libraries" Build Phase.
-    * Add the `-ObjC` flag in the "Other Linker Flags" build settings if not present already(*)
+    * Add the relative path to the OHAttributedLabel headers in your "User Header Search Path" Build Setting
+    * Add the `-ObjC` flag in the "Other Linker Flags" Build Setting if not present already
 
-Then in your application code, when you want to make use of OHAttributedLabel methods, import the headers using the angle brackets syntax : `#import <OHAttributedLabel/OHAttributedLabel.h>` or `#import <OHAttributedLabel/NSAttributedString+Attributes.h>` etc.
+Then in your application code, when you want to make use of OHAttributedLabel methods, import the headers as usual: `#import "OHAttributedLabel.h"` or `#import "NSAttributedString+Attributes.h"` etc.
 
 For more details and import/linking troubleshooting, please see the [dedicated page](https://github.com/AliSoftware/OHAttributedLabel/wiki/How-to-use) and issue #90.
 

@@ -7,7 +7,7 @@
 //
 
 #import "UIAppearanceDemoViewController.h"
-#import <OHAttributedLabel/OHAttributedLabel.h>
+#import "OHAttributedLabel.h"
 
 
 @implementation UIAppearanceDemoViewController
