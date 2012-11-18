@@ -68,13 +68,12 @@
 	// now we only change the color of "FoodReporter"
 	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.f blue:0.5 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
 	[attrStr setTextBold:YES range:[txt rangeOfString:@TXT_BOLD]];
-	
+
+	// and add a link to the "share your food!" text
+    [attrStr setLink:[NSURL URLWithString:@"http://www.foodreporter.net"] range:[txt rangeOfString:@TXT_LINK]];
+    
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	self.customLinkDemoLabel.attributedText = attrStr;
-	// and add a link to the "share your food!" text
-	[self.customLinkDemoLabel addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net"] inRange:[txt rangeOfString:@TXT_LINK]];
-    
-	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 }
 
 -(IBAction)toggleBold:(UISwitch*)boldSwitch
@@ -88,9 +87,6 @@
 	[mas setTextBold:boldSwitch.on range:[plainText rangeOfString:@TXT_BOLD]];
 	// Affect back the attributed string to the label
 	self.customLinkDemoLabel.attributedText = mas;
-	
-	// Restore the link (as each time we change the attributedText we remove custom links to avoid inconsistencies
-	[self.customLinkDemoLabel addCustomLink:[NSURL URLWithString:@"http://www.foodreporter.net"] inRange:[plainText rangeOfString:@TXT_LINK]];
     
 #if ! __has_feature(objc_arc)
 	// Cleaning: balance the "mutableCopy" call with a "release"
@@ -111,16 +107,17 @@
 {
     // Detect all "@xxx" mention-like strings using the "@\w+" regular expression
     NSRegularExpression* userRegex = [NSRegularExpression regularExpressionWithPattern:@"@\\w+" options:0 error:nil];
+    NSMutableAttributedString* mas = [self.mentionDemoLabel.attributedText mutableCopy];
     [userRegex enumerateMatchesInString:self.mentionDemoLabel.text options:0 range:NSMakeRange(0,self.mentionDemoLabel.text.length)
                              usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop)
     {
         // For each "@xxx" user mention found, add a custom link:
         NSString* user = [[self.mentionDemoLabel.text substringWithRange:match.range] substringFromIndex:1]; // get the matched user name, removing the "@"
         NSString* linkURLString = [NSString stringWithFormat:@"user:%@", user]; // build the "user:" link
-        [self.mentionDemoLabel addCustomLink:[NSURL URLWithString:linkURLString] inRange:match.range]; // add it
+        [mas setLink:[NSURL URLWithString:linkURLString] range:match.range]; // add it
     }];
-
-     self.mentionDemoLabel.centerVertically = YES;
+    self.mentionDemoLabel.attributedText = mas;
+    self.mentionDemoLabel.centerVertically = YES;
 }
 
 

@@ -35,6 +35,8 @@
 #define MRC_AUTORELEASE(x) [(x) autorelease]
 #endif
 
+NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value as OSX, to be compatible in case Apple port this to iOS one day too
+
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NSAttributedString Additions
 
@@ -130,6 +132,12 @@
     CTParagraphStyleGetValueForSpecifier(style, kCTParagraphStyleSpecifierLineBreakMode, sizeof(CTLineBreakMode), &lineBreakMode);
     return lineBreakMode;
 }
+
+-(NSURL*)linkAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    return [self attribute:kOHLinkAttributeName atIndex:index effectiveRange:aRange];
+}
+
 @end
 
 
@@ -263,6 +271,15 @@
 	[self removeAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName value:(BRIDGE_CAST id)aStyle range:range];
 	CFRelease(aStyle);
+}
+
+-(void)setLink:(NSURL*)link range:(NSRange)range
+{
+    [self removeAttribute:kOHLinkAttributeName range:range]; // Work around for Apple leak
+    if (link)
+    {
+        [self addAttribute:kOHLinkAttributeName value:(BRIDGE_CAST id)link range:range];
+    }
 }
 
 @end

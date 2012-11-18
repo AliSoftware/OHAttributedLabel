@@ -21,7 +21,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.sampleLabel addCustomLink:nil inRange:NSMakeRange(8,11)];
+    [self.sampleLabel addCustomLink:[NSURL URLWithString:@"#"] inRange:NSMakeRange(8,11)]; // Add fake link so we can see the UIAppearance effect
     self.sampleLabel.centerVertically = YES;
 }
 

@@ -29,6 +29,7 @@
 #import <CoreText/CoreText.h>
 #import <UIKit/UIKit.h>
 
+extern NSString* kOHLinkAttributeName;
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NSAttributedString Additions
@@ -51,6 +52,8 @@
 -(BOOL)textIsBoldAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(CTTextAlignment)textAlignmentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(CTLineBreakMode)lineBreakModeAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
+
+-(NSURL*)linkAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 @end
 
 
@@ -74,6 +77,8 @@
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;
+
+-(void)setLink:(NSURL*)link range:(NSRange)range;
 @end
 
 

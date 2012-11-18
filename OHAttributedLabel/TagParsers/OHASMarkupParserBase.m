@@ -38,9 +38,12 @@
                               usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop2)
           {
               NSAttributedString* repl = block(processedString, result);
-              NSRange offsetRange = NSMakeRange(result.range.location - offset, result.range.length);
-              [mutAttrString replaceCharactersInRange:offsetRange withAttributedString:repl];
-              offset += result.range.length - repl.length;
+              if (repl)
+              {
+                  NSRange offsetRange = NSMakeRange(result.range.location - offset, result.range.length);
+                  [mutAttrString replaceCharactersInRange:offsetRange withAttributedString:repl];
+                  offset += result.range.length - repl.length;
+              }
           }];
 #if ! __has_feature(objc_arc)
          [processedString release];

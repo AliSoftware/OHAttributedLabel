@@ -269,6 +269,18 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
             }
         };
         
+        // Links set by text attribute
+        [_attributedText enumerateAttribute:kOHLinkAttributeName inRange:NSMakeRange(0, [_attributedText length])
+                                    options:0 usingBlock:^(id value, NSRange range, BOOL *stop)
+         {
+             if (value)
+             {
+                 NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(BRIDGE_CAST NSURL*)value];
+                 applyLinkStyle(result);
+             }
+         }];
+
+        // Automatically Detected Links
         if (plainText && (self.automaticallyAddLinksForType > 0))
         {
             [_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
@@ -277,6 +289,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                  applyLinkStyle(result);
              }];
         }
+        
+        // Custom Links
         [_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
          {
              applyLinkStyle((NSTextCheckingResult*)obj);
@@ -298,8 +312,25 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     @autoreleasepool
     {
         NSString* plainText = [_attributedText string];
-        if (plainText && (self.automaticallyAddLinksForType > 0))
+        
+        // Links set by text attribute
+        if (_attributedText)
         {
+            [_attributedText enumerateAttribute:kOHLinkAttributeName inRange:NSMakeRange(0, [_attributedText length])
+                                        options:0 usingBlock:^(id value, NSRange range, BOOL *stop)
+             {
+                 if (value && NSLocationInRange(idx, range))
+                 {
+                     NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(BRIDGE_CAST NSURL*)value];
+                     foundResult = MRC_RETAIN(result);
+                     *stop = YES;
+                 }
+             }];
+        }
+        
+        if (!foundResult && plainText && (self.automaticallyAddLinksForType > 0))
+        {
+            // Automatically Detected Links
             [_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
                                           usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
              {
@@ -314,6 +345,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         
         if (!foundResult)
         {
+            // Custom Links
             [_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
              {
                  NSRange r = [(NSTextCheckingResult*)obj range];
