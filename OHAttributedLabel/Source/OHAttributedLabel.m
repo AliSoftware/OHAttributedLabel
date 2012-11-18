@@ -26,7 +26,6 @@
 
 
 #import "OHAttributedLabel.h"
-#import "NSAttributedString+Attributes.h"
 #import "CoreTextUtils.h"
 
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES 1
@@ -222,56 +221,60 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         return;
 	}
     
-    NSMutableAttributedString* mutAS = [_attributedText mutableCopy];
-	
-    BOOL hasLinkColorSelector = [self.delegate respondsToSelector:@selector(attributedLabel:colorForLink:underlineStyle:)];
-    
-#if OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        BOOL hasOldLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
-        if (hasOldLinkColorSelector)
-        {
-            NSLog(@"[OHAttributedLabel] Warning: \"-colorForLink:underlineStyle:\" delegate method is deprecated and has been replaced"
-                  "by \"-attributedLabel:colorForLink:underlineStyle:\" to be more compliant with naming conventions.");
-        }
-    });
-#endif
-
-	NSString* plainText = [_attributedText string];
-    
-    void (^applyLinkStyle)(NSTextCheckingResult*) = ^(NSTextCheckingResult* result)
+    @autoreleasepool
     {
-        int32_t uStyle = self.linkUnderlineStyle;
-        UIColor* thisLinkColor = hasLinkColorSelector
-        ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
-        : self.linkColor;
+        NSMutableAttributedString* mutAS = [_attributedText mutableCopy];
         
-        if (thisLinkColor)
-            [mutAS setTextColor:thisLinkColor range:[result range]];
-        if ((uStyle & 0xFFFF) != kCTUnderlineStyleNone)
-            [mutAS setTextUnderlineStyle:uStyle range:[result range]];
-        if (uStyle & kOHBoldStyleTraitMask)
-            [mutAS setTextBold:((uStyle & kOHBoldStyleTraitSetBold) == kOHBoldStyleTraitSetBold) range:[result range]];
-    };
+        BOOL hasLinkColorSelector = [self.delegate respondsToSelector:@selector(attributedLabel:colorForLink:underlineStyle:)];
+        
+#if OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            BOOL hasOldLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
+            if (hasOldLinkColorSelector)
+            {
+                NSLog(@"[OHAttributedLabel] Warning: \"-colorForLink:underlineStyle:\" delegate method is deprecated and has been replaced"
+                      "by \"-attributedLabel:colorForLink:underlineStyle:\" to be more compliant with naming conventions.");
+            }
+        });
+#endif
+        
+        NSString* plainText = [_attributedText string];
+        
+        void (^applyLinkStyle)(NSTextCheckingResult*) = ^(NSTextCheckingResult* result)
+        {
+            int32_t uStyle = self.linkUnderlineStyle;
+            UIColor* thisLinkColor = hasLinkColorSelector
+            ? [self.delegate attributedLabel:self colorForLink:result underlineStyle:&uStyle]
+            : self.linkColor;
+            
+            if (thisLinkColor)
+                [mutAS setTextColor:thisLinkColor range:[result range]];
+            if ((uStyle & 0xFFFF) != kCTUnderlineStyleNone)
+                [mutAS setTextUnderlineStyle:uStyle range:[result range]];
+            if (uStyle & kOHBoldStyleTraitMask)
+                [mutAS setTextBold:((uStyle & kOHBoldStyleTraitSetBold) == kOHBoldStyleTraitSetBold) range:[result range]];
+        };
+        
+        if (plainText && (self.automaticallyAddLinksForType > 0))
+        {
+            [_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
+                                          usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
+             {
+                 applyLinkStyle(result);
+             }];
+        }
+        [_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+         {
+             applyLinkStyle((NSTextCheckingResult*)obj);
+         }];
+        
+        MRC_RELEASE(_attributedTextWithLinks);
+        _attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
+        
+        MRC_RELEASE(mutAS);
+    } // @autoreleasepool
     
-	if (plainText && (self.automaticallyAddLinksForType > 0))
-    {
-		[_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
-                                     usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
-		 {
-			 applyLinkStyle(result);
-		 }];
-	}
-	[_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-	 {
-		 applyLinkStyle((NSTextCheckingResult*)obj);
-	 }];
-
-    MRC_RELEASE(_attributedTextWithLinks);
-    _attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
-
-    MRC_RELEASE(mutAS);
     [self setNeedsDisplay];
 }
 
@@ -279,34 +282,38 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 {
 	__block NSTextCheckingResult* foundResult = nil;
 	
-	NSString* plainText = [_attributedText string];
-	if (plainText && (self.automaticallyAddLinksForType > 0))
+    @autoreleasepool
     {
-		[_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
-									usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
-		 {
-			 NSRange r = [result range];
-			 if (NSLocationInRange(idx, r))
+        NSString* plainText = [_attributedText string];
+        if (plainText && (self.automaticallyAddLinksForType > 0))
+        {
+            [_linksDetector enumerateMatchesInString:plainText options:0 range:NSMakeRange(0,[plainText length])
+                                          usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
              {
-				 foundResult = MRC_AUTORELEASE(MRC_RETAIN(result));
-				 *stop = YES;
-			 }
-		 }];
-	}
-	
-    if (!foundResult)
-    {
-        [_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
-         {
-             NSRange r = [(NSTextCheckingResult*)obj range];
-             if (NSLocationInRange(idx, r))
+                 NSRange r = [result range];
+                 if (NSLocationInRange(idx, r))
+                 {
+                     foundResult = MRC_RETAIN(result);
+                     *stop = YES;
+                 }
+             }];
+        }
+        
+        if (!foundResult)
+        {
+            [_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
              {
-                 foundResult = MRC_AUTORELEASE(MRC_RETAIN(obj));
-                 *stop = YES;
-             }
-         }];
-    }
-	return foundResult;
+                 NSRange r = [(NSTextCheckingResult*)obj range];
+                 if (NSLocationInRange(idx, r))
+                 {
+                     foundResult = MRC_RETAIN(obj);
+                     *stop = YES;
+                 }
+             }];
+        }
+    } // @autoreleasepool
+    
+	return MRC_AUTORELEASE(foundResult);
 }
 
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)point
@@ -425,61 +432,64 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 {
 	if (_attributedText)
     {
-		CGContextRef ctx = UIGraphicsGetCurrentContext();
-		CGContextSaveGState(ctx);
-		
-		// flipping the context to draw core text
-		// no need to flip our typographical bounds from now on
-		CGContextConcatCTM(ctx, CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f));
-		
-		if (self.shadowColor)
+        @autoreleasepool
         {
-			CGContextSetShadowWithColor(ctx, self.shadowOffset, 0.0, self.shadowColor.CGColor);
-		}
-		
-        [self recomputeLinksInTextIfNeeded];
-        NSAttributedString* attributedStringToDisplay = _attributedTextWithLinks;
-		if (self.highlighted && self.highlightedTextColor != nil)
-        {
-            NSMutableAttributedString* mutAS = [attributedStringToDisplay mutableCopy];
-			[mutAS setTextColor:self.highlightedTextColor];
-            attributedStringToDisplay = mutAS;
-            (void)MRC_AUTORELEASE(mutAS);
-		}
-		if (textFrame == NULL)
-        {
-            CFAttributedStringRef cfAttrStrWithLinks = (BRIDGE_CAST CFAttributedStringRef)attributedStringToDisplay;
-			CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(cfAttrStrWithLinks);
-			drawingRect = self.bounds;
-			if (self.centerVertically || self.extendBottomToFit)
+            CGContextRef ctx = UIGraphicsGetCurrentContext();
+            CGContextSaveGState(ctx);
+            
+            // flipping the context to draw core text
+            // no need to flip our typographical bounds from now on
+            CGContextConcatCTM(ctx, CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f));
+            
+            if (self.shadowColor)
             {
-				CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(drawingRect.size.width,CGFLOAT_MAX),NULL);
-				if (self.extendBottomToFit)
+                CGContextSetShadowWithColor(ctx, self.shadowOffset, 0.0, self.shadowColor.CGColor);
+            }
+            
+            [self recomputeLinksInTextIfNeeded];
+            NSAttributedString* attributedStringToDisplay = _attributedTextWithLinks;
+            if (self.highlighted && self.highlightedTextColor != nil)
+            {
+                NSMutableAttributedString* mutAS = [attributedStringToDisplay mutableCopy];
+                [mutAS setTextColor:self.highlightedTextColor];
+                attributedStringToDisplay = mutAS;
+                (void)MRC_AUTORELEASE(mutAS);
+            }
+            if (textFrame == NULL)
+            {
+                CFAttributedStringRef cfAttrStrWithLinks = (BRIDGE_CAST CFAttributedStringRef)attributedStringToDisplay;
+                CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(cfAttrStrWithLinks);
+                drawingRect = self.bounds;
+                if (self.centerVertically || self.extendBottomToFit)
                 {
-					CGFloat delta = MAX(0.f , ceilf(sz.height - drawingRect.size.height)) + 10 /* Security margin */;
-					drawingRect.origin.y -= delta;
-					drawingRect.size.height += delta;
-				}
-				if (self.centerVertically) {
-					drawingRect.origin.y -= (drawingRect.size.height - sz.height)/2;
-				}
-			}
-			CGMutablePathRef path = CGPathCreateMutable();
-			CGPathAddRect(path, NULL, drawingRect);
-			textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
-			CGPathRelease(path);
-			CFRelease(framesetter);
-		}
-		
-		// draw highlights for activeLink
-		if (_activeLink)
-        {
-			[self drawActiveLinkHighlightForRect:drawingRect];
-		}
-		
-		CTFrameDraw(textFrame, ctx);
-
-		CGContextRestoreGState(ctx);
+                    CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(drawingRect.size.width,CGFLOAT_MAX),NULL);
+                    if (self.extendBottomToFit)
+                    {
+                        CGFloat delta = MAX(0.f , ceilf(sz.height - drawingRect.size.height)) + 10 /* Security margin */;
+                        drawingRect.origin.y -= delta;
+                        drawingRect.size.height += delta;
+                    }
+                    if (self.centerVertically) {
+                        drawingRect.origin.y -= (drawingRect.size.height - sz.height)/2;
+                    }
+                }
+                CGMutablePathRef path = CGPathCreateMutable();
+                CGPathAddRect(path, NULL, drawingRect);
+                textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+                CGPathRelease(path);
+                CFRelease(framesetter);
+            }
+            
+            // draw highlights for activeLink
+            if (_activeLink)
+            {
+                [self drawActiveLinkHighlightForRect:drawingRect];
+            }
+            
+            CTFrameDraw(textFrame, ctx);
+            
+            CGContextRestoreGState(ctx);
+        } // @autoreleasepool
 	} else {
 		[super drawTextInRect:aRect];
 	}
