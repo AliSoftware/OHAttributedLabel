@@ -126,10 +126,12 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     _highlightedLinkColor = MRC_RETAIN([UIColor colorWithWhite:0.4 alpha:0.3]);
 	_linkUnderlineStyle = kCTUnderlineStyleSingle | kCTUnderlinePatternSolid;
     
-	self.automaticallyAddLinksForType = NSTextCheckingTypeLink;
-	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]]) {
-		self.automaticallyAddLinksForType |= NSTextCheckingTypePhoneNumber;
+	NSTextCheckingTypes linksType = NSTextCheckingTypeLink;
+	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]])
+    {
+		linksType |= NSTextCheckingTypePhoneNumber;
 	}
+    self.automaticallyAddLinksForType = linksType;
 	self.onlyCatchTouchesOnLinks = YES;
 	self.userInteractionEnabled = YES;
 	self.contentMode = UIViewContentModeRedraw;
@@ -189,7 +191,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range
 {
 	NSTextCheckingResult* link = [NSTextCheckingResult linkCheckingResultWithRange:range URL:linkUrl];
-	if (_customLinks == nil) {
+	if (_customLinks == nil)
+    {
 		_customLinks = [[NSMutableArray alloc] init];
 	}
 	[_customLinks addObject:link];
@@ -211,7 +214,11 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 -(void)recomputeLinksInTextIfNeeded
 {
-    if (!_needsRecomputeLinksInText) return;
+    if (!_needsRecomputeLinksInText)
+    {
+        return;
+    }
+    
     _needsRecomputeLinksInText = NO;
     
     if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0))
@@ -249,11 +256,17 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
             : self.linkColor;
             
             if (thisLinkColor)
+            {
                 [mutAS setTextColor:thisLinkColor range:[result range]];
+            }
             if ((uStyle & 0xFFFF) != kCTUnderlineStyleNone)
+            {
                 [mutAS setTextUnderlineStyle:uStyle range:[result range]];
+            }
             if (uStyle & kOHBoldStyleTraitMask)
+            {
                 [mutAS setTextBold:((uStyle & kOHBoldStyleTraitSetBold) == kOHBoldStyleTraitSetBold) range:[result range]];
+            }
         };
         
         if (plainText && (self.automaticallyAddLinksForType > 0))
@@ -319,17 +332,24 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)point
 {
 	static const CGFloat kVMargin = 5.f;
-	if (!CGRectContainsPoint(CGRectInset(drawingRect, 0, -kVMargin), point)) return nil;
+	if (!CGRectContainsPoint(CGRectInset(drawingRect, 0, -kVMargin), point))
+    {
+        return nil;
+    }
 	
 	CFArrayRef lines = CTFrameGetLines(textFrame);
-	if (!lines) return nil;
+	if (!lines)
+    {
+        return nil;
+    }
 	CFIndex nbLines = CFArrayGetCount(lines);
 	NSTextCheckingResult* link = nil;
 	
 	CGPoint origins[nbLines];
 	CTFrameGetLineOrigins(textFrame, CFRangeMake(0,0), origins);
 	
-	for (int lineIndex=0 ; lineIndex<nbLines ; ++lineIndex) {
+	for (int lineIndex=0 ; lineIndex<nbLines ; ++lineIndex)
+    {
 		// this actually the origin of the line rect, so we need the whole rect to flip it
 		CGPoint lineOriginFlipped = origins[lineIndex];
 		
@@ -338,12 +358,16 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 		CGRect lineRect = CGRectFlipped(lineRectFlipped, CGRectFlipped(drawingRect,self.bounds));
 		
 		lineRect = CGRectInset(lineRect, 0, -kVMargin);
-		if (CGRectContainsPoint(lineRect, point)) {
+		if (CGRectContainsPoint(lineRect, point))
+        {
 			CGPoint relativePoint = CGPointMake(point.x-CGRectGetMinX(lineRect),
 												point.y-CGRectGetMinY(lineRect));
 			CFIndex idx = CTLineGetStringIndexForPosition(line, relativePoint);
 			link = ([self linkAtCharacterIndex:idx]);
-			if (link) return link;
+			if (link)
+            {
+                return link;
+            }
 		}
 	}
 	return nil;
@@ -356,13 +380,16 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	UIView *hitResult = [super hitTest:point withEvent:event];
 	
 	// don't check for links if the event was handled by one of the subviews
-	if (hitResult != self) {
+	if (hitResult != self)
+    {
 		return hitResult;
 	}
 	
-	if (self.onlyCatchTouchesOnLinks) {
+	if (self.onlyCatchTouchesOnLinks)
+    {
 		BOOL didHitLink = ([self linkAtPoint:point] != nil);
-		if (!didHitLink) {
+		if (!didHitLink)
+        {
 			// not catch the touch if it didn't hit a link
 			return nil;
 		}
@@ -399,7 +426,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         (void)MRC_AUTORELEASE(MRC_RETAIN(linkToOpen));
 		BOOL openLink = (self.delegate && [self.delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
 		? [self.delegate attributedLabel:self shouldFollowLink:linkToOpen] : YES;
-		if (openLink) [[UIApplication sharedApplication] openURL:linkToOpen.extendedURL];
+		if (openLink)
+        {
+            [[UIApplication sharedApplication] openURL:linkToOpen.extendedURL];
+        }
 	}
 	
 	self.activeLink = nil;
@@ -469,7 +499,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                         drawingRect.origin.y -= delta;
                         drawingRect.size.height += delta;
                     }
-                    if (self.centerVertically) {
+                    if (self.centerVertically)
+                    {
                         drawingRect.origin.y -= (drawingRect.size.height - sz.height)/2;
                     }
                 }
@@ -497,7 +528,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 -(void)drawActiveLinkHighlightForRect:(CGRect)rect
 {
-    if (!self.highlightedLinkColor) return;
+    if (!self.highlightedLinkColor)
+    {
+        return;
+    }
     
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
 	CGContextSaveGState(ctx);
@@ -560,8 +594,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 - (CGSize)sizeThatFits:(CGSize)size
 {
     [self recomputeLinksInTextIfNeeded];
-	if (!_attributedTextWithLinks) return CGSizeZero;
-	return [_attributedTextWithLinks sizeConstrainedToSize:size fitRange:NULL];
+    return _attributedTextWithLinks ? [_attributedTextWithLinks sizeConstrainedToSize:size] : CGSizeZero;
 }
 
 
@@ -586,8 +619,14 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 -(void)resetAttributedText
 {
 	NSMutableAttributedString* mutAttrStr = [NSMutableAttributedString attributedStringWithString:self.text];
-	if (self.font) [mutAttrStr setFont:self.font];
-	if (self.textColor) [mutAttrStr setTextColor:self.textColor];
+	if (self.font)
+    {
+        [mutAttrStr setFont:self.font];
+    }
+	if (self.textColor)
+    {
+        [mutAttrStr setTextColor:self.textColor];
+    }
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
 	[mutAttrStr setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
