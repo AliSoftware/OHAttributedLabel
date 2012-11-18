@@ -8,6 +8,8 @@
 
 #import "TableViewDemoViewController.h"
 #import "OHAttributedLabel.h"
+#import "NSAttributedString+Attributes.h"
+#import "OHASBasicMarkupParser.h"
 #import "UIAlertView+Commodity.h"
 
 
@@ -16,6 +18,8 @@
 @end
 
 static NSInteger const kAttributedLabelTag = 100;
+static CGFloat const kLabelWidth = 300;
+static CGFloat const kLabelVMargin = 10;
 
 @implementation TableViewDemoViewController
 @synthesize texts = _texts;
@@ -29,16 +33,31 @@ static NSInteger const kAttributedLabelTag = 100;
     self = [super initWithCoder:aDecoder];
     if (self) {
         // Custom initialization
-        NSMutableArray* entries = [NSMutableArray arrayWithObjects:
-                                   @"Visit http://www.apple.com now!",
-                                   @"Go to http://www.foodreporter.net !",
-                                   @"Start a search on http://www.google.com",
+        NSMutableArray* plainEntries = [NSMutableArray arrayWithObjects:
+                                   @"Visit http://www.apple.com *now*!",
+                                   @"Go to http://www.foodreporter.net to *{red|share your food}*!",
+                                   @"Start a search on http://www.google.com right now",
                                    nil];
         for(int i=0; i<20;++i)
         {
-            [entries addObject:[NSString stringWithFormat:@"Call +1555-000-%04d from your iPhone", i]];
+            [plainEntries addObject:[NSString stringWithFormat:@"Call +1555-000-%04d from your iPhone", i]];
         }
-        self.texts = entries;
+        [plainEntries insertObject:@"Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
+         "Etiam pretium mi eget lectus tincidunt semper. Phasellus placerat, lorem quis laoreet." atIndex:13];
+        
+        NSMutableArray* formattedEntries = [NSMutableArray arrayWithCapacity:plainEntries.count];
+        NSArray* randomColors = [NSArray arrayWithObjects:[UIColor redColor], [UIColor greenColor], [UIColor blueColor],
+                               [UIColor orangeColor], [UIColor darkTextColor], nil];
+        NSUInteger idx = 0;
+        for(NSString* plainEntry in plainEntries)
+        {
+            NSMutableAttributedString* mas = [OHASBasicMarkupParser attributedStringByProcessingMarkupInString:plainEntry];
+            [mas setFont:[UIFont systemFontOfSize: (idx++ < 13) ? 18 : 16]];
+            [mas setTextColor:[randomColors objectAtIndex:(idx%5)]];
+            [mas setTextAlignment:kCTTextAlignmentCenter lineBreakMode:kCTLineBreakByWordWrapping];
+            [formattedEntries addObject:mas];
+        }
+        self.texts = formattedEntries;
         [self.tableView reloadData];
     }
     return self;
@@ -72,10 +91,9 @@ static NSInteger const kAttributedLabelTag = 100;
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
         
-        attrLabel = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(10,10,300,tableView.rowHeight-20)];
-        attrLabel.textAlignment = UITextAlignmentCenter;
+        attrLabel = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(10,kLabelVMargin,kLabelWidth,tableView.rowHeight-2*kLabelVMargin)];
+        attrLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         attrLabel.centerVertically = YES;
-        attrLabel.font = [UIFont systemFontOfSize:16];
         attrLabel.automaticallyAddLinksForType = NSTextCheckingAllTypes;
         attrLabel.delegate = self;
         attrLabel.highlightedTextColor = [UIColor whiteColor];
@@ -89,13 +107,20 @@ static NSInteger const kAttributedLabelTag = 100;
     }
     
     attrLabel = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
-    attrLabel.text = [self.texts objectAtIndex:indexPath.row];
+    attrLabel.attributedText = [self.texts objectAtIndex:indexPath.row];
     return cell;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - TableView Delegate
 /////////////////////////////////////////////////////////////////////////////
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSAttributedString* attrStr = [self.texts objectAtIndex:indexPath.row];
+    CGSize sz = [attrStr sizeConstrainedToSize:CGSizeMake(kLabelWidth, CGFLOAT_MAX)];
+    return sz.height + 2*kLabelVMargin;
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
