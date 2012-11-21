@@ -75,7 +75,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - String to Color function
 
-UIColor* UIColorFromString(NSString* colorString)
+UIColor* OHUIColorFromString(NSString* colorString)
 {
     UIColor* color = nil;
     if ([colorString hasPrefix:@"#"])

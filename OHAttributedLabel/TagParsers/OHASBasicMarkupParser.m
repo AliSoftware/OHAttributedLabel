@@ -68,7 +68,7 @@
                 if ((colorRange.length>0) && (textRange.length>0))
                 {
                     NSString* colorName = [str attributedSubstringFromRange:colorRange].string;
-                    UIColor* color = UIColorFromString(colorName);
+                    UIColor* color = OHUIColorFromString(colorName);
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setTextColor:color];
                     return MRC_AUTORELEASE(foundString);

@@ -63,4 +63,4 @@ typedef NSAttributedString*(^TagProcessorBlockType)(NSAttributedString*, NSTextC
  * Support "#rgb", "#rgba", "#rrggbb" and "#rrggbbaa" hexadecimal representations (e.g. "#ffcc00")
  * Support also named colors exposed by UIColor class commodity "xxxColor" constructors, namely "red", "green", "blue", etc
  */
-UIColor* UIColorFromString(NSString* colorString);
+UIColor* OHUIColorFromString(NSString* colorString);
