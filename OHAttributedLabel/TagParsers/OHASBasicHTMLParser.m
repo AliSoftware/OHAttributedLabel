@@ -89,7 +89,7 @@
                     NSString* link = [str attributedSubstringFromRange:linkRange].string;
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setLink:[NSURL URLWithString:link] range:NSMakeRange(0,textRange.length)];
-                    return [foundString autorelease];
+                    return MRC_AUTORELEASE(foundString);
                 } else {
                     return nil;
                 }

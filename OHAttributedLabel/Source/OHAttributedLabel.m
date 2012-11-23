@@ -275,7 +275,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
          {
              if (value)
              {
-                 NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(BRIDGE_CAST NSURL*)value];
+                 NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(NSURL*)value];
                  applyLinkStyle(result);
              }
          }];
@@ -321,7 +321,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
              {
                  if (value && NSLocationInRange(idx, range))
                  {
-                     NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(BRIDGE_CAST NSURL*)value];
+                     NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(NSURL*)value];
                      foundResult = MRC_RETAIN(result);
                      *stop = YES;
                  }

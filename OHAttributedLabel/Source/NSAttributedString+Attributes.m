@@ -278,7 +278,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
     [self removeAttribute:kOHLinkAttributeName range:range]; // Work around for Apple leak
     if (link)
     {
-        [self addAttribute:kOHLinkAttributeName value:(BRIDGE_CAST id)link range:range];
+        [self addAttribute:kOHLinkAttributeName value:(id)link range:range];
     }
 }
 
