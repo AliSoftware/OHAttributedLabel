@@ -27,6 +27,12 @@
 
 #import "NSAttributedString+Attributes.h"
 
+#ifndef OHATTRIBUTEDLABEL_DEDICATED_PROJECT
+// Copying files in your project and thus compiling OHAttributedLabel under different build settings
+// than the one provided is not recommended abd increase risks of leaks (ARC vs. MRC) or unwanted behaviors
+#warning [OHAttributedLabel integration] You should include OHAttributedLabel project in your workspace instead of copying the files in your own app project. See README for instructions.
+#endif
+
 #if __has_feature(objc_arc)
 #define BRIDGE_CAST __bridge
 #define BRIDGE_TRANSFER_CAST __bridge_transfer

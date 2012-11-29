@@ -277,6 +277,10 @@
 		09E159F7160F573A003025B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					OHATTRIBUTEDLABEL_DEDICATED_PROJECT,
+					"$(inherited)",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
@@ -289,6 +293,10 @@
 		09E159F8160F573A003025B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					OHATTRIBUTEDLABEL_DEDICATED_PROJECT,
+					"$(inherited)",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
