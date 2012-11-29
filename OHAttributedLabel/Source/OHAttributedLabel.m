@@ -544,7 +544,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                         drawingRect.origin.y -= delta;
                         drawingRect.size.height += delta;
                     }
-                    if (self.centerVertically)
+                    if (self.centerVertically && drawingRect.size.height > sz.height)
                     {
                         drawingRect.origin.y -= (drawingRect.size.height - sz.height)/2;
                     }
