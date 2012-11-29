@@ -121,7 +121,10 @@ UIColor* OHUIColorFromString(NSString* colorString)
         // Check that the selector exists and return an NSObject/id, so that we can call it and retrieve the return value
         if ([UIColor.class respondsToSelector:selector] && (0 == strcmp([sign methodReturnType],@encode(id))) )
         {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks" // "xxxColor" selectors return autoreleased object so we're cool
             id clr = [UIColor.class performSelector:selector];
+#pragma clang diagnostic pop
             // Check that the returned object is really an UIColor, just in case
             color = ([clr isKindOfClass:UIColor.class]) ? clr : nil;
         }

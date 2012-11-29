@@ -33,11 +33,13 @@
     [self setSampleLabel:nil];
 }
 
+#if ! __has_feature(objc_arc)
 - (void)dealloc
 {
     [_sampleLabel release];
     [super dealloc];
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - IBActions
