@@ -29,9 +29,11 @@
 
 #if __has_feature(objc_arc)
 #define BRIDGE_CAST __bridge
+#define BRIDGE_TRANSFER_CAST __bridge_transfer
 #define MRC_AUTORELEASE(x) (x)
 #else
 #define BRIDGE_CAST
+#define BRIDGE_TRANSFER_CAST
 #define MRC_AUTORELEASE(x) [(x) autorelease]
 #endif
 
@@ -231,7 +233,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
         if (!currentFont)
         {
             currentFont = CTFontCreateUIFontForLanguage(kCTFontLabelFontType, 0.0, NULL);
-            (void)MRC_AUTORELEASE((BRIDGE_CAST id)currentFont);
+            (void)MRC_AUTORELEASE((BRIDGE_TRANSFER_CAST id)currentFont);
         }
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
