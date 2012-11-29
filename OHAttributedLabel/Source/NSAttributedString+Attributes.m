@@ -225,13 +225,14 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 {
 	NSUInteger startPoint = range.location;
 	NSRange effectiveRange;
+	BOOL shouldReleaseFont = NO;
 	do {
 		// Get font at startPoint
 		CTFontRef currentFont = (BRIDGE_CAST CTFontRef)[self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
         if (!currentFont)
         {
             currentFont = CTFontCreateUIFontForLanguage(kCTFontLabelFontType, 0.0, NULL);
-            (void)MRC_AUTORELEASE((BRIDGE_CAST id)currentFont);
+            shouldReleaseFont = YES;
         }
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
@@ -248,6 +249,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
                   (BRIDGE_CAST NSString*)fontName);
             if (fontName) CFRelease(fontName);
 		}
+		if (currentFont && shouldReleaseFont) CFRelease(currentFont);
 		////[self removeAttribute:(NSString*)kCTFontWeightTrait range:fontRange]; // Work around for Apple leak
 		////[self addAttribute:(NSString*)kCTFontWeightTrait value:(id)[NSNumber numberWithInt:1.0f] range:fontRange];
 		
