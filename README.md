@@ -10,6 +10,30 @@ This class **also support hyperlinks and URLs**. It can **automatically detect l
 
 In addition to this `OHAttributedLabel` class, you will also find a category of `NS(Mutable)AttributedString` to ease creation and manipulation of common attributes of `NSAttributedString` (to easily change the font, style, color, ... of a range of the string). See the header file `NSAttributedString+Attributes.h` for a list of those comodity methods.
 
+Example:
+
+```objc
+    // Build an NSAttributedString easily from a NSString
+	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:txt];
+	// Change font, text color, paragraph style
+	[attrStr setFont:[UIFont fontWithName:@"Helvetica" size:18]];
+	[attrStr setTextColor:[UIColor grayColor]];
+    
+    OHParagraphStyle* paragraphStyle = [OHParagraphStyle defaultParagraphStyle];
+    paragraphStyle.textAlignment = kCTJustifiedTextAlignment;
+    paragraphStyle.lineBreakMode = kCTLineBreakByWordWrapping;
+    paragraphStyle.firstLineHeadIndent = 30.f; // indentation for first line
+    paragraphStyle.lineSpacing = 3.f; // increase space between lines by 3 points
+    [attrStr setParagraphStyle:paragraphStyle];
+    
+	// Change the color and bold of only one part of the string
+	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(10,3)];
+	[attrStr setTextBold:YES range:NSMakeRange(10,8)];
+
+	// Add a link to a given portion of the string
+    [attrStr setLink:someNSURL range:NSMakeRange(8,20)];
+```
+    
 There is also a category for `NSTextCheckingResult` that adds the `extendedURL` property. This property returns the same value as the `URL` value for standard link cases, and return a formatted Maps URL for `NSTextCheckingTypeAddress` link types, that will open Google Maps in iOS version before 6.0 and the Apple's Maps application in iOS 6.0 and later.
 
 ### OHASMarkupParsers and simple markup to build your attributed strings easily
