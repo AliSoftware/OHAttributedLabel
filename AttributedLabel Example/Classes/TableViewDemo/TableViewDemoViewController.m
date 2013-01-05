@@ -51,10 +51,11 @@ static CGFloat const kLabelVMargin = 10;
         NSUInteger idx = 0;
         for(NSString* plainEntry in plainEntries)
         {
-            NSMutableAttributedString* mas = [OHASBasicMarkupParser attributedStringByProcessingMarkupInString:plainEntry];
+            NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:plainEntry];
             [mas setFont:[UIFont systemFontOfSize: (idx++ < 13) ? 18 : 16]];
             [mas setTextColor:[randomColors objectAtIndex:(idx%5)]];
             [mas setTextAlignment:kCTTextAlignmentCenter lineBreakMode:kCTLineBreakByWordWrapping];
+            [OHASBasicMarkupParser processMarkupInAttributedString:mas];
             [formattedEntries addObject:mas];
         }
         self.texts = formattedEntries;
