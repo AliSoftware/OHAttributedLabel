@@ -68,7 +68,7 @@
     OHParagraphStyle* paragraphStyle = [OHParagraphStyle defaultParagraphStyle];
     paragraphStyle.textAlignment = kCTJustifiedTextAlignment;
     paragraphStyle.lineBreakMode = kCTLineBreakByWordWrapping;
-    paragraphStyle.firstLineHeadIndent = 25.f; // indentation for first line
+    paragraphStyle.firstLineHeadIndent = 30.f; // indentation for first line
     paragraphStyle.headIndent =  10.f; // indentation for lines other than the first (= left margin)
     paragraphStyle.tailIndent = -10.f; // right margin (negative values to count from the right edge instead of left edge)
     [attrStr setParagraphStyle:paragraphStyle];
@@ -85,6 +85,28 @@
     self.customLinkDemoLabel.centerVertically = YES;
 }
 
+-(IBAction)toggleIndentation:(UISwitch*)indentationSwitch
+{
+ 	/**(3)** (... later ...) Modify again the existing string *******/
+	
+	// Get the current attributedString and make it a mutable copy so we can modify it
+	NSMutableAttributedString* mas = [self.customLinkDemoLabel.attributedText mutableCopy];
+	// Modify the indent of the whole paragraph
+	[mas modifyParagraphStylesWithBlock:^(OHParagraphStyle *paragraphStyle) {
+        paragraphStyle.firstLineHeadIndent = indentationSwitch.on ? 30.f : 0.f;
+        paragraphStyle.headIndent = indentationSwitch.on ?  10.f : 0.f;
+        paragraphStyle.tailIndent = indentationSwitch.on ? -10.f : 0.f;
+    }];
+	// Affect back the attributed string to the label
+	self.customLinkDemoLabel.attributedText = mas;
+    
+#if ! __has_feature(objc_arc)
+	// Cleaning: balance the "mutableCopy" call with a "release"
+	[mas release];
+#endif
+   
+}
+
 -(IBAction)toggleBold:(UISwitch*)boldSwitch
 {
 	/**(3)** (... later ...) Modify again the existing string *******/
@@ -92,7 +114,7 @@
 	// Get the current attributedString and make it a mutable copy so we can modify it
 	NSMutableAttributedString* mas = [self.customLinkDemoLabel.attributedText mutableCopy];
 	NSString* plainText = [mas string];
-	// Modify the the font of "FoodReporter" to bold
+	// Modify the font of "FoodReporter" to bold variant
 	[mas setTextBold:boldSwitch.on range:[plainText rangeOfString:@TXT_BOLD]];
 	// Affect back the attributed string to the label
 	self.customLinkDemoLabel.attributedText = mas;

@@ -93,7 +93,7 @@
     [attrStr modifyParagraphStylesWithBlock:^(OHParagraphStyle *paragraphStyle) {
         paragraphStyle.textAlignment = kCTCenterTextAlignment;
         paragraphStyle.lineBreakMode = kCTLineBreakByWordWrapping;
-        paragraphStyle.paragraphSpacing = 12.f;
+        paragraphStyle.paragraphSpacing = 8.f;
         paragraphStyle.lineSpacing = 3.f;
     }];
 	// and only change the color of the "Visit" word

@@ -15,4 +15,5 @@
 @property(nonatomic, retain) IBOutlet OHAttributedLabel* mentionDemoLabel;
 
 -(IBAction)toggleBold:(UISwitch*)boldSwitch;
+-(IBAction)toggleIndentation:(UISwitch*)indentationSwitch;
 @end
