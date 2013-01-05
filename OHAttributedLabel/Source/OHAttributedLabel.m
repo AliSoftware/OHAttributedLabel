@@ -691,7 +691,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 -(void)setAttributedText:(NSAttributedString*)newText
 {
 	MRC_RELEASE(_attributedText);
-	_attributedText = MRC_RETAIN(newText);
+	_attributedText = [newText copy];
 	[self setAccessibilityLabel:_attributedText.string];
 	[self removeAllCustomLinks];
     [self setNeedsRecomputeLinksInText];
