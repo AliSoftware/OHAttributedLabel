@@ -240,6 +240,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 {
 	NSUInteger startPoint = range.location;
 	NSRange effectiveRange;
+    [self beginEditing];
 	do {
 		// Get font at startPoint
 		CTFontRef currentFont = (BRIDGE_CAST CTFontRef)[self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
@@ -284,6 +285,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 		// If the fontRange was not covering the whole range, continue with next run
 		startPoint = NSMaxRange(effectiveRange);
 	} while(startPoint<NSMaxRange(range));
+    [self endEditing];
 }
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode
@@ -309,6 +311,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
     
     NSRangePointer rangePtr = &range;
     NSUInteger loc = range.location;
+    [self beginEditing];
     while (NSLocationInRange(loc, range))
     {
         CTParagraphStyleRef currentCTStyle = (BRIDGE_CAST CTParagraphStyleRef)[self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName
@@ -319,6 +322,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
         
         loc = NSMaxRange(*rangePtr);
     }
+    [self endEditing];
 }
 
 -(void)setParagraphStyle:(OHParagraphStyle *)style

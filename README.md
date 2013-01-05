@@ -2,7 +2,9 @@
 
 ### OHAttributedLabel
 
-This class allows you to use a `UILabel` with `NSAttributedString`s, in order to **display styled text** with mixed style (mixed fonts, color, size, ...) in a unique label. It is a subclass of `UILabel`, which adds an `attributedText` property. Use this property, instead of the `text` property, to set and get the `NSAttributedString` to display.
+This class allows you to use a `UILabel` with `NSAttributedStrings`, in order to **display styled text** with various style (mixed fonts, color, size, ...) in a unique label. It is a subclass of `UILabel` which adds an `attributedText` property. Use this property, instead of the `text` property, to set and get the `NSAttributedString` to display.
+
+> Note: This class is compatible with iOS4.3+ and has been developped before the release of the iOS6 SDK (before Apple added support for `NSAttributedLabel` in the `UILabel` class itself). It can still be used with the iOS6 SDK (the `attributedText` property hopefully match the one chosen by Apple) if you need support for eariler iOS versions or for the additional features it provides.
 
 This class **also support hyperlinks and URLs**. It can **automatically detect links** in your text, color them and make them touchable; you can also **add "custom links" in your text** by attaching an URL to a range of your text and thus make it touchable, and even then catch the event of a touch on a link to act as you wish to.
 
