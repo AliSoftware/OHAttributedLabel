@@ -52,8 +52,17 @@
 -(void)viewDidLoad
 {
 	[self fillDemoLabel];
+    
+    // HTML label
     self.htmlLabel.attributedText = [OHASBasicHTMLParser attributedStringByProcessingMarkupInAttributedString:self.htmlLabel.attributedText];
-    self.basicMarkupLabel.attributedText = [OHASBasicMarkupParser attributedStringByProcessingMarkupInAttributedString:self.basicMarkupLabel.attributedText];
+    
+    // Basic Markup label. Add some indentation to the text to demonstrate the OHParagraphStyle new feature.
+    NSMutableAttributedString* basicMarkupString = [OHASBasicMarkupParser attributedStringByProcessingMarkupInAttributedString:self.basicMarkupLabel.attributedText];
+    [basicMarkupString modifyParagraphStylesWithBlock:^(OHParagraphStyle *paragraphStyle) {
+        paragraphStyle.firstLineHeadIndent = 20.f;
+    }];
+    self.basicMarkupLabel.attributedText = basicMarkupString;
+    
     [super viewDidLoad];
 }
 
@@ -79,16 +88,22 @@
 	
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [self.demoLabel.attributedText mutableCopy];
-    
-    [attrStr setTextAlignment:kCTCenterTextAlignment lineBreakMode:kCTLineBreakByWordWrapping];
-	// and only change the color of "Hello"
+
+    // Change the paragraph attributes, like textAlignment, lineBreakMode and paragraph spacing
+    [attrStr modifyParagraphStylesWithBlock:^(OHParagraphStyle *paragraphStyle) {
+        paragraphStyle.textAlignment = kCTCenterTextAlignment;
+        paragraphStyle.lineBreakMode = kCTLineBreakByWordWrapping;
+        paragraphStyle.paragraphSpacing = 12.f;
+        paragraphStyle.lineSpacing = 3.f;
+    }];
+	// and only change the color of the "Visit" word
 	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(26,5)];
 	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	self.demoLabel.attributedText = attrStr;
 	// "Hello World!" will be displayed in the label, justified, "Hello" in red and " World!" in gray.
 	self.demoLabel.automaticallyAddLinksForType = NSTextCheckingTypeDate|NSTextCheckingTypeAddress|NSTextCheckingTypeLink|NSTextCheckingTypePhoneNumber;
-    self.demoLabel.centerVertically = NO;
+    self.demoLabel.centerVertically = YES;
     
 #if ! __has_feature(objc_arc)
 	[attrStr release];

@@ -141,6 +141,13 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
     return lineBreakMode;
 }
 
+-(OHParagraphStyle*)paragraphStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
+{
+    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
+    CTParagraphStyleRef style = (BRIDGE_CAST CTParagraphStyleRef)attr;
+    return [OHParagraphStyle paragraphStyleWithCTParagraphStyle:style];
+}
+
 -(NSURL*)linkAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
     return [self attribute:kOHLinkAttributeName atIndex:index effectiveRange:aRange];
@@ -285,15 +292,46 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 }
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range
 {
-	// kCTParagraphStyleAttributeName > kCTParagraphStyleSpecifierAlignment
-	CTParagraphStyleSetting paraStyles[2] = {
-		{.spec = kCTParagraphStyleSpecifierAlignment, .valueSize = sizeof(CTTextAlignment), .value = (const void*)&alignment},
-		{.spec = kCTParagraphStyleSpecifierLineBreakMode, .valueSize = sizeof(CTLineBreakMode), .value = (const void*)&lineBreakMode},
-	};
-	CTParagraphStyleRef aStyle = CTParagraphStyleCreate(paraStyles, 2);
-	[self removeAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName value:(BRIDGE_CAST id)aStyle range:range];
-	CFRelease(aStyle);
+    [self modifyParagraphStylesInRange:range withBlock:^(OHParagraphStyle *paragraphStyle) {
+        paragraphStyle.textAlignment = alignment;
+        paragraphStyle.lineBreakMode = lineBreakMode;
+    }];
+}
+
+-(void)modifyParagraphStylesWithBlock:(void(^)(OHParagraphStyle* paragraphStyle))block
+{
+    [self modifyParagraphStylesInRange:NSMakeRange(0,[self length]) withBlock:block];
+}
+
+-(void)modifyParagraphStylesInRange:(NSRange)range withBlock:(void(^)(OHParagraphStyle* paragraphStyle))block
+{
+    NSParameterAssert(block != nil);
+    
+    NSRangePointer rangePtr = &range;
+    NSUInteger loc = range.location;
+    while (NSLocationInRange(loc, range))
+    {
+        CTParagraphStyleRef currentCTStyle = (BRIDGE_CAST CTParagraphStyleRef)[self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName
+                                                     atIndex:loc longestEffectiveRange:rangePtr inRange:range];
+        __block OHParagraphStyle* paraStyle = [OHParagraphStyle paragraphStyleWithCTParagraphStyle:currentCTStyle];
+        block(paraStyle);        
+        [self setParagraphStyle:paraStyle range:*rangePtr];
+        
+        loc = NSMaxRange(*rangePtr);
+    }
+}
+
+-(void)setParagraphStyle:(OHParagraphStyle *)style
+{
+    [self setParagraphStyle:style range:NSMakeRange(0,[self length])];
+}
+
+-(void)setParagraphStyle:(OHParagraphStyle*)style range:(NSRange)range
+{
+    CTParagraphStyleRef newParaStyle = [style createCTParagraphStyle];
+    [self removeAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
+    [self addAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName value:(BRIDGE_CAST id)newParaStyle range:range];
+    CFRelease(newParaStyle);
 }
 
 -(void)setLink:(NSURL*)link range:(NSRange)range

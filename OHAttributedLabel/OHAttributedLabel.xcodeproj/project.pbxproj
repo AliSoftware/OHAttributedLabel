@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0926A8101698ADDD00573783 /* OHParagraphStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 0926A80E1698ADDD00573783 /* OHParagraphStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0926A8111698ADDD00573783 /* OHParagraphStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 0926A80F1698ADDD00573783 /* OHParagraphStyle.m */; };
 		09793558161393F2006DB5D5 /* OHASMarkupParserBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 09793556161393F2006DB5D5 /* OHASMarkupParserBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		09793559161393F2006DB5D5 /* OHASMarkupParserBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 09793557161393F2006DB5D5 /* OHASMarkupParserBase.m */; };
 		0979355C1613A5AE006DB5D5 /* OHASBasicHTMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0979355A1613A5AE006DB5D5 /* OHASBasicHTMLParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0926A80E1698ADDD00573783 /* OHParagraphStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHParagraphStyle.h; sourceTree = "<group>"; };
+		0926A80F1698ADDD00573783 /* OHParagraphStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHParagraphStyle.m; sourceTree = "<group>"; };
 		09793556161393F2006DB5D5 /* OHASMarkupParserBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHASMarkupParserBase.h; sourceTree = "<group>"; };
 		09793557161393F2006DB5D5 /* OHASMarkupParserBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHASMarkupParserBase.m; sourceTree = "<group>"; };
 		0979355A1613A5AE006DB5D5 /* OHASBasicHTMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHASBasicHTMLParser.h; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 			children = (
 				09E15A02160F57E2003025B4 /* OHAttributedLabel.h */,
 				09E15A03160F57E2003025B4 /* OHAttributedLabel.m */,
+				0926A80E1698ADDD00573783 /* OHParagraphStyle.h */,
+				0926A80F1698ADDD00573783 /* OHParagraphStyle.m */,
 				09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */,
 				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
 				09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */,
@@ -155,6 +161,7 @@
 				09793558161393F2006DB5D5 /* OHASMarkupParserBase.h in Headers */,
 				0979355C1613A5AE006DB5D5 /* OHASBasicHTMLParser.h in Headers */,
 				097935601613B276006DB5D5 /* OHASBasicMarkupParser.h in Headers */,
+				0926A8101698ADDD00573783 /* OHParagraphStyle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +223,7 @@
 				09793559161393F2006DB5D5 /* OHASMarkupParserBase.m in Sources */,
 				0979355D1613A5AE006DB5D5 /* OHASBasicHTMLParser.m in Sources */,
 				097935611613B276006DB5D5 /* OHASBasicMarkupParser.m in Sources */,
+				0926A8111698ADDD00573783 /* OHParagraphStyle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

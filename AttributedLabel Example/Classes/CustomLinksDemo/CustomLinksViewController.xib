@@ -13,6 +13,7 @@
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBProxyObject</string>
 			<string>IBUILabel</string>
+			<string>IBUISlider</string>
 			<string>IBUISwitch</string>
 			<string>IBUIView</string>
 		</array>
@@ -35,7 +36,7 @@
 					<object class="IBUILabel" id="731726403">
 						<reference key="NSNextResponder" ref="122382973"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 49}, {300, 60}}</string>
+						<string key="NSFrame">{{10, 23}, {300, 60}}</string>
 						<reference key="NSSuperview" ref="122382973"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="909262263"/>
@@ -79,7 +80,7 @@
 					<object class="IBUILabel" id="909262263">
 						<reference key="NSNextResponder" ref="122382973"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 125}, {198, 21}}</string>
+						<string key="NSFrame">{{10, 99}, {198, 21}}</string>
 						<reference key="NSSuperview" ref="122382973"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="903816378"/>
@@ -93,11 +94,11 @@
 						<reference key="IBUIHighlightedColor" ref="32204308"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="127382794">
 							<int key="type">1</int>
 							<double key="pointSize">17</double>
 						</object>
-						<object class="NSFont" key="IBUIFont">
+						<object class="NSFont" key="IBUIFont" id="550523188">
 							<string key="NSName">Helvetica</string>
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
@@ -106,7 +107,7 @@
 					<object class="IBUISwitch" id="903816378">
 						<reference key="NSNextResponder" ref="122382973"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{216, 122}, {94, 27}}</string>
+						<string key="NSFrame">{{216, 96}, {94, 27}}</string>
 						<reference key="NSSuperview" ref="122382973"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="360989347"/>
@@ -119,9 +120,10 @@
 					<object class="IBUILabel" id="360989347">
 						<reference key="NSNextResponder" ref="122382973"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 201}, {300, 158}}</string>
+						<string key="NSFrame">{{10, 157}, {300, 202}}</string>
 						<reference key="NSSuperview" ref="122382973"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="751108422"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC44OTg1MTQ4NTE1AA</bytes>
@@ -156,6 +158,40 @@ c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
 						</object>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 						<double key="preferredMaxLayoutWidth">300</double>
+					</object>
+					<object class="IBUISlider" id="698831412">
+						<reference key="NSNextResponder" ref="122382973"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{194, 369}, {118, 23}}</string>
+						<reference key="NSSuperview" ref="122382973"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<float key="IBUIMaxValue">5</float>
+					</object>
+					<object class="IBUILabel" id="751108422">
+						<reference key="NSNextResponder" ref="122382973"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{10, 369}, {155, 21}}</string>
+						<reference key="NSSuperview" ref="122382973"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="698831412"/>
+						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<bool key="IBUIClipsSubviews">YES</bool>
+						<int key="IBUIContentMode">7</int>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<string key="IBUIText">Change line spacing</string>
+						<reference key="IBUITextColor" ref="853353891"/>
+						<nil key="IBUIHighlightedColor"/>
+						<int key="IBUIBaselineAdjustment">0</int>
+						<reference key="IBUIFontDescription" ref="127382794"/>
+						<reference key="IBUIFont" ref="550523188"/>
+						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 					</object>
 				</array>
 				<string key="NSFrame">{{0, 20}, {320, 411}}</string>
@@ -230,6 +266,15 @@ c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
 					</object>
 					<int key="connectionID">13</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">changeLineSpacing:</string>
+						<reference key="source" ref="698831412"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">13</int>
+					</object>
+					<int key="connectionID">16</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -258,6 +303,8 @@ c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
 							<reference ref="731726403"/>
 							<reference ref="909262263"/>
 							<reference ref="903816378"/>
+							<reference ref="698831412"/>
+							<reference ref="751108422"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -281,6 +328,16 @@ c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
 						<reference key="object" ref="903816378"/>
 						<reference key="parent" ref="122382973"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">14</int>
+						<reference key="object" ref="698831412"/>
+						<reference key="parent" ref="122382973"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">15</int>
+						<reference key="object" ref="751108422"/>
+						<reference key="parent" ref="122382973"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -288,6 +345,8 @@ c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
 				<string key="-1.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="14.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="15.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="3.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.CustomClassName">OHAttributedLabel</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -300,24 +359,27 @@ c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">13</int>
+			<int key="maxID">16</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
 					<string key="className">CustomLinksViewController</string>
 					<string key="superclassName">UIViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">toggleBold:</string>
-						<string key="NS.object.0">UISwitch</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">toggleBold:</string>
-						<object class="IBActionInfo" key="NS.object.0">
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="changeLineSpacing:">UISlider</string>
+						<string key="toggleBold:">UISwitch</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="changeLineSpacing:">
+							<string key="name">changeLineSpacing:</string>
+							<string key="candidateClassName">UISlider</string>
+						</object>
+						<object class="IBActionInfo" key="toggleBold:">
 							<string key="name">toggleBold:</string>
 							<string key="candidateClassName">UISwitch</string>
 						</object>
-					</object>
+					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="customLinkDemoLabel">OHAttributedLabel</string>
 						<string key="mentionDemoLabel">OHAttributedLabel</string>

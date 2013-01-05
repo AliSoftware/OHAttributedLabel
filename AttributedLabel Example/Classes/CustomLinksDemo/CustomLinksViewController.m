@@ -63,7 +63,15 @@
 	// for those calls we don't specify a range so it affects the whole string
 	[attrStr setFont:[UIFont fontWithName:@"Helvetica" size:18]];
 	[attrStr setTextColor:[UIColor grayColor]];
-    [attrStr setTextAlignment:kCTJustifiedTextAlignment lineBreakMode:kCTLineBreakByWordWrapping];
+    
+    // Set Paragraph Style: alignment, linebreak, indentation
+    OHParagraphStyle* paragraphStyle = [OHParagraphStyle defaultParagraphStyle];
+    paragraphStyle.textAlignment = kCTJustifiedTextAlignment;
+    paragraphStyle.lineBreakMode = kCTLineBreakByWordWrapping;
+    paragraphStyle.firstLineHeadIndent = 25.f; // indentation for first line
+    paragraphStyle.headIndent =  10.f; // indentation for lines other than the first (= left margin)
+    paragraphStyle.tailIndent = -10.f; // right margin (negative values to count from the right edge instead of left edge)
+    [attrStr setParagraphStyle:paragraphStyle];
     
 	// now we only change the color of "FoodReporter"
 	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.f blue:0.5 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
@@ -74,6 +82,7 @@
     
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	self.customLinkDemoLabel.attributedText = attrStr;
+    self.customLinkDemoLabel.centerVertically = YES;
 }
 
 -(IBAction)toggleBold:(UISwitch*)boldSwitch
@@ -120,7 +129,18 @@
     self.mentionDemoLabel.centerVertically = YES;
 }
 
-
+-(IBAction)changeLineSpacing:(UISlider*)slider
+{
+    NSMutableAttributedString* mas = [self.mentionDemoLabel.attributedText mutableCopy];
+    [mas modifyParagraphStylesWithBlock:^(OHParagraphStyle *paragraphStyle) {
+        paragraphStyle.lineSpacing = slider.value;
+    }];
+    self.mentionDemoLabel.attributedText = mas;
+#if ! __has_feature(objc_arc)
+	// Cleaning: balance the "mutableCopy" call with a "release"
+	[mas release];
+#endif
+}
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - OHAttributedString Delegate Method

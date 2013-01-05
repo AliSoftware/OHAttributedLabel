@@ -53,8 +53,8 @@
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<string type="base64-UTF8" key="IBUIText">QXV0by1kZXRlY3RlZCBsaW5rcyBkZW1vOgpWaXNpdCBodHRwOi8vd3d3LmZvb2RyZXBvcnRlci5uZXQg
-dG8gcG9zdCB5b3VyIGZvb2QhCgpJIHNob3VsZCBjYWxsIEFwcGxlIGluIEN1cGVydGlubywgQ2FsaWZv
-cm5pYSAoKzEgNDA4LTk5Ni0xMDEwKSBuZXh0IHN1bmRheS4</string>
+dG8gcG9zdCB5b3VyIGZvb2QhCkkgc2hvdWxkIGNhbGwgQXBwbGUgaW4gQ3VwZXJ0aW5vLCBDYWxpZm9y
+bmlhICgrMSA0MDgtOTk2LTEwMTApIG5leHQgc3VuZGF5Lg</string>
 						<object class="NSColor" key="IBUITextColor" id="613463035">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -281,7 +281,7 @@ cm5pYSAoKzEgNDA4LTk5Ni0xMDEwKSBuZXh0IHN1bmRheS4</string>
 					<object class="IBUILabel" id="1061334595">
 						<reference key="NSNextResponder" ref="818567079"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{10, 343}, {300, 48}}</string>
+						<string key="NSFrame">{{10, 343}, {300, 52}}</string>
 						<reference key="NSSuperview" ref="818567079"/>
 						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>

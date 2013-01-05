@@ -29,6 +29,7 @@
 #import <CoreText/CoreText.h>
 #import <UIKit/UIKit.h>
 
+#import "OHParagraphStyle.h"
 extern NSString* kOHLinkAttributeName;
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -52,6 +53,7 @@ extern NSString* kOHLinkAttributeName;
 -(BOOL)textIsBoldAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(CTTextAlignment)textAlignmentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 -(CTLineBreakMode)lineBreakModeAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
+-(OHParagraphStyle*)paragraphStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 
 -(NSURL*)linkAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange;
 @end
@@ -77,6 +79,14 @@ extern NSString* kOHLinkAttributeName;
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;
+
+/* Allows you to modify only certain Paragraph Styles without changing the others (for example changing the firstLineHeadIndent without overriding the textAlignment) */
+-(void)modifyParagraphStylesWithBlock:(void(^)(OHParagraphStyle* paragraphStyle))block;
+-(void)modifyParagraphStylesInRange:(NSRange)range withBlock:(void(^)(OHParagraphStyle* paragraphStyle))block;
+/* Override the Paragraph Styles, dropping the ones previously set if any.
+ Be aware that this will override the text alignment, linebreakmode, and all other paragraph styles with the new values */
+-(void)setParagraphStyle:(OHParagraphStyle *)style;
+-(void)setParagraphStyle:(OHParagraphStyle*)style range:(NSRange)range;
 
 -(void)setLink:(NSURL*)link range:(NSRange)range;
 @end
