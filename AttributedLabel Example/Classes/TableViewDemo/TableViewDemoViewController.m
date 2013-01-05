@@ -35,7 +35,7 @@ static CGFloat const kLabelVMargin = 10;
         // Custom initialization
         NSMutableArray* plainEntries = [NSMutableArray arrayWithObjects:
                                    @"Visit http://www.apple.com *now*!",
-                                   @"Go to http://www.foodreporter.net to *{red|share your food}*!",
+                                   @"Go to http://www.foodreporter.net to *{red|share your food}* with millions of users!",
                                    @"Start a search on http://www.google.com right now",
                                    nil];
         for(int i=0; i<20;++i)
@@ -46,17 +46,19 @@ static CGFloat const kLabelVMargin = 10;
          "Etiam pretium mi eget lectus tincidunt semper. Phasellus placerat, lorem quis laoreet." atIndex:13];
         
         NSMutableArray* formattedEntries = [NSMutableArray arrayWithCapacity:plainEntries.count];
-        NSArray* randomColors = [NSArray arrayWithObjects:[UIColor redColor], [UIColor greenColor], [UIColor blueColor],
-                               [UIColor orangeColor], [UIColor darkTextColor], nil];
+        NSArray* randomColors = [NSArray arrayWithObjects:[UIColor redColor], [UIColor orangeColor],
+                                 [UIColor colorWithRed:0 green:0.6 blue:0 alpha:1],
+                                 [UIColor blueColor], [UIColor darkTextColor], nil];
         NSUInteger idx = 0;
         for(NSString* plainEntry in plainEntries)
         {
             NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:plainEntry];
-            [mas setFont:[UIFont systemFontOfSize: (idx++ < 13) ? 18 : 16]];
+            [mas setFont:[UIFont systemFontOfSize: (idx < 13) ? 18 : 16]];
             [mas setTextColor:[randomColors objectAtIndex:(idx%5)]];
             [mas setTextAlignment:kCTTextAlignmentCenter lineBreakMode:kCTLineBreakByWordWrapping];
             [OHASBasicMarkupParser processMarkupInAttributedString:mas];
             [formattedEntries addObject:mas];
+            ++idx;
         }
         self.texts = formattedEntries;
         [self.tableView reloadData];
