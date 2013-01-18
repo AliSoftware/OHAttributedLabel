@@ -110,7 +110,7 @@
 						<string key="NSFrame">{{216, 82}, {94, 27}}</string>
 						<reference key="NSSuperview" ref="122382973"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="360989347"/>
+						<reference key="NSNextKeyView" ref="312232726"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
@@ -143,6 +143,7 @@
 						<string key="NSFrame">{{216, 114}, {94, 27}}</string>
 						<reference key="NSSuperview" ref="122382973"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="360989347"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
@@ -165,17 +166,17 @@
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<string type="base64-UTF8" key="IBUIText">WW91IGNhbiBhbHNvIHVzZSBsaW5rcyBmb3IgaW50ZXJuYWwgbmF2aWdhdGlvbiEgRm9yIGV4YW1wbGUg
-dG8gZGV0ZWN0IG1lbnRpb25zIGxpa2UgQHRvbSBhbmQgQGJvYiBhbmQgZG8gc29tZXRoaW5nIHdoZW4g
-dGhlc2UgdXNlciBuYW1lcyBhcmUgdGFwcGVkLgoKKFRoZSBkZXRlY3Rpb24gUmVnRXggbWFrZXMgdGhl
-IGRpc3RpbmN0aW9uIGJldHdlZW4gbWVudGlvbnMgYW5kIG1lQGV4YW1wbGUuY29tIGVtYWlsIGFkZHJl
-c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
+						<string type="base64-UTF8" key="IBUIText">WW91IGNhbiBhbHNvIHVzZSBsaW5rcyBmb3Ige3JlZHwqaW50ZXJuYWwgbmF2aWdhdGlvbip9ISBGb3Ig
+ZXhhbXBsZSB0byB7IzA4MHxkZXRlY3QgbWVudGlvbnMgbGlrZSBAdG9tIGFuZCBAYm9ifSBhbmQgZG8g
+YW55dGhpbmcgd2hlbiB0aGVzZSB1c2VyIG5hbWVzIGFyZSB0YXBwZWQuCgooVGhlIHx7b3JhbmdlfGRl
+dGVjdGlvbiBSZWdFeH18IG1ha2VzIHRoZSBkaXN0aW5jdGlvbiBiZXR3ZWVuIG1lbnRpb25zIGFuZCBt
+ZUBleGFtcGxlLmNvbSBlbWFpbCBhZGRyZXNzZXMuIFNlZSBleGFtcGxlIGNvZGUgZm9yIGRldGFpbHMp
+A</string>
 						<reference key="IBUITextColor" ref="853353891"/>
 						<reference key="IBUIHighlightedColor" ref="32204308"/>
 						<int key="IBUIBaselineAdjustment">1</int>
 						<float key="IBUIMinimumFontSize">10</float>
 						<int key="IBUINumberOfLines">0</int>
-						<int key="IBUITextAlignment">1</int>
 						<int key="IBUILineBreakMode">0</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription">
 							<string key="name">Helvetica</string>
@@ -193,12 +194,13 @@ c3Nlcy4gU2VlIGV4YW1wbGUgY29kZSBmb3IgZGV0YWlscyk</string>
 						<string key="NSFrame">{{194, 375}, {118, 23}}</string>
 						<reference key="NSSuperview" ref="122382973"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
-						<float key="IBUIMaxValue">5</float>
+						<float key="IBUIMaxValue">8</float>
 					</object>
 					<object class="IBUILabel" id="663779980">
 						<reference key="NSNextResponder" ref="122382973"/>

@@ -7,26 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0926A8101698ADDD00573783 /* OHParagraphStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 0926A80E1698ADDD00573783 /* OHParagraphStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0926A8111698ADDD00573783 /* OHParagraphStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 0926A80F1698ADDD00573783 /* OHParagraphStyle.m */; };
-		09793558161393F2006DB5D5 /* OHASMarkupParserBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 09793556161393F2006DB5D5 /* OHASMarkupParserBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		09793559161393F2006DB5D5 /* OHASMarkupParserBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 09793557161393F2006DB5D5 /* OHASMarkupParserBase.m */; };
-		0979355C1613A5AE006DB5D5 /* OHASBasicHTMLParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0979355A1613A5AE006DB5D5 /* OHASBasicHTMLParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0979355D1613A5AE006DB5D5 /* OHASBasicHTMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0979355B1613A5AE006DB5D5 /* OHASBasicHTMLParser.m */; };
-		097935601613B276006DB5D5 /* OHASBasicMarkupParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0979355E1613B276006DB5D5 /* OHASBasicMarkupParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		097935611613B276006DB5D5 /* OHASBasicMarkupParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0979355F1613B276006DB5D5 /* OHASBasicMarkupParser.m */; };
+		09804E0716A8CAA400ADC660 /* OHAttributedLabel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 09E15A02160F57E2003025B4 /* OHAttributedLabel.h */; };
+		09804E0816A8CAA400ADC660 /* OHParagraphStyle.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0926A80E1698ADDD00573783 /* OHParagraphStyle.h */; };
+		09804E0916A8CAA400ADC660 /* NSAttributedString+Attributes.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */; };
+		09804E0A16A8CAA400ADC660 /* NSTextCheckingResult+ExtendedURL.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */; };
+		09804E0B16A8CAA400ADC660 /* OHASMarkupParserBase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 09793556161393F2006DB5D5 /* OHASMarkupParserBase.h */; };
+		09804E0C16A8CAA400ADC660 /* OHASBasicHTMLParser.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0979355A1613A5AE006DB5D5 /* OHASBasicHTMLParser.h */; };
+		09804E0D16A8CAA400ADC660 /* OHASBasicMarkupParser.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0979355E1613B276006DB5D5 /* OHASBasicMarkupParser.h */; };
 		09E159EC160F573A003025B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E159EB160F573A003025B4 /* Foundation.framework */; };
 		09E159FE160F57AB003025B4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E159FD160F57AB003025B4 /* CoreText.framework */; };
 		09E15A04160F57E2003025B4 /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */; };
 		09E15A05160F57E2003025B4 /* OHAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A03160F57E2003025B4 /* OHAttributedLabel.m */; };
-		09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A02160F57E2003025B4 /* OHAttributedLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		09E15A25160F63DE003025B4 /* CoreTextUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A23160F63DE003025B4 /* CoreTextUtils.h */; };
 		09E15A26160F63DE003025B4 /* CoreTextUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A24160F63DE003025B4 /* CoreTextUtils.m */; };
-		09E15A29160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		09E15A2A160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */; };
 		09E15A2C160F64EB003025B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E15A2B160F64EB003025B4 /* UIKit.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		09804E0516A8CA8800ADC660 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				09804E0716A8CAA400ADC660 /* OHAttributedLabel.h in CopyFiles */,
+				09804E0816A8CAA400ADC660 /* OHParagraphStyle.h in CopyFiles */,
+				09804E0916A8CAA400ADC660 /* NSAttributedString+Attributes.h in CopyFiles */,
+				09804E0A16A8CAA400ADC660 /* NSTextCheckingResult+ExtendedURL.h in CopyFiles */,
+				09804E0B16A8CAA400ADC660 /* OHASMarkupParserBase.h in CopyFiles */,
+				09804E0C16A8CAA400ADC660 /* OHASBasicHTMLParser.h in CopyFiles */,
+				09804E0D16A8CAA400ADC660 /* OHASBasicMarkupParser.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0926A80E1698ADDD00573783 /* OHParagraphStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHParagraphStyle.h; sourceTree = "<group>"; };
@@ -149,24 +167,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		09E15A1F160F5DA8003025B4 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				09E15A21160F5DAF003025B4 /* NSAttributedString+Attributes.h in Headers */,
-				09E15A22160F5DAF003025B4 /* OHAttributedLabel.h in Headers */,
-				09E15A25160F63DE003025B4 /* CoreTextUtils.h in Headers */,
-				09E15A29160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h in Headers */,
-				09793558161393F2006DB5D5 /* OHASMarkupParserBase.h in Headers */,
-				0979355C1613A5AE006DB5D5 /* OHASBasicHTMLParser.h in Headers */,
-				097935601613B276006DB5D5 /* OHASBasicMarkupParser.h in Headers */,
-				0926A8101698ADDD00573783 /* OHParagraphStyle.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		09E159E7160F573A003025B4 /* OHAttributedLabel */ = {
 			isa = PBXNativeTarget;
@@ -174,7 +174,7 @@
 			buildPhases = (
 				09E159E4160F573A003025B4 /* Sources */,
 				09E159E5160F573A003025B4 /* Frameworks */,
-				09E15A1F160F5DA8003025B4 /* Headers */,
+				09804E0516A8CA8800ADC660 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -290,10 +290,7 @@
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -306,10 +303,7 @@
 					"$(inherited)",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = OHAttributedLabel/Private;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

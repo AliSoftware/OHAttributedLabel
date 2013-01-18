@@ -7,9 +7,9 @@
 //
 
 #import "TableViewDemoViewController.h"
-#import "OHAttributedLabel.h"
-#import "NSAttributedString+Attributes.h"
-#import "OHASBasicMarkupParser.h"
+#import <OHAttributedLabel/OHAttributedLabel.h>
+#import <OHAttributedLabel/NSAttributedString+Attributes.h>
+#import <OHAttributedLabel/OHASBasicMarkupParser.h>
 #import "UIAlertView+Commodity.h"
 
 

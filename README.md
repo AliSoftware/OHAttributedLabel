@@ -83,13 +83,17 @@ There are two possible methods to include these classes in your project:
 
 2. Manually:
     * Include the `OHAttributedLabel.xcodeproj` project in your Xcode4 workspace
-    * Add the `libOHAttributedLabel.a` library **and the `CoreText.framework`** to your "Link binary with libraries" Build Phase.
-    * Add the relative path to the OHAttributedLabel headers in your "User Header Search Path" Build Setting
-    * Add the `-ObjC` flag in the "Other Linker Flags" Build Setting if not present already
+    * Build this `OHAttributedLabel.xcodeproj` project once for the "iOS Device" (not the simulator) _(1)_
+    * Add `libOHAttributedLabel.a` **and `CoreText.framework`** to your **"Link Binary With Libraries"** Build Phase of your app project.
+    * Select the `libOHAttributedLabel.a` that has just been added to your app project in your Project Navigator on the left, and change the "Location" dropdown in the File Inspector to **"Relative to Build Products"** _(1)_
+    * Add the **`-ObjC` flag in the "Other Linker Flags"** Build Setting (if not present already)
 
-Then in your application code, when you want to make use of OHAttributedLabel methods, import the headers as usual: `#import "OHAttributedLabel.h"` or `#import "NSAttributedString+Attributes.h"` etc.
+Then in your application code, when you want to make use of OHAttributedLabel methods, you only need to import the headers with `#import <OHAttributedLabel/OHAttributedLabel.h>` or `#import <OHAttributedLabel/NSAttributedString+Attributes.h>` etc.
 
-For more details and import/linking troubleshooting, please see the [dedicated page](https://github.com/AliSoftware/OHAttributedLabel/wiki/How-to-use) and issue #90.
+> _(1) Note: These two steps are only necessary to avoid a bug in Xcode4 that would otherwise make Xcode fail to detect implicit dependencies between your app and the lib._
+
+For more details and import/linking troubleshooting, please see the [dedicated page](https://github.com/AliSoftware/OHAttributedLabel/wiki/How-to-use).
+
 
 # Sample code & Other documentation
 

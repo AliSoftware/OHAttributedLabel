@@ -9,9 +9,9 @@
 #import "BasicDemoViewController.h"
 #import "UIAlertView+Commodity.h"
 
-#import "NSAttributedString+Attributes.h"
-#import "OHASBasicHTMLParser.h"
-#import "OHASBasicMarkupParser.h"
+#import <OHAttributedLabel/NSAttributedString+Attributes.h>
+#import <OHAttributedLabel/OHASBasicHTMLParser.h>
+#import <OHAttributedLabel/OHASBasicMarkupParser.h>
 
 @interface BasicDemoViewController ()
 @property(nonatomic, retain) NSMutableSet* visitedLinks;
@@ -98,6 +98,9 @@
     }];
 	// and only change the color of the "Visit" word
 	[attrStr setTextColor:[UIColor redColor] range:NSMakeRange(26,5)];
+    // and the color and font of the "post your food" text
+    [attrStr setTextColor:[UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0] range:NSMakeRange(63,15)];
+    [attrStr setFontFamily:@"helvetica" size:18 bold:YES italic:YES range:NSMakeRange(63,15)];
 	
 	/**(2)** Affect the NSAttributedString to the OHAttributedLabel *******/
 	self.demoLabel.attributedText = attrStr;

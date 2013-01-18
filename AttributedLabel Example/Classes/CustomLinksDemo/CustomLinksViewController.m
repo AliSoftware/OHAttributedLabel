@@ -7,7 +7,8 @@
 //
 
 #import "CustomLinksViewController.h"
-#import "NSAttributedString+Attributes.h"
+#import <OHAttributedLabel/NSAttributedString+Attributes.h>
+#import <OHAttributedLabel/OHASBasicMarkupParser.h>
 #import "UIAlertView+Commodity.h"
 
 @interface CustomLinksViewController ()
@@ -74,7 +75,7 @@
     [attrStr setParagraphStyle:paragraphStyle];
     
 	// now we only change the color of "FoodReporter"
-	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.f blue:0.5 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
+	[attrStr setTextColor:[UIColor colorWithRed:0.f green:0.5f blue:0.0 alpha:1.f] range:[txt rangeOfString:@TXT_BOLD]];
 	[attrStr setTextBold:YES range:[txt rangeOfString:@TXT_BOLD]];
 
 	// and add a link to the "share your food!" text
@@ -147,6 +148,15 @@
         NSString* linkURLString = [NSString stringWithFormat:@"user:%@", user]; // build the "user:" link
         [mas setLink:[NSURL URLWithString:linkURLString] range:match.range]; // add it
     }];
+    
+    OHParagraphStyle* para = [OHParagraphStyle defaultParagraphStyle];
+    para.firstLineHeadIndent = 30;
+    para.headIndent = 5;
+    para.tailIndent = -5;
+    para.textAlignment = kCTTextAlignmentJustified;
+    [mas setParagraphStyle:para];
+    [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+    
     self.mentionDemoLabel.attributedText = mas;
     self.mentionDemoLabel.centerVertically = YES;
 }

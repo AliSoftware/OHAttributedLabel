@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OHAttributedLabel.h"
+#import <OHAttributedLabel/OHAttributedLabel.h>
 
 @interface BasicDemoViewController : UIViewController <OHAttributedLabelDelegate>
 
