@@ -76,6 +76,7 @@ extern NSString* kOHLinkAttributeName;
 //! @param style is a combination of CTUnderlineStyle & CTUnderlineStyleModifiers
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range;
 -(void)setTextBold:(BOOL)isBold range:(NSRange)range;
+-(void)setTextItalics:(BOOL)isItalics range:(NSRange)range;
 
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;

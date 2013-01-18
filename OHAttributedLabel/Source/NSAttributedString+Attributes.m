@@ -288,6 +288,58 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
     [self endEditing];
 }
 
+-(void)setTextItalics:(BOOL)isItalics range:(NSRange)range
+{
+	NSUInteger startPoint = range.location;
+	NSRange effectiveRange;
+    [self beginEditing];
+	do {
+		// Get font at startPoint
+		CTFontRef currentFont = (BRIDGE_CAST CTFontRef)[self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
+        if (!currentFont)
+        {
+            currentFont = CTFontCreateUIFontForLanguage(kCTFontLabelFontType, 0.0, NULL);
+            (void)MRC_AUTORELEASE((BRIDGE_TRANSFER_CAST id)currentFont);
+        }
+		// The range for which this font is effective
+		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
+		// Create italics/unitalics font variant for this font and apply
+		CTFontRef newFont = CTFontCreateCopyWithSymbolicTraits(currentFont, 0.0, NULL, (isItalics?kCTFontTraitItalic:0), kCTFontTraitItalic);
+        if (!newFont)
+        {
+            // Check if .HelveticaNeueUI font which is the default font for labels in XIB but does not seem to detect its italic variant automatically
+            CFStringRef fontFamily = CTFontCopyFamilyName(currentFont);
+            if ([(BRIDGE_CAST NSString*)fontFamily isEqualToString:@".Helvetica NeueUI"])
+            {
+                CTFontDescriptorRef fontDesc = CTFontCopyFontDescriptor(currentFont);
+                NSDictionary* nameAttr = [NSDictionary dictionaryWithObject:@".HelveticaNeueUI-Italic" forKey:@"NSFontNameAttribute"];
+                CTFontDescriptorRef fontDescItalics = CTFontDescriptorCreateCopyWithAttributes(fontDesc, (BRIDGE_CAST CFDictionaryRef)nameAttr);
+                newFont = CTFontCreateWithFontDescriptor(fontDescItalics, CTFontGetSize(currentFont), NULL);
+                CFRelease(fontDesc);
+                CFRelease(fontDescItalics);
+            }
+            if (!newFont)
+            {
+                // Still no luck, display a warning message in console
+                NSLog(@"[OHAttributedLabel] Warning: can't find an italic font variant for font family %@. Try another font family (like Helvetica) instead.",
+                      (BRIDGE_CAST NSString*)fontFamily);
+            }
+            if (fontFamily) CFRelease(fontFamily);
+        }
+        
+		if (newFont)
+        {
+			[self removeAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
+			[self addAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)newFont range:fontRange];
+			CFRelease(newFont);
+		}
+		
+		// If the fontRange was not covering the whole range, continue with next run
+		startPoint = NSMaxRange(effectiveRange);
+	} while(startPoint<NSMaxRange(range));
+    [self endEditing];
+}
+
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode
 {
 	[self setTextAlignment:alignment lineBreakMode:lineBreakMode range:NSMakeRange(0,[self length])];

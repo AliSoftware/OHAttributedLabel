@@ -34,6 +34,8 @@
  *
  *  "<u>underline text</u>" to write some text underlined
  *
+ *  "<i>italic text</i> to write some text in italics
+ *
  *  "<font name='fontname' size='size'>some text</font>" to change font and size of some text
  *      note that you have to specify both "name" and "size" attributes and in that exact order
  *

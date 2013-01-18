@@ -49,8 +49,8 @@
 +(void)processMarkupInAttributedString:(NSMutableAttributedString*)mutAttrString
 {
     NSDictionary* mappings = [self tagMappings];
-    
-    NSRegularExpressionOptions options = NSRegularExpressionAnchorsMatchLines | NSRegularExpressionDotMatchesLineSeparators;
+    NSRegularExpressionOptions options = NSRegularExpressionAnchorsMatchLines
+    | NSRegularExpressionDotMatchesLineSeparators | NSRegularExpressionUseUnicodeWordBoundaries;
     [mappings enumerateKeysAndObjectsUsingBlock:^(id pattern, id obj, BOOL *stop1)
      {
          TagProcessorBlockType block = (TagProcessorBlockType)obj;

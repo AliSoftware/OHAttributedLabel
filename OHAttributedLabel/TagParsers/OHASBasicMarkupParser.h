@@ -34,6 +34,8 @@
  *
  *  "_underline_" to write text underlined
  *
+ *  "|italics|" to write text in italics
+ *
  *  "`typewritter font`" to write text in Courier (fixed-width) font
  *
  *  "[some text](some URL)" to create a link to "some URL" with displayed text "some text"

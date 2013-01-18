@@ -66,6 +66,20 @@
                 }
             }, @"<u>(.+?)</u>",
             
+            
+            ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match)
+            {
+                NSRange textRange = [match rangeAtIndex:1];
+                if (textRange.length>0)
+                {
+                    NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
+                    [foundString setTextItalics:YES range:NSMakeRange(0,foundString.length)];
+                    return MRC_AUTORELEASE(foundString);
+                } else {
+                    return nil;
+                }
+            }, @"<i>(.+?)</i>",
+            
             ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match)
             {
                 NSRange fontNameRange = [match rangeAtIndex:2];
