@@ -85,6 +85,7 @@ There are two possible methods to include these classes in your project:
     * Include the `OHAttributedLabel.xcodeproj` project in your Xcode4 workspace
     * Build this `OHAttributedLabel.xcodeproj` project once for the "iOS Device" (not the simulator) _(1)_
     * Add `libOHAttributedLabel.a` **and `CoreText.framework`** to your **"Link Binary With Libraries"** Build Phase of your app project.
+    * Add OHAttributedLabel to your "Target Dependencies" Build Phase.
     * Select the `libOHAttributedLabel.a` that has just been added to your app project in your Project Navigator on the left, and change the "Location" dropdown in the File Inspector to **"Relative to Build Products"** _(1)_
     * Add the **`-ObjC` flag in the "Other Linker Flags"** Build Setting (if not present already)
 
