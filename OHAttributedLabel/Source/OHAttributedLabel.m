@@ -450,49 +450,59 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	self.activeLink = [self linkAtPoint:pt];
 	_touchStartPoint = pt;
 
-	if (_catchTouchesOnLinksOnTouchBegan) {
-		[self processLinkAt:pt];
+	if (_catchTouchesOnLinksOnTouchBegan)
+    {
+		[self processActiveLink];
 	}
-	// we're using activeLink to draw a highlight in -drawRect:
+    
+	// we're using activeLink to draw a highlight in -drawRect:, so force redraw
 	[self setNeedsDisplay];
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	UITouch* touch = [touches anyObject];
-	CGPoint pt = [touch locationInView:self];
-	if (!_catchTouchesOnLinksOnTouchBegan) {
-		[self processLinkAt:pt];
-	}
-	[self setNeedsDisplay];
-}
-
-- (void)processLinkAt:(CGPoint)pt {
-	NSTextCheckingResult *linkAtTouchesEnded = [self linkAtPoint:pt];
-
-	BOOL closeToStart = (abs(_touchStartPoint.x - pt.x) < 10 && abs(_touchStartPoint.y - pt.y) < 10);
-
-	// we can check on equality of the ranges themselfes since the data detectors create new results
-	if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))
+	if (!_catchTouchesOnLinksOnTouchBegan)
     {
-        NSTextCheckingResult* linkToOpen = _activeLink;
-        // In case the delegate calls recomputeLinksInText or anything that will clear the _activeLink variable, keep it around anyway
-        (void)MRC_AUTORELEASE(MRC_RETAIN(linkToOpen));
-		BOOL openLink = (self.delegate && [self.delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
-		? [self.delegate attributedLabel:self shouldFollowLink:linkToOpen] : YES;
-		if (openLink)
+        UITouch* touch = [touches anyObject];
+        CGPoint pt = [touch locationInView:self];
+
+        // Check that the link on touchEnd is the same as the link on touchBegan
+		NSTextCheckingResult* linkAtTouchesEnded = [self linkAtPoint:pt];
+        BOOL closeToStart = (abs(_touchStartPoint.x - pt.x) < 10 && abs(_touchStartPoint.y - pt.y) < 10);
+        
+        // we must check on equality of the ranges themselves since the data detectors create new results
+        if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))
         {
-            [[UIApplication sharedApplication] openURL:linkToOpen.extendedURL];
+            // Same link on touchEnded than the one on touchBegan, so trigger it
+            [self processActiveLink];
         }
 	}
 
-	self.activeLink = nil;
+    // we're using activeLink to draw a highlight in -drawRect:, so force redraw
+    self.activeLink = nil;
+	[self setNeedsDisplay];
 }
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    // we're using activeLink to draw a highlight in -drawRect:, so force redraw
 	self.activeLink = nil;
 	[self setNeedsDisplay];
+}
+
+- (void)processActiveLink
+{
+    NSTextCheckingResult* linkToOpen = _activeLink;
+    // In case the delegate calls recomputeLinksInText or anything that will clear the _activeLink variable, keep it around anyway
+    (void)MRC_AUTORELEASE(MRC_RETAIN(linkToOpen));
+    
+    BOOL openLink = (self.delegate && [self.delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
+    ? [self.delegate attributedLabel:self shouldFollowLink:linkToOpen] : YES;
+    
+    if (openLink)
+    {
+        [[UIApplication sharedApplication] openURL:linkToOpen.extendedURL];
+    }
 }
 
 
@@ -658,6 +668,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 #pragma mark - Setters/Getters
 /////////////////////////////////////////////////////////////////////////////////////
 
+// Note: Even if we now have auto property synthesis, we still write the @synthesize here for older compilers compatibility
 @synthesize activeLink = _activeLink;
 @synthesize linkColor = _linkColor;
 @synthesize highlightedLinkColor = _highlightedLinkColor;
@@ -665,6 +676,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 @synthesize centerVertically = _centerVertically;
 @synthesize automaticallyAddLinksForType = _automaticallyAddLinksForType;
 @synthesize onlyCatchTouchesOnLinks = _onlyCatchTouchesOnLinks;
+@synthesize catchTouchesOnLinksOnTouchBegan = _catchTouchesOnLinksOnTouchBegan;
 @synthesize extendBottomToFit = _extendBottomToFit;
 @synthesize delegate = _delegate;
 
@@ -701,7 +713,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	MRC_RELEASE(_attributedText);
 	_attributedText = [newText copy];
 	[self setAccessibilityLabel:_attributedText.string];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 	[self removeAllCustomLinks];
+#pragma clang diagnostic pop
     [self setNeedsRecomputeLinksInText];
 }
 

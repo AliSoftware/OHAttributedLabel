@@ -99,9 +99,12 @@ typedef NS_OPTIONS(int32_t, OHBoldStyleTrait) {
 -(void)setUnderlineLinks:(BOOL)underlineLinks;
 
 //! Add a link to some text in the label
--(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range;
+-(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range
+__attribute__((deprecated("You should add links directly to your NSAttributedString instead, using [setLink:... range:...] method (see NSAttributedString+Attributes.h)")));
 //! Remove all custom links from the label
--(void)removeAllCustomLinks;
+-(void)removeAllCustomLinks
+__attribute__((deprecated("You should remove links directly to from NSAttributedString instead, using [setLink:nil range:...] method (see NSAttributedString+Attributes.h)")));
+
 
 //! If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to YES)
 @property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks;

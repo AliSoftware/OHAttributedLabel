@@ -21,7 +21,12 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.sampleLabel addCustomLink:[NSURL URLWithString:@"#"] inRange:NSMakeRange(8,11)]; // Add fake link so we can see the UIAppearance effect
+    NSMutableAttributedString* mutStr = [self.sampleLabel.attributedText mutableCopy];
+    [mutStr setLink:[NSURL URLWithString:@"#"] range:NSMakeRange(8,11)]; // Add fake link so we can see the UIAppearance effect
+    self.sampleLabel.attributedText = mutStr;
+#if ! __has_feature(objc_arc)
+    [mutStr release];
+#endif
     self.sampleLabel.centerVertically = YES;
 }
 
