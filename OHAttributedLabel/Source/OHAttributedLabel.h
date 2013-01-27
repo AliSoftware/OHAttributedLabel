@@ -105,6 +105,8 @@ typedef NS_OPTIONS(int32_t, OHBoldStyleTrait) {
 
 //! If YES, pointInside will only return YES if the touch is on a link. If NO, pointInside will always return YES (Defaults to YES)
 @property(nonatomic, assign) BOOL onlyCatchTouchesOnLinks;
+//! If YES, any touched links are process on touchBegin, otherwise on touchEnd (Defaults to NO)
+@property(nonatomic, assign) BOOL catchTouchesOnLinksOnTouchBegan;
 //! The delegate that gets informed when a link is touched and gives the opportunity to catch it
 @property(nonatomic, assign) IBOutlet id<OHAttributedLabelDelegate> delegate;
 

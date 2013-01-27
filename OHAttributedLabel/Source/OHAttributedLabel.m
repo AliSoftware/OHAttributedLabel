@@ -449,7 +449,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	
 	self.activeLink = [self linkAtPoint:pt];
 	_touchStartPoint = pt;
-	
+
+	if (_catchTouchesOnLinksOnTouchBegan) {
+		[self processLinkAt:pt];
+	}
 	// we're using activeLink to draw a highlight in -drawRect:
 	[self setNeedsDisplay];
 }
@@ -458,9 +461,15 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 {
 	UITouch* touch = [touches anyObject];
 	CGPoint pt = [touch locationInView:self];
-	
+	if (!_catchTouchesOnLinksOnTouchBegan) {
+		[self processLinkAt:pt];
+	}
+	[self setNeedsDisplay];
+}
+
+- (void)processLinkAt:(CGPoint)pt {
 	NSTextCheckingResult *linkAtTouchesEnded = [self linkAtPoint:pt];
-	
+
 	BOOL closeToStart = (abs(_touchStartPoint.x - pt.x) < 10 && abs(_touchStartPoint.y - pt.y) < 10);
 
 	// we can check on equality of the ranges themselfes since the data detectors create new results
@@ -476,9 +485,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
             [[UIApplication sharedApplication] openURL:linkToOpen.extendedURL];
         }
 	}
-	
+
 	self.activeLink = nil;
-	[self setNeedsDisplay];
 }
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
