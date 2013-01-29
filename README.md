@@ -1,3 +1,17 @@
+_Table of Contents_
+
+* [About these classes](#about-these-classes)
+  * [`OHAttributedLabel`](#ohattributedlabel)
+  * [`NSAttributedString` and `NSTextChecking` Additions](#nsattributedstring-and-nstextchecking-additions)
+  * [`OHASMarkupParsers` and simple markup to build your attributed strings easily](#ohasmarkupparsers-and-simple-markup-to-build-your-attributed-strings-easily)
+  * [`UIAppearance` support](#uiappearance-support)
+* [How to use in your project](#how-to-use-in-your-project)
+* [Sample code & Other documentation](#sample-code--other-documentation)
+* [ChangeLog — Revisions History](#changelog-%E2%80%94-revisions-history)
+* [Projects that use this class](#projects-that-use-this-class)
+
+----
+
 # About these classes
 
 ### OHAttributedLabel
