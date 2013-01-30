@@ -101,7 +101,7 @@ CGRect CGRectFlipped(CGRect rect, CGRect bounds)
 
 NSRange NSRangeFromCFRange(CFRange range)
 {
-	return NSMakeRange(range.location, range.length);
+	return NSMakeRange((NSUInteger)range.location, (NSUInteger)range.length);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +114,7 @@ CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin)
 	CGFloat ascent = 0;
 	CGFloat descent = 0;
 	CGFloat leading = 0;
-	CGFloat width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+	CGFloat width = (CGFloat)CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
 	CGFloat height = ascent + descent;
 	
 	return CGRectMake(lineOrigin.x,
@@ -128,7 +128,7 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 	CGFloat ascent = 0;
 	CGFloat descent = 0;
 	CGFloat leading = 0;
-	CGFloat width = CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &descent, &leading);
+	CGFloat width = (CGFloat)CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &descent, &leading);
 	CGFloat height = ascent + descent;
 	
 	CGFloat xOffset = CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL);

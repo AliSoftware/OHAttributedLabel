@@ -112,28 +112,28 @@ UIColor* OHUIColorFromString(NSString* colorString)
         switch(colorString.length)
         {
             case 4: // #rgb
-                color = [UIColor colorWithRed:((rgba>> 8)&0x0F)/15.
-                                        green:((rgba>> 4)&0x0F)/15.
-                                         blue:((rgba    )&0x0F)/15.
-                                        alpha:1.0];
+                color = [UIColor colorWithRed:((rgba>> 8)&0x0F)/15.f
+                                        green:((rgba>> 4)&0x0F)/15.f
+                                         blue:((rgba    )&0x0F)/15.f
+                                        alpha:1.0f];
                 break;
             case 5: // #rgba
-                color = [UIColor colorWithRed:((rgba>>12)&0x0F)/15.
-                                        green:((rgba>> 8)&0x0F)/15.
-                                         blue:((rgba>> 4)&0x0F)/15.
-                                        alpha:((rgba    )&0x0F)/15.];
+                color = [UIColor colorWithRed:((rgba>>12)&0x0F)/15.f
+                                        green:((rgba>> 8)&0x0F)/15.f
+                                         blue:((rgba>> 4)&0x0F)/15.f
+                                        alpha:((rgba    )&0x0F)/15.f];
                 break;
             case 7: // #rrggbb
-                color = [UIColor colorWithRed:((rgba>>16)&0xFF)/255.
-                                        green:((rgba>> 8)&0xFF)/255.
-                                         blue:((rgba    )&0xFF)/255.
-                                        alpha:1.0];
+                color = [UIColor colorWithRed:((rgba>>16)&0xFF)/255.f
+                                        green:((rgba>> 8)&0xFF)/255.f
+                                         blue:((rgba    )&0xFF)/255.f
+                                        alpha:1.0f];
                 break;
             case 9: // #rrggbbaa
-                color = [UIColor colorWithRed:((rgba>>24)&0xFF)/255.
-                                        green:((rgba>>16)&0xFF)/255.
-                                         blue:((rgba>> 8)&0xFF)/255.
-                                        alpha:((rgba    )&0xFF)/255.];
+                color = [UIColor colorWithRed:((rgba>>24)&0xFF)/255.f
+                                        green:((rgba>>16)&0xFF)/255.f
+                                         blue:((rgba>> 8)&0xFF)/255.f
+                                        alpha:((rgba    )&0xFF)/255.f];
                 break;
         }
     }

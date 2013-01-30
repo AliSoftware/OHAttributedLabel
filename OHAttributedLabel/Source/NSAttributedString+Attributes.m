@@ -86,7 +86,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 
         if (fitRange)
         {
-            *fitRange = NSMakeRange(fitCFRange.location, fitCFRange.length);
+            *fitRange = NSMakeRange((NSUInteger)fitCFRange.location, (NSUInteger)fitCFRange.length);
         }
     }
     return sz;
@@ -193,7 +193,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 {
 	// kCTFontFamilyNameAttribute + kCTFontTraitsAttribute
 	CTFontSymbolicTraits symTrait = (isBold?kCTFontBoldTrait:0) | (isItalic?kCTFontItalicTrait:0);
-	NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:symTrait]
+	NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:symTrait]
                                                       forKey:(BRIDGE_CAST NSString*)kCTFontSymbolicTrait];
 	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
 						  fontFamily,kCTFontFamilyNameAttribute,

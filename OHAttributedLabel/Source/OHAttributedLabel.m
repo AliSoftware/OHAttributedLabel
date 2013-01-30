@@ -100,7 +100,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     if (types > 0)
     {
         // Dequeue a reusable data detector from the pool, only allocate one if none exist yet
-        id typesKey = [NSNumber numberWithInteger:types];
+        id typesKey = [NSNumber numberWithUnsignedLongLong:types];
         dd = [dataDetectorsCache objectForKey:typesKey];
         if (!dd)
         {
@@ -128,10 +128,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 - (void)commonInit
 {
     _linkColor = MRC_RETAIN([UIColor blueColor]);
-    _highlightedLinkColor = MRC_RETAIN([UIColor colorWithWhite:0.4 alpha:0.3]);
+    _highlightedLinkColor = MRC_RETAIN([UIColor colorWithWhite:0.4f alpha:0.3f]);
 	_linkUnderlineStyle = kCTUnderlineStyleSingle | kCTUnderlinePatternSolid;
     
-	NSTextCheckingTypes linksType = NSTextCheckingTypeLink;
+	NSTextCheckingTypes linksType = (NSTextCheckingTypes)(NSTextCheckingTypeLink);
 	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]])
     {
 		linksType |= NSTextCheckingTypePhoneNumber;
@@ -324,7 +324,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
             [_attributedText enumerateAttribute:kOHLinkAttributeName inRange:NSMakeRange(0, [_attributedText length])
                                         options:0 usingBlock:^(id value, NSRange range, BOOL *stop)
              {
-                 if (value && NSLocationInRange(idx, range))
+                 if (value && NSLocationInRange((NSUInteger)idx, range))
                  {
                      NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(NSURL*)value];
                      foundResult = MRC_RETAIN(result);
@@ -340,7 +340,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                                           usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
              {
                  NSRange r = [result range];
-                 if (NSLocationInRange(idx, r))
+                 if (NSLocationInRange((NSUInteger)idx, r))
                  {
                      foundResult = MRC_RETAIN(result);
                      *stop = YES;
@@ -354,7 +354,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
             [_customLinks enumerateObjectsUsingBlock:^(id obj, NSUInteger aidx, BOOL *stop)
              {
                  NSRange r = [(NSTextCheckingResult*)obj range];
-                 if (NSLocationInRange(idx, r))
+                 if (NSLocationInRange((NSUInteger)idx, r))
                  {
                      foundResult = MRC_RETAIN(obj);
                      *stop = YES;
@@ -468,7 +468,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
         // Check that the link on touchEnd is the same as the link on touchBegan
 		NSTextCheckingResult* linkAtTouchesEnded = [self linkAtPoint:pt];
-        BOOL closeToStart = (abs(_touchStartPoint.x - pt.x) < 10 && abs(_touchStartPoint.y - pt.y) < 10);
+        BOOL closeToStart = (fabs(_touchStartPoint.x - pt.x) < 10 && fabs(_touchStartPoint.y - pt.y) < 10);
         
         // we must check on equality of the ranges themselves since the data detectors create new results
         if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))
@@ -815,7 +815,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     [self setNeedsRecomputeLinksInText];
 }
 
--(void)setLinkUnderlineStyle:(uint32_t)newValue
+-(void)setLinkUnderlineStyle:(int32_t)newValue
 {
     _linkUnderlineStyle = newValue;
     [self setNeedsRecomputeLinksInText];

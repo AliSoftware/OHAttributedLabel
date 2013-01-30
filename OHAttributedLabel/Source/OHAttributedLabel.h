@@ -94,7 +94,7 @@ typedef NS_OPTIONS(int32_t, OHBoldStyleTrait) {
 //! Defaults to [UIColor colorWithWhite:0.2 alpha:0.5]
 @property(nonatomic, strong) UIColor* highlightedLinkColor UI_APPEARANCE_SELECTOR;
 //! Combination of CTUnderlineStyle and CTUnderlineStyleModifiers
-@property(nonatomic, assign) uint32_t linkUnderlineStyle UI_APPEARANCE_SELECTOR;
+@property(nonatomic, assign) int32_t linkUnderlineStyle UI_APPEARANCE_SELECTOR;
 //! Commodity setter to set the linkUnderlineStyle to CTUnderlineStyleSingle (YES) / CTUnderlineStyleNone (NO)
 -(void)setUnderlineLinks:(BOOL)underlineLinks;
 
