@@ -255,9 +255,9 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 		CTFontRef newFont = CTFontCreateCopyWithSymbolicTraits(currentFont, 0.0, NULL, (isBold?kCTFontBoldTrait:0), kCTFontBoldTrait);
         if (!newFont)
         {
-            // Check if .HelveticaNeueUI font which is the default font for labels in XIB but does not seem to detect its bold variant automatically
+            // Hack for .HelveticaNeueUI font, which is the default font for labels in XIB, but does not seem to detect its bold variant :(
             CFStringRef fontFamily = CTFontCopyFamilyName(currentFont);
-            if ([(BRIDGE_CAST NSString*)fontFamily isEqualToString:@".Helvetica NeueUI"])
+            if (isBold && [(BRIDGE_CAST NSString*)fontFamily isEqualToString:@".Helvetica NeueUI"])
             {
                 CTFontDescriptorRef fontDesc = CTFontCopyFontDescriptor(currentFont);
                 NSDictionary* nameAttr = [NSDictionary dictionaryWithObject:@".HelveticaNeueUI-Bold" forKey:@"NSFontNameAttribute"];
@@ -307,9 +307,9 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 		CTFontRef newFont = CTFontCreateCopyWithSymbolicTraits(currentFont, 0.0, NULL, (isItalics?kCTFontTraitItalic:0), kCTFontTraitItalic);
         if (!newFont)
         {
-            // Check if .HelveticaNeueUI font which is the default font for labels in XIB but does not seem to detect its italic variant automatically
+            // Hack for .HelveticaNeueUI font, which is the default font for labels in XIB, but does not seem to detect its italic variant :(
             CFStringRef fontFamily = CTFontCopyFamilyName(currentFont);
-            if ([(BRIDGE_CAST NSString*)fontFamily isEqualToString:@".Helvetica NeueUI"])
+            if (isItalics && [(BRIDGE_CAST NSString*)fontFamily isEqualToString:@".Helvetica NeueUI"])
             {
                 CTFontDescriptorRef fontDesc = CTFontCopyFontDescriptor(currentFont);
                 NSDictionary* nameAttr = [NSDictionary dictionaryWithObject:@".HelveticaNeueUI-Italic" forKey:@"NSFontNameAttribute"];
