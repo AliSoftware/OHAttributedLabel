@@ -62,7 +62,7 @@
 	/**(1)** Build the NSAttributedString *******/
 	NSMutableAttributedString* attrStr = [NSMutableAttributedString attributedStringWithString:txt];
 	// for those calls we don't specify a range so it affects the whole string
-	[attrStr setFont:[UIFont fontWithName:@"Helvetica" size:18]];
+	[attrStr setFont:[UIFont systemFontOfSize:18]];
 	[attrStr setTextColor:[UIColor grayColor]];
     
     // Set Paragraph Style: alignment, linebreak, indentation
