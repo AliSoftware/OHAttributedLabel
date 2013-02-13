@@ -353,6 +353,15 @@ static NSString* const kHelveticaNeueUI_Bold_Italic = @".HelveticaNeueUI-BoldIta
     }];
 }
 
+-(void)setCharacterSpacing:(CGFloat)chracterSpacing
+{
+	[self setCharacterSpacing:chracterSpacing range:NSMakeRange(0,[self length])];
+}
+-(void)setCharacterSpacing:(CGFloat)chracterSpacing range:(NSRange)range
+{
+    [self addAttribute:(NSString *)kCTKernAttributeName value:[NSNumber numberWithFloat:chracterSpacing] range:range];
+}
+
 -(void)modifyParagraphStylesWithBlock:(void(^)(OHParagraphStyle* paragraphStyle))block
 {
     [self modifyParagraphStylesInRange:NSMakeRange(0,[self length]) withBlock:block];
