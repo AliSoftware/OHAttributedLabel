@@ -81,6 +81,11 @@ extern NSString* kOHLinkAttributeName;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode;
 -(void)setTextAlignment:(CTTextAlignment)alignment lineBreakMode:(CTLineBreakMode)lineBreakMode range:(NSRange)range;
 
+/* The characterSpacing attribute indicate how many points the following character should be shifted from its default offset as defined by the current character's font in points; a positive characterSpacing indicates a shift farther along and a negative characterSpacing indicates a shift closer to the current character. If this attribute is not present, standard character spacing will be used. If this attribute is set to 0.0, no characterSpacing will be done at all.  */
+-(void)setCharacterSpacing:(CGFloat)chracterSpacing;
+-(void)setCharacterSpacing:(CGFloat)chracterSpacing range:(NSRange)range;
+
+
 /* Allows you to modify only certain Paragraph Styles without changing the others (for example changing the firstLineHeadIndent without overriding the textAlignment) */
 -(void)modifyParagraphStylesWithBlock:(void(^)(OHParagraphStyle* paragraphStyle))block;
 -(void)modifyParagraphStylesInRange:(NSRange)range withBlock:(void(^)(OHParagraphStyle* paragraphStyle))block;
