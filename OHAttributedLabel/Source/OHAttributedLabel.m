@@ -552,6 +552,32 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
             {
                 CFAttributedStringRef cfAttrStrWithLinks = (BRIDGE_CAST CFAttributedStringRef)attributedStringToDisplay;
                 CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(cfAttrStrWithLinks);
+                
+                if (self.numberOfLines>0) {
+                    CGMutablePathRef path = CGPathCreateMutable();
+                    CGPathAddRect(path, NULL, self.bounds);
+                    
+                    CTFrameRef frame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+                    CFArrayRef lines = CTFrameGetLines(frame);
+                    
+                    if(CFArrayGetCount(lines) > self.numberOfLines) {
+                        CFIndex length=0;
+                        for (CFIndex i=0; i<self.numberOfLines; i++) {
+                            CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+                            length += CTLineGetGlyphCount(line);
+                        }
+                        
+                        attributedStringToDisplay = [attributedStringToDisplay attributedSubstringFromRange:
+                                                     NSRangeFromCFRange(CFRangeMake(0, length))];
+                        cfAttrStrWithLinks = (BRIDGE_CAST CFAttributedStringRef)attributedStringToDisplay;
+                        
+                        CFRelease(framesetter);
+                        framesetter = CTFramesetterCreateWithAttributedString(cfAttrStrWithLinks);
+                    }
+                    CFRelease(frame);
+                    CFRelease(path);
+                }
+                                
                 drawingRect = self.bounds;
                 if (self.centerVertically || self.extendBottomToFit)
                 {
