@@ -90,17 +90,26 @@ For example, your could implement this in your `application:didFinishLoadingWith
 
 # How to use in your project
 
-There are two possible methods to include these classes in your project:
+There are three possible methods to include these classes in your project:
 
 1. Using [Cocoapods](http://cocoapods.org):
     * add `pod "OHAttributedLabel"` to your Podfile
 
-2. Manually:
+2. Include OHAttributedLabel in your project:
     * Include the `OHAttributedLabel.xcodeproj` project in your Xcode4 workspace
     * Build this `OHAttributedLabel.xcodeproj` project once for the "iOS Device" (not the simulator) _(1)_
     * Add `libOHAttributedLabel.a` **and `CoreText.framework`** to your **"Link Binary With Libraries"** Build Phase of your app project.
     * Select the `libOHAttributedLabel.a` that has just been added to your app project in your Project Navigator on the left, and change the "Location" dropdown in the File Inspector to **"Relative to Build Products"** _(1)_
     * Add the **`-ObjC` flag in the "Other Linker Flags"** Build Setting (if not present already)
+
+3. Add `libOHAttributedLabel.a` and headers in your project
+    * `cd OHAttributedLabel` 
+    * `make clean && make` (nb. **rvm** users may need to ```CC= && make clean && make```)
+    * copy the contents of the `build/Release-Combined` directory to you project (eg. `ThirdParty/OHAttributedLabel`)
+    * Add `libOHAttributedLabel.a` **and `CoreText.framework`** to your **"Link Binary With Libraries"** Build Phase of your app project.
+    * Add the OHAttributedLabel headers to your **"Header Search Path"** in Build Settings (eg. `"$(SRCROOT)/ThirdParty/OHAttributedLabel/include/**"`)
+    * Add the **`-ObjC` flag in the "Other Linker Flags"** Build Setting (if not present already)
+
 
 Then in your application code, when you want to make use of OHAttributedLabel methods, you only need to import the headers with `#import <OHAttributedLabel/OHAttributedLabel.h>` or `#import <OHAttributedLabel/NSAttributedString+Attributes.h>` etc.
 
