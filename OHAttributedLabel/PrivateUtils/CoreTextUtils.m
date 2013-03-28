@@ -139,6 +139,16 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 					  height);
 }
 
+CGRect CTRunGetTypographicBoundsForRangeAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin, CFRange range, CGContextRef ctx)
+{
+    CGRect boundsOfRun = CTRunGetTypographicBoundsAsRect(run, line, lineOrigin);
+    CGRect boundsOfImageForRun = CTRunGetImageBounds(run, ctx, range);
+    return CGRectMake(boundsOfRun.origin.x + boundsOfImageForRun.origin.x,
+                      boundsOfRun.origin.y,
+                      boundsOfImageForRun.size.width,
+                      boundsOfRun.size.height);
+}
+
 BOOL CTLineContainsCharactersFromStringRange(CTLineRef line, NSRange range)
 {
 	NSRange lineRange = NSRangeFromCFRange(CTLineGetStringRange(line));
