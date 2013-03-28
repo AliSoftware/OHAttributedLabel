@@ -62,5 +62,6 @@ NSRange NSRangeFromCFRange(CFRange range);
 
 CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin);
 CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin);
+CGRect CTRunGetTypographicBoundsForRangeAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin, CFRange range, CGContextRef ctx);
 BOOL CTLineContainsCharactersFromStringRange(CTLineRef line, NSRange range);
 BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range);
