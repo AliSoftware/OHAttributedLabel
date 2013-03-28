@@ -25,6 +25,7 @@
 		09E15A26160F63DE003025B4 /* CoreTextUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A24160F63DE003025B4 /* CoreTextUtils.m */; };
 		09E15A2A160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */; };
 		09E15A2C160F64EB003025B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E15A2B160F64EB003025B4 /* UIKit.framework */; };
+		C99D190217044B6300050CDC /* OHTouchesGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = C99D190117044B6200050CDC /* OHTouchesGestureRecognizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -70,6 +71,8 @@
 		09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextCheckingResult+ExtendedURL.h"; sourceTree = "<group>"; };
 		09E15A28160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextCheckingResult+ExtendedURL.m"; sourceTree = "<group>"; };
 		09E15A2B160F64EB003025B4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C99D190017044B6200050CDC /* OHTouchesGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OHTouchesGestureRecognizer.h; sourceTree = "<group>"; };
+		C99D190117044B6200050CDC /* OHTouchesGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OHTouchesGestureRecognizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +159,8 @@
 				09E15A03160F57E2003025B4 /* OHAttributedLabel.m */,
 				0926A80E1698ADDD00573783 /* OHParagraphStyle.h */,
 				0926A80F1698ADDD00573783 /* OHParagraphStyle.m */,
+				C99D190017044B6200050CDC /* OHTouchesGestureRecognizer.h */,
+				C99D190117044B6200050CDC /* OHTouchesGestureRecognizer.m */,
 				09E15A00160F57E2003025B4 /* NSAttributedString+Attributes.h */,
 				09E15A01160F57E2003025B4 /* NSAttributedString+Attributes.m */,
 				09E15A27160F640D003025B4 /* NSTextCheckingResult+ExtendedURL.h */,
@@ -224,6 +229,7 @@
 				0979355D1613A5AE006DB5D5 /* OHASBasicHTMLParser.m in Sources */,
 				097935611613B276006DB5D5 /* OHASBasicMarkupParser.m in Sources */,
 				0926A8111698ADDD00573783 /* OHParagraphStyle.m in Sources */,
+				C99D190217044B6300050CDC /* OHTouchesGestureRecognizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
