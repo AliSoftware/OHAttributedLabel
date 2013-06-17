@@ -33,8 +33,13 @@
 #pragma mark - Text Alignment Convertion
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment);
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode);
+#else
+CTTextAlignment CTTextAlignmentFromUITextAlignment(NSTextAlignment alignment);
+CTLineBreakMode CTLineBreakModeFromUILineBreakMode(NSLineBreakMode lineBreakMode);
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Flipping Coordinates
@@ -55,5 +60,6 @@ NSRange NSRangeFromCFRange(CFRange range);
 
 CGRect CTLineGetTypographicBoundsAsRect(CTLineRef line, CGPoint lineOrigin);
 CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin);
+CGRect CTRunGetTypographicBoundsForRangeAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin, CFRange range, CGContextRef ctx);
 BOOL CTLineContainsCharactersFromStringRange(CTLineRef line, NSRange range);
 BOOL CTRunContainsCharactersFromStringRange(CTRunRef run, NSRange range);

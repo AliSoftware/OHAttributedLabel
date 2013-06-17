@@ -31,17 +31,22 @@
 #pragma mark - Text Alignment Convertion
 /////////////////////////////////////////////////////////////////////////////////////
 
-
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment)
 {
     if (alignment == (UITextAlignment)kCTJustifiedTextAlignment)
+#else
+CTTextAlignment CTTextAlignmentFromUITextAlignment(NSTextAlignment alignment)
+{
+    if (alignment == (NSTextAlignment)kCTJustifiedTextAlignment)
+#endif
     {
         /* special OOB value, so test it outside of the switch to avoid warning */
         return kCTJustifiedTextAlignment;
     }
 	switch (alignment)
     {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 		case UITextAlignmentLeft: return kCTLeftTextAlignment;
 		case UITextAlignmentCenter: return kCTCenterTextAlignment;
 		case UITextAlignmentRight: return kCTRightTextAlignment;
@@ -54,11 +59,15 @@ CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment)
 	}
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode)
+#else
+CTLineBreakMode CTLineBreakModeFromUILineBreakMode(NSLineBreakMode lineBreakMode)
+#endif
 {
 	switch (lineBreakMode)
     {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 		case UILineBreakModeWordWrap: return kCTLineBreakByWordWrapping;
 		case UILineBreakModeCharacterWrap: return kCTLineBreakByCharWrapping;
 		case UILineBreakModeClip: return kCTLineBreakByClipping;
@@ -137,6 +146,16 @@ CGRect CTRunGetTypographicBoundsAsRect(CTRunRef run, CTLineRef line, CGPoint lin
 					  lineOrigin.y - descent,
 					  width,
 					  height);
+}
+
+CGRect CTRunGetTypographicBoundsForRangeAsRect(CTRunRef run, CTLineRef line, CGPoint lineOrigin, CFRange range, CGContextRef ctx)
+{
+    CGRect boundsOfRun = CTRunGetTypographicBoundsAsRect(run, line, lineOrigin);
+    CGRect boundsOfImageForRun = CTRunGetImageBounds(run, ctx, range);
+    return CGRectMake(boundsOfRun.origin.x + boundsOfImageForRun.origin.x,
+                      boundsOfRun.origin.y,
+                      boundsOfImageForRun.size.width,
+                      boundsOfRun.size.height);
 }
 
 BOOL CTLineContainsCharactersFromStringRange(CTLineRef line, NSRange range)

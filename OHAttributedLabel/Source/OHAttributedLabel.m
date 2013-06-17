@@ -27,6 +27,7 @@
 
 #import "OHAttributedLabel.h"
 #import "CoreTextUtils.h"
+#import "OHTouchesGestureRecognizer.h"
 
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES 1
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API 1
@@ -56,7 +57,7 @@
 
 const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 
-@interface OHAttributedLabel(/* Private */)
+@interface OHAttributedLabel(/* Private */) <UIGestureRecognizerDelegate>
 {
 	NSAttributedString* _attributedText;
     NSAttributedString* _attributedTextWithLinks;
@@ -66,6 +67,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	CGRect drawingRect;
 	NSMutableArray* _customLinks;
 	CGPoint _touchStartPoint;
+    UIGestureRecognizer *_gestureRecogniser;
 }
 @property(nonatomic, retain) NSTextCheckingResult* activeLink;
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
@@ -141,6 +143,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	self.userInteractionEnabled = YES;
 	self.contentMode = UIViewContentModeRedraw;
 	[self resetAttributedText];
+    
+    _gestureRecogniser = [[OHTouchesGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureRecognised:)];
+    _gestureRecogniser.delegate = self;
+    [self addGestureRecognizer:_gestureRecogniser];
 }
 
 - (id) initWithFrame:(CGRect)aFrame
@@ -226,7 +232,17 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     
     _needsRecomputeLinksInText = NO;
     
-    if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0))
+    __block NSUInteger OHLinkCount = 0;
+    [_attributedText enumerateAttribute:kOHLinkAttributeName inRange:NSMakeRange(0, [_attributedText length])
+                                options:0 usingBlock:^(id value, NSRange range, BOOL *stop)
+     {
+         if (value)
+         {
+             OHLinkCount++;
+         }
+     }];
+    
+    if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0 && OHLinkCount == 0))
     {
         MRC_RELEASE(_attributedTextWithLinks);
         _attributedTextWithLinks = MRC_RETAIN(_attributedText);
@@ -442,52 +458,53 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	return hitResult;
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+-(void)_gestureRecognised:(UIGestureRecognizer*)recogniser
 {
-	UITouch* touch = [touches anyObject];
-	CGPoint pt = [touch locationInView:self];
-	
-	self.activeLink = [self linkAtPoint:pt];
-	_touchStartPoint = pt;
-
-	if (_catchTouchesOnLinksOnTouchBegan)
-    {
-		[self processActiveLink];
-	}
+    CGPoint pt = [recogniser locationInView:self];
     
-	// we're using activeLink to draw a highlight in -drawRect:, so force redraw
-	[self setNeedsDisplay];
-}
-
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-	if (!_catchTouchesOnLinksOnTouchBegan)
-    {
-        UITouch* touch = [touches anyObject];
-        CGPoint pt = [touch locationInView:self];
-
-        // Check that the link on touchEnd is the same as the link on touchBegan
-		NSTextCheckingResult* linkAtTouchesEnded = [self linkAtPoint:pt];
-        BOOL closeToStart = (fabs(_touchStartPoint.x - pt.x) < 10 && fabs(_touchStartPoint.y - pt.y) < 10);
-        
-        // we must check on equality of the ranges themselves since the data detectors create new results
-        if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))
-        {
-            // Same link on touchEnded than the one on touchBegan, so trigger it
-            [self processActiveLink];
+    switch (recogniser.state) {
+        case UIGestureRecognizerStateBegan: {
+            self.activeLink = [self linkAtPoint:pt];
+            _touchStartPoint = pt;
+            
+            if (_catchTouchesOnLinksOnTouchBegan)
+            {
+                [self processActiveLink];
+            }
+            
+            // we're using activeLink to draw a highlight in -drawRect:
+            [self setNeedsDisplay];
         }
-	}
-
-    // we're using activeLink to draw a highlight in -drawRect:, so force redraw
-    self.activeLink = nil;
-	[self setNeedsDisplay];
-}
-
--(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    // we're using activeLink to draw a highlight in -drawRect:, so force redraw
-	self.activeLink = nil;
-	[self setNeedsDisplay];
+            break;
+        case UIGestureRecognizerStateEnded: {
+            if (!_catchTouchesOnLinksOnTouchBegan)
+            {
+                // Check that the link on touchEnd is the same as the link on touchBegan
+                NSTextCheckingResult* linkAtTouchesEnded = [self linkAtPoint:pt];
+                BOOL closeToStart = (fabs(_touchStartPoint.x - pt.x) < 10 && fabs(_touchStartPoint.y - pt.y) < 10);
+                
+                // we must check on equality of the ranges themselves since the data detectors create new results
+                if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))
+                {
+                    // Same link on touchEnded than the one on touchBegan, so trigger it
+                    [self processActiveLink];
+                }
+            }
+            
+            self.activeLink = nil;
+            [self setNeedsDisplay];
+        }
+            break;
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed: {
+            self.activeLink = nil;
+            [self setNeedsDisplay];
+        }
+            break;
+        case UIGestureRecognizerStateChanged:
+        case UIGestureRecognizerStatePossible:
+            break;
+    }
 }
 
 - (void)processActiveLink
@@ -635,7 +652,17 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 				continue; // with next run
 			}
 			
-			CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
+            CFRange fullRunRange = CTRunGetStringRange(run);
+            
+            CFRange inRunRange;
+            inRunRange.location = (CFIndex)activeLinkRange.location - (CFIndex)fullRunRange.location;
+            inRunRange.length = (CFIndex)activeLinkRange.length;
+            if (inRunRange.location < 0) {
+                inRunRange.length += inRunRange.location;
+                inRunRange.location = 0;
+            }
+            
+            CGRect linkRunRect = CTRunGetTypographicBoundsForRangeAsRect(run, line, lineOrigins[lineIndex], inRunRange, ctx);
 			linkRunRect = CGRectIntegral(linkRunRect);		// putting the rect on pixel edges
 			linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
 			if (CGRectIsEmpty(unionRect))
@@ -658,6 +685,18 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 {
     [self recomputeLinksInTextIfNeeded];
     return _attributedTextWithLinks ? [_attributedTextWithLinks sizeConstrainedToSize:size] : CGSizeZero;
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - UIGestureRecognizerDelegate
+/////////////////////////////////////////////////////////////////////////////////////
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return ([[otherGestureRecognizer.view class] isSubclassOfClass:[UIScrollView class]]);
 }
 
 
@@ -692,6 +731,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     {
         [mutAttrStr setTextColor:self.textColor];
     }
+    
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
 	[mutAttrStr setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
@@ -755,7 +795,11 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	[super setTextColor:color]; // will call setNeedsDisplay too
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 -(void)setTextAlignment:(UITextAlignment)alignment
+#else
+-(void)setTextAlignment:(NSTextAlignment)alignment
+#endif
 {
     if (_attributedText)
     {
@@ -769,7 +813,11 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	[super setTextAlignment:alignment]; // will call setNeedsDisplay too
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 -(void)setLineBreakMode:(UILineBreakMode)lineBreakMode
+#else
+-(void)setLineBreakMode:(NSLineBreakMode)lineBreakMode
+#endif
 {
     if (_attributedText)
     {
