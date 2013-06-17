@@ -33,8 +33,13 @@
 #pragma mark - Text Alignment Convertion
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment);
 CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode);
+#else
+CTTextAlignment CTTextAlignmentFromUITextAlignment(NSTextAlignment alignment);
+CTLineBreakMode CTLineBreakModeFromUILineBreakMode(NSLineBreakMode lineBreakMode);
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Flipping Coordinates

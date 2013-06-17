@@ -731,6 +731,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     {
         [mutAttrStr setTextColor:self.textColor];
     }
+    
 	CTTextAlignment coreTextAlign = CTTextAlignmentFromUITextAlignment(self.textAlignment);
 	CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
 	[mutAttrStr setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
@@ -794,7 +795,11 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	[super setTextColor:color]; // will call setNeedsDisplay too
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 -(void)setTextAlignment:(UITextAlignment)alignment
+#else
+-(void)setTextAlignment:(NSTextAlignment)alignment
+#endif
 {
     if (_attributedText)
     {
@@ -808,7 +813,11 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	[super setTextAlignment:alignment]; // will call setNeedsDisplay too
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_6_0
 -(void)setLineBreakMode:(UILineBreakMode)lineBreakMode
+#else
+-(void)setLineBreakMode:(NSLineBreakMode)lineBreakMode
+#endif
 {
     if (_attributedText)
     {
