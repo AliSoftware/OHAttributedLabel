@@ -31,7 +31,7 @@
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES 1
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API 1
 
-#ifndef OHATTRIBUTEDLABEL_DEDICATED_PROJECT
+#if ! defined(COCOAPODS) && ! defined(OHATTRIBUTEDLABEL_DEDICATED_PROJECT)
 // Copying files in your project and thus compiling OHAttributedLabel under different build settings
 // than the one provided is not recommended abd increase risks of leaks (ARC vs. MRC) or unwanted behaviors
 #warning [OHAttributedLabel integration] You should include OHAttributedLabel project in your workspace instead of copying the files in your own app project. See README for instructions.
