@@ -31,30 +31,28 @@
 #pragma mark - Text Alignment Convertion
 /////////////////////////////////////////////////////////////////////////////////////
 
-
-CTTextAlignment CTTextAlignmentFromUITextAlignment(UITextAlignment alignment)
+CTTextAlignment CTTextAlignmentFromUITextAlignment(NSUITextAlignment alignment)
 {
-    if (alignment == (UITextAlignment)kCTJustifiedTextAlignment)
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
+    if (alignment == (NSUITextAlignment)kCTJustifiedTextAlignment)
     {
         /* special OOB value, so test it outside of the switch to avoid warning */
         return kCTJustifiedTextAlignment;
     }
 	switch (alignment)
     {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
 		case UITextAlignmentLeft: return kCTLeftTextAlignment;
 		case UITextAlignmentCenter: return kCTCenterTextAlignment;
 		case UITextAlignmentRight: return kCTRightTextAlignment;
-#else
-		case NSTextAlignmentLeft: return kCTLeftTextAlignment;
-		case NSTextAlignmentCenter: return kCTCenterTextAlignment;
-		case NSTextAlignmentRight: return kCTRightTextAlignment;
-#endif
 		default: return kCTNaturalTextAlignment;
 	}
+#else
+    // Use equivalent Apple provided function
+    return NSTextAlignmentToCTTextAlignment(alignment);
+#endif
 }
 
-CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode lineBreakMode)
+CTLineBreakMode CTLineBreakModeFromUILineBreakMode(NSUILineBreakMode lineBreakMode)
 {
 	switch (lineBreakMode)
     {
