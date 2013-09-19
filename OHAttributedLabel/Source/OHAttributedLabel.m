@@ -28,8 +28,12 @@
 #import "OHAttributedLabel.h"
 #import "CoreTextUtils.h"
 
+#ifndef OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES 1
+#endif
+#ifndef OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API 1
+#endif
 
 #if ! defined(COCOAPODS) && ! defined(OHATTRIBUTEDLABEL_DEDICATED_PROJECT)
 // Copying files in your project and thus compiling OHAttributedLabel under different build settings
