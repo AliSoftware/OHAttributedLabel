@@ -33,7 +33,7 @@
 
 CTTextAlignment CTTextAlignmentFromUITextAlignment(NSUITextAlignment alignment)
 {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < 60000
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
     if (alignment == (NSUITextAlignment)kCTJustifiedTextAlignment)
     {
         /* special OOB value, so test it outside of the switch to avoid warning */
