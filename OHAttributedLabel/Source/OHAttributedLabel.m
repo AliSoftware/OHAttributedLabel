@@ -136,7 +136,13 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	_linkUnderlineStyle = kCTUnderlineStyleSingle | kCTUnderlinePatternSolid;
     
 	NSTextCheckingTypes linksType = (NSTextCheckingTypes)(NSTextCheckingTypeLink);
-	if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]])
+	
+	static dispatch_once_t onceToken;
+	static BOOL canOpenURL;
+	dispatch_once(&onceToken, ^{
+		canOpenURL = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]];
+	});
+	if (canOpenURL)
     {
 		linksType |= NSTextCheckingTypePhoneNumber;
 	}
@@ -196,6 +202,11 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Links Managment
 /////////////////////////////////////////////////////////////////////////////////////
+
+-(void)setDetectsPhoneNumbers:(BOOL)detectsPhoneNumbers
+{
+	
+}
 
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range
 {
