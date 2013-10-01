@@ -30,8 +30,8 @@
 
 #if ! defined(COCOAPODS) && ! defined(OHATTRIBUTEDLABEL_DEDICATED_PROJECT)
 // Copying files in your project and thus compiling OHAttributedLabel under different build settings
-// than the one provided is not recommended abd increase risks of leaks (ARC vs. MRC) or unwanted behaviors
-#warning [OHAttributedLabel integration] You should include OHAttributedLabel project in your workspace instead of copying the files in your own app project. See README for instructions.
+// than the one provided is not recommended and increase risks of leaks (mixing ARC vs. MRC) or unwanted behaviors
+#warning [OHAttributedLabel integration] You should include OHAttributedLabel project in your workspace instead of copying the files in your own app project. Or better, use CocoaPods to integrate your 3rd party libs. See README for instructions.
 #endif
 
 @interface OHASMarkupParserBase ()
