@@ -138,15 +138,16 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	NSTextCheckingTypes linksType = (NSTextCheckingTypes)(NSTextCheckingTypeLink);
 	
 	static dispatch_once_t onceToken;
-	static BOOL canOpenURL;
+	static BOOL canOpenPhoneLinks;
 	dispatch_once(&onceToken, ^{
-		canOpenURL = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]];
+		canOpenPhoneLinks = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel:0"]];
 	});
-	if (canOpenURL)
+	if (canOpenPhoneLinks)
     {
 		linksType |= NSTextCheckingTypePhoneNumber;
 	}
     self.automaticallyAddLinksForType = linksType;
+    
 	self.onlyCatchTouchesOnLinks = YES;
 	self.userInteractionEnabled = YES;
 	self.contentMode = UIViewContentModeRedraw;
@@ -202,11 +203,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Links Managment
 /////////////////////////////////////////////////////////////////////////////////////
-
--(void)setDetectsPhoneNumbers:(BOOL)detectsPhoneNumbers
-{
-	
-}
 
 -(void)addCustomLink:(NSURL*)linkUrl inRange:(NSRange)range
 {
