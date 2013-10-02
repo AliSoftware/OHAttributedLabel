@@ -656,8 +656,19 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 				}
 				continue; // with next run
 			}
-			
-			CGRect linkRunRect = CTRunGetTypographicBoundsAsRect(run, line, lineOrigins[lineIndex]);
+            
+            // Fix for issue #136
+            CFRange fullRunRange = CTRunGetStringRange(run);
+            CFRange inRunRange;
+            inRunRange.location = (CFIndex)activeLinkRange.location - (CFIndex)fullRunRange.location;
+            inRunRange.length = (CFIndex)activeLinkRange.length;
+            if (inRunRange.location < 0) {
+                inRunRange.length += inRunRange.location;
+                inRunRange.location = 0;
+            }
+            // End Fix #136
+            CGRect linkRunRect = CTRunGetTypographicBoundsForRangeAsRect(run, line, lineOrigins[lineIndex], inRunRange, ctx);
+            
 			linkRunRect = CGRectIntegral(linkRunRect);		// putting the rect on pixel edges
 			linkRunRect = CGRectInset(linkRunRect, -1, -1);	// increase the rect a little
 			if (CGRectIsEmpty(unionRect))
