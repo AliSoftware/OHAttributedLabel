@@ -237,17 +237,18 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     
     _needsRecomputeLinksInText = NO;
     
-    __block NSUInteger OHLinkCount = 0;
+    __block BOOL hasOHLinkAttribute = NO;
     [_attributedText enumerateAttribute:kOHLinkAttributeName inRange:NSMakeRange(0, [_attributedText length])
                                 options:0 usingBlock:^(id value, NSRange range, BOOL *stop)
      {
          if (value)
          {
-             OHLinkCount++;
+             hasOHLinkAttribute = YES;
+             *stop = YES;
          }
      }];
     
-    if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0 && OHLinkCount == 0))
+    if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0 && hasOHLinkAttribute == 0))
     {
         MRC_RELEASE(_attributedTextWithLinks);
         _attributedTextWithLinks = MRC_RETAIN(_attributedText);
