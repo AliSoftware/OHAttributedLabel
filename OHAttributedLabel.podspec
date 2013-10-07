@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'OHAttributedLabel'
-  s.version  = '3.4.3'
+  s.version  = '3.5.0'
   s.license  = {:type => 'MIT', :file => 'OHAttributedLabel/LICENSE'}
   s.summary  = 'UILabel that supports NSAttributedString.'
   s.homepage = 'https://github.com/AliSoftware/OHAttributedLabel'
