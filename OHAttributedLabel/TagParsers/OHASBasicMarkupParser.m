@@ -51,7 +51,7 @@
                 } else {
                     return nil;
                 }
-            }, @"\\*(.+?)\\*", /* "*xxx*" = xxx in bold */
+            }, @"\\b\\*(.+?)\\*\\b", /* "*xxx*" on word boundaries = xxx in bold */
             
             ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match)
             {
@@ -64,7 +64,7 @@
                 } else {
                     return nil;
                 }
-            }, @"_(.+?)_", /* "_xxx_" = xxx in underline */
+            }, @"\\b_(.+?)_\\b", /* "_xxx_" on word boundaries = xxx in underline */
             
             ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match)
             {
@@ -77,7 +77,7 @@
                 } else {
                     return nil;
                 }
-            }, @"\\|(.+?)\\|", /* "_xxx_" = xxx in italics */
+            }, @"\\b\\|(.+?)\\|\\b", /* "_xxx_" on word boundaries = xxx in italics */
             
             ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match)
             {
@@ -91,7 +91,7 @@
                 } else {
                     return nil;
                 }
-            }, @"`(.+?)`", /* "`xxx`" = xxx in Courier font */
+            }, @"\\b`(.+?)`\\b", /* "`xxx`" on word boundaries = xxx in Courier font */
             
             ^NSAttributedString*(NSAttributedString* str, NSTextCheckingResult* match)
             {
@@ -122,7 +122,7 @@
                 } else {
                     return nil;
                 }
-            }, @"\\[(.+?)\\]\\((.+?)\\)", /* "[text](link)" = add link to text */
+            }, @"\\b\\[(.+?)\\]\\((.+?)\\)\\b", /* "[text](link)" on word boundaries = add link to text */
             
             nil];
 }
