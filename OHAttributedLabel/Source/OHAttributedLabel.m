@@ -197,6 +197,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	[_attributedText release]; _attributedText = nil;
     [_attributedTextWithLinks release]; _attributedTextWithLinks = nil;
 	[_customLinks release]; _customLinks = nil;
+    
+    [_gestureRecogniser release]; _gestureRecogniser = nil;
 
 	[super dealloc];
 #endif
