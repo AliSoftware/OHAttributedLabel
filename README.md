@@ -126,6 +126,11 @@ There is no explicit docset or documentation of the class yet sorry (never had t
 * There are doxygen/javadoc-like documentation in the headers that should also help you describe the methods
 * The provided example ("AttributedLabel Example.xcworkspace") should also demonstrate quite every typical usages — including justifying the text, dynamically changing the style/attributes of a range of text, adding custom links, make special links with a custom behavior (like catching @mention and #hashtags), and customizing the appearance/color of links.
 
+# License & Credits
+
+`OHAttributedLabel` is published under the MIT license.
+It has been created and developped by me (O.Halligon), but I'd like to thank all the [contributors](https://github.com/AliSoftware/OHAttributedLabel/graphs/contributors) too, including @mattjgalloway, @stigi and @jparise among others.
+
 # ChangeLog — Revisions History
 
 The [_ChangeLog_](http://github.com/AliSoftware/OHAttributedLabel/wiki/Revisions-History) is maintained as a [wiki page accessible here](http://github.com/AliSoftware/OHAttributedLabel/wiki/Revisions-History).
