@@ -28,12 +28,6 @@
 #import "OHASBasicHTMLParser.h"
 #import "NSAttributedString+Attributes.h"
 
-#if __has_feature(objc_arc)
-#define MRC_AUTORELEASE(x) (x)
-#else
-#define MRC_AUTORELEASE(x) [(x) autorelease]
-#endif
-
 @implementation OHASBasicHTMLParser
 
 +(NSDictionary*)tagMappings
@@ -47,7 +41,7 @@
                 {
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setTextBold:YES range:NSMakeRange(0,textRange.length)];
-                    return MRC_AUTORELEASE(foundString);
+                    return foundString;
                 } else {
                     return nil;
                 }
@@ -60,7 +54,7 @@
                 {
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setTextIsUnderlined:YES];
-                    return MRC_AUTORELEASE(foundString);
+                    return foundString;
                 } else {
                     return nil;
                 }
@@ -74,7 +68,7 @@
                 {
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setTextItalics:YES range:NSMakeRange(0,foundString.length)];
-                    return MRC_AUTORELEASE(foundString);
+                    return foundString;
                 } else {
                     return nil;
                 }
@@ -91,7 +85,7 @@
                     CGFloat fontSize = [str attributedSubstringFromRange:fontSizeRange].string.floatValue;
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setFontName:fontName size:fontSize];
-                    return MRC_AUTORELEASE(foundString);
+                    return foundString;
                 } else {
                     return nil;
                 }
@@ -107,7 +101,7 @@
                     UIColor* color = OHUIColorFromString(colorName);
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setTextColor:color];
-                    return MRC_AUTORELEASE(foundString);
+                    return foundString;
                 } else {
                     return nil;
                 }
@@ -122,7 +116,7 @@
                     NSString* link = [str attributedSubstringFromRange:linkRange].string;
                     NSMutableAttributedString* foundString = [[str attributedSubstringFromRange:textRange] mutableCopy];
                     [foundString setLink:[NSURL URLWithString:link] range:NSMakeRange(0,textRange.length)];
-                    return MRC_AUTORELEASE(foundString);
+                    return foundString;
                 } else {
                     return nil;
                 }
