@@ -42,18 +42,6 @@
 #warning [OHAttributedLabel integration] You should include OHAttributedLabel project in your workspace instead of copying the files in your own app project. Or better, use CocoaPods to integrate your 3rd party libs. See README for instructions.
 #endif
 
-#if __has_feature(objc_arc)
-#define BRIDGE_CAST __bridge
-#define MRC_RETAIN(x) (x)
-#define MRC_RELEASE(x)
-#define MRC_AUTORELEASE(x) (x)
-#else
-#define BRIDGE_CAST
-#define MRC_RETAIN(x) [x retain]
-#define MRC_RELEASE(x) [x release]; x = nil
-#define MRC_AUTORELEASE(x) [x autorelease]
-#endif
-
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private interface
 /////////////////////////////////////////////////////////////////////////////////////
@@ -133,8 +121,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 - (void)commonInit
 {
-    _linkColor = MRC_RETAIN([UIColor blueColor]);
-    _highlightedLinkColor = MRC_RETAIN([UIColor colorWithWhite:0.4f alpha:0.3f]);
+    _linkColor = [UIColor blueColor];
+    _highlightedLinkColor = [UIColor colorWithWhite:0.4f alpha:0.3f];
 	_linkUnderlineStyle = kCTUnderlineStyleSingle | kCTUnderlinePatternSolid;
     
 	NSTextCheckingTypes linksType = (NSTextCheckingTypes)(NSTextCheckingTypeLink);
@@ -187,21 +175,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 -(void)dealloc
 {
 	[self resetTextFrame]; // CFRelease the text frame
-
-#if ! __has_feature(objc_arc)
-    [_linksDetector release]; _linksDetector = nil;
-    [_linkColor release]; _linkColor = nil;
-	[_highlightedLinkColor release]; _highlightedLinkColor = nil;
-	[_activeLink release]; _activeLink = nil;
-
-	[_attributedText release]; _attributedText = nil;
-    [_attributedTextWithLinks release]; _attributedTextWithLinks = nil;
-	[_customLinks release]; _customLinks = nil;
-    
-    [_gestureRecogniser release]; _gestureRecogniser = nil;
-
-	[super dealloc];
-#endif
 }
 
 
@@ -258,8 +231,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     
     if (!_attributedText || (self.automaticallyAddLinksForType == 0 && _customLinks.count == 0 && hasOHLinkAttribute == 0))
     {
-        MRC_RELEASE(_attributedTextWithLinks);
-        _attributedTextWithLinks = MRC_RETAIN(_attributedText);
+        _attributedTextWithLinks = _attributedText;
         return;
 	}
     
@@ -331,10 +303,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
              applyLinkStyle((NSTextCheckingResult*)obj);
          }];
         
-        MRC_RELEASE(_attributedTextWithLinks);
         _attributedTextWithLinks = [[NSAttributedString alloc] initWithAttributedString:mutAS];
         
-        MRC_RELEASE(mutAS);
     } // @autoreleasepool
     
     [self setNeedsDisplay];
@@ -357,7 +327,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                  if (value && NSLocationInRange((NSUInteger)idx, range))
                  {
                      NSTextCheckingResult* result = [NSTextCheckingResult linkCheckingResultWithRange:range URL:(NSURL*)value];
-                     foundResult = MRC_RETAIN(result);
+                     foundResult = result;
                      *stop = YES;
                  }
              }];
@@ -372,7 +342,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                  NSRange r = [result range];
                  if (NSLocationInRange((NSUInteger)idx, r))
                  {
-                     foundResult = MRC_RETAIN(result);
+                     foundResult = result;
                      *stop = YES;
                  }
              }];
@@ -386,14 +356,14 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                  NSRange r = [(NSTextCheckingResult*)obj range];
                  if (NSLocationInRange((NSUInteger)idx, r))
                  {
-                     foundResult = MRC_RETAIN(obj);
+                     foundResult = obj;
                      *stop = YES;
                  }
              }];
         }
     } // @autoreleasepool
     
-	return MRC_AUTORELEASE(foundResult);
+	return foundResult;
 }
 
 -(NSTextCheckingResult*)linkAtPoint:(CGPoint)point
@@ -524,8 +494,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 - (void)processActiveLink
 {
     NSTextCheckingResult* linkToOpen = _activeLink;
-    // In case the delegate calls recomputeLinksInText or anything that will clear the _activeLink variable, keep it around anyway
-    (void)MRC_AUTORELEASE(MRC_RETAIN(linkToOpen));
     
     BOOL openLink = (self.delegate && [self.delegate respondsToSelector:@selector(attributedLabel:shouldFollowLink:)])
     ? [self.delegate attributedLabel:self shouldFollowLink:linkToOpen] : YES;
@@ -577,11 +545,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                 NSMutableAttributedString* mutAS = [attributedStringToDisplay mutableCopy];
                 [mutAS setTextColor:self.highlightedTextColor];
                 attributedStringToDisplay = mutAS;
-                (void)MRC_AUTORELEASE(mutAS);
             }
             if (textFrame == NULL)
             {
-                CFAttributedStringRef cfAttrStrWithLinks = (BRIDGE_CAST CFAttributedStringRef)attributedStringToDisplay;
+                CFAttributedStringRef cfAttrStrWithLinks = (__bridge CFAttributedStringRef)attributedStringToDisplay;
                 CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(cfAttrStrWithLinks);
                 drawingRect = self.bounds;
                 if (self.centerVertically || self.extendBottomToFit)
@@ -763,7 +730,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 -(void)setAttributedText:(NSAttributedString*)newText
 {
-	MRC_RELEASE(_attributedText);
 	_attributedText = [newText copy];
 	[self setAccessibilityLabel:_attributedText.string];
 #pragma clang diagnostic push
@@ -790,7 +756,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     {
         NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
         [mutAS setFont:font];
-        MRC_RELEASE(_attributedText);
         _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
     }
 	[super setFont:font]; // will call setNeedsDisplay too
@@ -802,7 +767,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     {
         NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
         [mutAS setTextColor:color];
-        MRC_RELEASE(_attributedText);
         _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
     }
 	[super setTextColor:color]; // will call setNeedsDisplay too
@@ -816,7 +780,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(self.lineBreakMode);
         NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
         [mutAS setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
-        MRC_RELEASE(_attributedText);
         _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
     }
 	[super setTextAlignment:alignment]; // will call setNeedsDisplay too
@@ -830,7 +793,6 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         CTLineBreakMode coreTextLBMode = CTLineBreakModeFromUILineBreakMode(lineBreakMode);
         NSMutableAttributedString* mutAS = [NSMutableAttributedString attributedStringWithAttributedString:_attributedText];
         [mutAS setTextAlignment:coreTextAlign lineBreakMode:coreTextLBMode];
-        MRC_RELEASE(_attributedText);
         _attributedText = [[NSAttributedString alloc] initWithAttributedString:mutAS];
     }
 	[super setLineBreakMode:lineBreakMode]; // will call setNeedsDisplay too
@@ -851,8 +813,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	_automaticallyAddLinksForType = types;
 
     NSDataDetector* dd = sharedReusableDataDetector(types);
-    MRC_RELEASE(_linksDetector);
-    _linksDetector = MRC_RETAIN(dd);
+    _linksDetector = dd;
     [self setNeedsRecomputeLinksInText];
 }
 -(NSDataDetector*)linksDataDetector
@@ -862,8 +823,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 -(void)setLinkColor:(UIColor *)newLinkColor
 {
-    MRC_RELEASE(_linkColor);
-    _linkColor = MRC_RETAIN(newLinkColor);
+    _linkColor = newLinkColor;
     
     [self setNeedsRecomputeLinksInText];
 }
