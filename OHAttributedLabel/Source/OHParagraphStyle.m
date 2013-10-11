@@ -31,9 +31,6 @@
 + (id)paragraphStyleWithCTParagraphStyle:(CTParagraphStyleRef)paragraphStyle
 {
     OHParagraphStyle* paraStyle = [[OHParagraphStyle alloc] initWithCTParagraphStyle:paragraphStyle];
-#if !__has_feature(objc_arc)
-    [paraStyle autorelease];
-#endif
     return paraStyle;
 }
 

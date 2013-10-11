@@ -70,9 +70,6 @@
                   offset += result.range.length - repl.length;
               }
           }];
-#if ! __has_feature(objc_arc)
-         [processedString release];
-#endif
      }];
 
 }
@@ -81,11 +78,7 @@
 {
     NSMutableAttributedString* mutAttrString = [attrString mutableCopy];
     [self processMarkupInAttributedString:mutAttrString];
-#if ! __has_feature(objc_arc)
-    return [mutAttrString autorelease];
-#else
     return mutAttrString;
-#endif
 }
 
 +(NSMutableAttributedString*)attributedStringByProcessingMarkupInString:(NSString*)string

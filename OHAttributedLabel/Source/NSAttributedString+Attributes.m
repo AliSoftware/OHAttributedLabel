@@ -33,16 +33,6 @@
 #warning [OHAttributedLabel integration] You should include OHAttributedLabel project in your workspace instead of copying the files in your own app project. Or better, use CocoaPods to integrate your 3rd party libs. See README for instructions.
 #endif
 
-#if __has_feature(objc_arc)
-#define BRIDGE_CAST __bridge
-#define BRIDGE_TRANSFER_CAST __bridge_transfer
-#define MRC_AUTORELEASE(x) (x)
-#else
-#define BRIDGE_CAST
-#define BRIDGE_TRANSFER_CAST
-#define MRC_AUTORELEASE(x) [(x) autorelease]
-#endif
-
 NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value as OSX, to be compatible in case Apple port this to iOS one day too
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +43,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 {
     if (string)
     {
-        return MRC_AUTORELEASE([[self alloc] initWithString:string]);
+        return [[self alloc] initWithString:string];
     } else {
         return nil;
     }
@@ -62,7 +52,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 {
     if (attrStr)
     {
-        return MRC_AUTORELEASE([[self alloc] initWithAttributedString:attrStr]);
+        return [[self alloc] initWithAttributedString:attrStr];
     } else {
         return nil;
     }
@@ -75,7 +65,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 
 -(CGSize)sizeConstrainedToSize:(CGSize)maxSize fitRange:(NSRange*)fitRange
 {
-	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((BRIDGE_CAST CFAttributedStringRef)self);
+	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self);
     CGSize sz = CGSizeMake(0.f, 0.f);
     if (framesetter)
     {
@@ -94,14 +84,14 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 
 -(CTFontRef)fontAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
-    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:index effectiveRange:aRange];
-    return (BRIDGE_CAST CTFontRef)attr;
+    id attr = [self attribute:(__bridge NSString*)kCTFontAttributeName atIndex:index effectiveRange:aRange];
+    return (__bridge CTFontRef)attr;
 }
 
 -(UIColor*)textColorAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
-    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTForegroundColorAttributeName atIndex:index effectiveRange:aRange];
-    return [UIColor colorWithCGColor:(BRIDGE_CAST CGColorRef)attr];
+    id attr = [self attribute:(__bridge NSString*)kCTForegroundColorAttributeName atIndex:index effectiveRange:aRange];
+    return [UIColor colorWithCGColor:(__bridge CGColorRef)attr];
 }
 
 -(BOOL)textIsUnderlinedAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
@@ -112,7 +102,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 
 -(int32_t)textUnderlineStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
-    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTUnderlineStyleAttributeName atIndex:index effectiveRange:aRange];
+    id attr = [self attribute:(__bridge NSString*)kCTUnderlineStyleAttributeName atIndex:index effectiveRange:aRange];
     return [(NSNumber*)attr intValue];
 }
 
@@ -125,8 +115,8 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 
 -(CTTextAlignment)textAlignmentAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
-    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
-    CTParagraphStyleRef style = (BRIDGE_CAST CTParagraphStyleRef)attr;
+    id attr = [self attribute:(__bridge NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
+    CTParagraphStyleRef style = (__bridge CTParagraphStyleRef)attr;
     CTTextAlignment textAlign = kCTNaturalTextAlignment;
     CTParagraphStyleGetValueForSpecifier(style, kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &textAlign);
     return textAlign;
@@ -134,8 +124,8 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 
 -(CTLineBreakMode)lineBreakModeAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
-    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
-    CTParagraphStyleRef style = (BRIDGE_CAST CTParagraphStyleRef)attr;
+    id attr = [self attribute:(__bridge NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
+    CTParagraphStyleRef style = (__bridge CTParagraphStyleRef)attr;
     CTLineBreakMode lineBreakMode = kCTLineBreakByWordWrapping;
     CTParagraphStyleGetValueForSpecifier(style, kCTParagraphStyleSpecifierLineBreakMode, sizeof(CTLineBreakMode), &lineBreakMode);
     return lineBreakMode;
@@ -143,8 +133,8 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 
 -(OHParagraphStyle*)paragraphStyleAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
-    id attr = [self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
-    CTParagraphStyleRef style = (BRIDGE_CAST CTParagraphStyleRef)attr;
+    id attr = [self attribute:(__bridge NSString*)kCTParagraphStyleAttributeName atIndex:index effectiveRange:aRange];
+    CTParagraphStyleRef style = (__bridge CTParagraphStyleRef)attr;
     return [OHParagraphStyle paragraphStyleWithCTParagraphStyle:style];
 }
 
@@ -181,11 +171,11 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 -(void)setFontName:(NSString*)fontName size:(CGFloat)size range:(NSRange)range
 {
 	// kCTFontAttributeName
-	CTFontRef aFont = CTFontCreateWithName((BRIDGE_CAST CFStringRef)fontName, size, NULL);
+	CTFontRef aFont = CTFontCreateWithName((__bridge CFStringRef)fontName, size, NULL);
 	if (aFont)
     {
-        [self removeAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-        [self addAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
+        [self removeAttribute:(__bridge NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
+        [self addAttribute:(__bridge NSString*)kCTFontAttributeName value:(__bridge id)aFont range:range];
         CFRelease(aFont);
     }
 }
@@ -194,19 +184,19 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 	// kCTFontFamilyNameAttribute + kCTFontTraitsAttribute
 	CTFontSymbolicTraits symTrait = (isBold?kCTFontBoldTrait:0) | (isItalic?kCTFontItalicTrait:0);
 	NSDictionary* trait = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedLong:symTrait]
-                                                      forKey:(BRIDGE_CAST NSString*)kCTFontSymbolicTrait];
+                                                      forKey:(__bridge NSString*)kCTFontSymbolicTrait];
 	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
 						  fontFamily,kCTFontFamilyNameAttribute,
 						  trait,kCTFontTraitsAttribute,nil];
 	
-	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((BRIDGE_CAST CFDictionaryRef)attr);
+	CTFontDescriptorRef desc = CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef)attr);
 	if (!desc) return;
 	CTFontRef aFont = CTFontCreateWithFontDescriptor(desc, size, NULL);
 	CFRelease(desc);
 	if (!aFont) return;
 
-	[self removeAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)aFont range:range];
+	[self removeAttribute:(__bridge NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
+	[self addAttribute:(__bridge NSString*)kCTFontAttributeName value:(__bridge id)aFont range:range];
 	CFRelease(aFont);
 }
 
@@ -217,8 +207,8 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 -(void)setTextColor:(UIColor*)color range:(NSRange)range
 {
 	// kCTForegroundColorAttributeName
-	[self removeAttribute:(BRIDGE_CAST NSString*)kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(BRIDGE_CAST NSString*)kCTForegroundColorAttributeName value:(BRIDGE_CAST id)color.CGColor range:range];
+	[self removeAttribute:(__bridge NSString*)kCTForegroundColorAttributeName range:range]; // Work around for Apple leak
+	[self addAttribute:(__bridge NSString*)kCTForegroundColorAttributeName value:(__bridge id)color.CGColor range:range];
 }
 
 -(void)setTextIsUnderlined:(BOOL)underlined
@@ -232,8 +222,8 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 }
 -(void)setTextUnderlineStyle:(int32_t)style range:(NSRange)range
 {
-	[self removeAttribute:(BRIDGE_CAST NSString*)kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
-	[self addAttribute:(BRIDGE_CAST NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
+	[self removeAttribute:(__bridge NSString*)kCTUnderlineStyleAttributeName range:range]; // Work around for Apple leak
+	[self addAttribute:(__bridge NSString*)kCTUnderlineStyleAttributeName value:[NSNumber numberWithInt:style] range:range];
 }
 
 -(void)changeFontWithTraits:(CTFontSymbolicTraits)traits
@@ -246,11 +236,10 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
     [self beginEditing];
 	do {
 		// Get font at startPoint
-		CTFontRef currentFont = (BRIDGE_CAST CTFontRef)[self attribute:(BRIDGE_CAST NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
+		CTFontRef currentFont = (__bridge CTFontRef)[self attribute:(__bridge NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
         if (!currentFont)
         {
             currentFont = CTFontCreateUIFontForLanguage(kCTFontLabelFontType, 0.0, NULL);
-            (void)MRC_AUTORELEASE((BRIDGE_TRANSFER_CAST id)currentFont);
         }
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
@@ -263,12 +252,12 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
             // font for labels in XIB, but fail to detect its italic variant correctly prior to iOS 6.1
             if (fontFinderBlock)
             {
-                NSString* newFontName = fontFinderBlock((BRIDGE_CAST NSString*)fontNameRef);
+                NSString* newFontName = fontFinderBlock((__bridge NSString*)fontNameRef);
                 if (newFontName)
                 {
                     CTFontDescriptorRef fontDesc = CTFontCopyFontDescriptor(currentFont);
                     NSDictionary* nameAttr = [NSDictionary dictionaryWithObject:newFontName forKey:@"NSFontNameAttribute"];
-                    CTFontDescriptorRef newFontDesc = CTFontDescriptorCreateCopyWithAttributes(fontDesc, (BRIDGE_CAST CFDictionaryRef)nameAttr);
+                    CTFontDescriptorRef newFontDesc = CTFontDescriptorCreateCopyWithAttributes(fontDesc, (__bridge CFDictionaryRef)nameAttr);
                     newFont = CTFontCreateWithFontDescriptor(newFontDesc, CTFontGetSize(currentFont), NULL);
                     CFRelease(fontDesc);
                     CFRelease(newFontDesc);
@@ -278,7 +267,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
             if (!newFont)
             {
                 NSLog(@"[OHAttributedLabel] Warning: can't find an italic font variant for font family %@. "
-                      @"Try another font family (like Helvetica) instead.", (BRIDGE_CAST NSString*)fontNameRef);
+                      @"Try another font family (like Helvetica) instead.", (__bridge NSString*)fontNameRef);
             }
             if (fontNameRef) CFRelease(fontNameRef);
         }
@@ -286,8 +275,8 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
         // Apply the new font with new traits
 		if (newFont)
         {
-			[self removeAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
-			[self addAttribute:(BRIDGE_CAST NSString*)kCTFontAttributeName value:(BRIDGE_CAST id)newFont range:fontRange];
+			[self removeAttribute:(__bridge NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
+			[self addAttribute:(__bridge NSString*)kCTFontAttributeName value:(__bridge id)newFont range:fontRange];
 			CFRelease(newFont);
 		}
 		
@@ -376,7 +365,7 @@ static NSString* const kHelveticaNeueUI_Bold_Italic = @".HelveticaNeueUI-BoldIta
     [self beginEditing];
     while (NSLocationInRange(loc, range))
     {
-        CTParagraphStyleRef currentCTStyle = (BRIDGE_CAST CTParagraphStyleRef)[self attribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName
+        CTParagraphStyleRef currentCTStyle = (__bridge CTParagraphStyleRef)[self attribute:(__bridge NSString*)kCTParagraphStyleAttributeName
                                                      atIndex:loc longestEffectiveRange:rangePtr inRange:range];
         __block OHParagraphStyle* paraStyle = [OHParagraphStyle paragraphStyleWithCTParagraphStyle:currentCTStyle];
         block(paraStyle);        
@@ -395,8 +384,8 @@ static NSString* const kHelveticaNeueUI_Bold_Italic = @".HelveticaNeueUI-BoldIta
 -(void)setParagraphStyle:(OHParagraphStyle*)style range:(NSRange)range
 {
     CTParagraphStyleRef newParaStyle = [style createCTParagraphStyle];
-    [self removeAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
-    [self addAttribute:(BRIDGE_CAST NSString*)kCTParagraphStyleAttributeName value:(BRIDGE_CAST id)newParaStyle range:range];
+    [self removeAttribute:(__bridge NSString*)kCTParagraphStyleAttributeName range:range]; // Work around for Apple leak
+    [self addAttribute:(__bridge NSString*)kCTParagraphStyleAttributeName value:(__bridge id)newParaStyle range:range];
     CFRelease(newParaStyle);
 }
 
