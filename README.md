@@ -7,6 +7,7 @@ _Table of Contents_
   * [`UIAppearance` support](#uiappearance-support)
 * [How to use in your project](#how-to-use-in-your-project)
 * [Sample code & Other documentation](#sample-code--other-documentation)
+* [License & Credits](#license--credits)
 * [ChangeLog — Revisions History](#changelog-%E2%80%94-revisions-history)
 * [Projects that use this class](#projects-that-use-this-class)
 
