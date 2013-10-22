@@ -244,7 +244,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 #if OHATTRIBUTEDLABEL_WARN_ABOUT_OLD_API
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            BOOL hasOldLinkColorSelector = [self.delegate respondsToSelector:@selector(colorForLink:underlineStyle:)];
+            BOOL hasOldLinkColorSelector = [self.delegate respondsToSelector:NSSelectorFromString(@"colorForLink:underlineStyle:")];
             if (hasOldLinkColorSelector)
             {
                 NSLog(@"[OHAttributedLabel] Warning: \"-colorForLink:underlineStyle:\" delegate method is deprecated and has been replaced"
