@@ -308,7 +308,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "i386 armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -331,7 +330,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "i386 armv7 armv7s";
 			};
 			name = Release;
 		};
