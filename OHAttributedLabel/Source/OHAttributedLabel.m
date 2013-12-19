@@ -737,6 +737,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	[self removeAllCustomLinks];
 #pragma clang diagnostic pop
     [self setNeedsRecomputeLinksInText];
+    [super setAttributedText:newText];
 }
 
 
