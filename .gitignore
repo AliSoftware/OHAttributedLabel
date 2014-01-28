@@ -18,3 +18,5 @@ profile
 
 # osx noise
 .DS_Store
+
+*.xccheckout
