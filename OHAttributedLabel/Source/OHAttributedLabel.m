@@ -60,6 +60,7 @@ const int UITextAlignmentJustify = ((UITextAlignment)kCTJustifiedTextAlignment);
 	NSMutableArray* _customLinks;
 	CGPoint _touchStartPoint;
     UIGestureRecognizer *_gestureRecogniser;
+    UIGestureRecognizer *_longTapGestureReconizer;
 }
 @property(nonatomic, retain) NSTextCheckingResult* activeLink;
 -(NSTextCheckingResult*)linkAtCharacterIndex:(CFIndex)idx;
@@ -146,6 +147,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
     _gestureRecogniser = [[OHTouchesGestureRecognizer alloc] initWithTarget:self action:@selector(_gestureRecognised:)];
     _gestureRecogniser.delegate = self;
     [self addGestureRecognizer:_gestureRecogniser];
+    
+    _longTapGestureReconizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+    _longTapGestureReconizer.delegate = self;
+    [self addGestureRecognizer:_longTapGestureReconizer];
 }
 
 - (id) initWithFrame:(CGRect)aFrame
@@ -442,6 +447,27 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	return hitResult;
 }
 
+- (void)longPress:(UILongPressGestureRecognizer *)gesture {
+    CGPoint pt = [gesture locationInView:self];
+    
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        // Check that the link on touchEnd is the same as the link on touchBegan
+        NSTextCheckingResult* linkAtTouchesEnded = [self linkAtPoint:pt];
+        BOOL closeToStart = (fabs(_touchStartPoint.x - pt.x) < 10 && fabs(_touchStartPoint.y - pt.y) < 10);
+        
+        // we must check on equality of the ranges themselves since the data detectors create new results
+        if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))
+        {
+            // Same link on touchEnded than the one on touchBegan, so trigger it
+            [self processLongPressActiveLink];
+        }
+        
+        gesture.enabled = NO;
+        gesture.enabled = YES;
+    }
+
+}
+
 -(void)_gestureRecognised:(UIGestureRecognizer*)recogniser
 {
     CGPoint pt = [recogniser locationInView:self];
@@ -488,6 +514,14 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         case UIGestureRecognizerStateChanged:
         case UIGestureRecognizerStatePossible:
             break;
+    }
+}
+
+- (void)processLongPressActiveLink {
+    NSTextCheckingResult* linkToOpen = _activeLink;
+    
+    if ([self.delegate respondsToSelector:@selector(attributedLabel:longPressedLink:)]) {
+        [self.delegate attributedLabel:self longPressedLink:linkToOpen];
     }
 }
 
@@ -677,7 +711,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 /////////////////////////////////////////////////////////////////////////////////////
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return ([[otherGestureRecognizer.view class] isSubclassOfClass:[UIScrollView class]]);
+    return (otherGestureRecognizer == _longTapGestureReconizer || otherGestureRecognizer == _gestureRecogniser || [[otherGestureRecognizer.view class] isSubclassOfClass:[UIScrollView class]]);
 }
 
 
