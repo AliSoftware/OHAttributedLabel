@@ -176,7 +176,7 @@ id objectForLinkInfo(NSTextCheckingResult* linkInfo)
 }
 
 - (void)attributedLabel:(OHAttributedLabel *)attributedLabel longPressedLink:(NSTextCheckingResult *)linkInfo {
-    NSLog(@"Long Pressed URL %@", linkInfo.URL);
+    NSLog(@"Long Pressed Link %@", linkInfo);
 }
 
 -(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo
