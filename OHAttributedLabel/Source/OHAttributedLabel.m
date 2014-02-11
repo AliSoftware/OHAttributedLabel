@@ -29,6 +29,8 @@
 #import "CoreTextUtils.h"
 #import "OHTouchesGestureRecognizer.h"
 
+#include <tgmath.h>
+
 #ifndef OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES 1
 #endif

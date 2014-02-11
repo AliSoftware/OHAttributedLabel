@@ -29,6 +29,8 @@
 
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
+#include <tgmath.h>
+
 @interface OHTouchesGestureRecognizer ()
 
 @property (nonatomic, assign) CGPoint startPoint;
