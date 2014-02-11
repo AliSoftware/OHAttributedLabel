@@ -456,14 +456,10 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
         BOOL closeToStart = (fabs(_touchStartPoint.x - pt.x) < 10 && fabs(_touchStartPoint.y - pt.y) < 10);
         
         // we must check on equality of the ranges themselves since the data detectors create new results
-        if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart))
-        {
+        if (_activeLink && (NSEqualRanges(_activeLink.range,linkAtTouchesEnded.range) || closeToStart)) {
             // Same link on touchEnded than the one on touchBegan, so trigger it
             [self processLongPressActiveLink];
         }
-        
-        gesture.enabled = NO;
-        gesture.enabled = YES;
     }
 
 }
