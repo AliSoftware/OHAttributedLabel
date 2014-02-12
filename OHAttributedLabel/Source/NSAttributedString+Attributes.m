@@ -73,7 +73,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
         sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,maxSize,&fitCFRange);
         sz = CGSizeMake( floorf(sz.width+1) , floorf(sz.height+1) ); // take 1pt of margin for security
         CFRelease(framesetter);
-
+        
         if (fitRange)
         {
             *fitRange = NSMakeRange((NSUInteger)fitCFRange.location, (NSUInteger)fitCFRange.length);
@@ -194,7 +194,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
 	CTFontRef aFont = CTFontCreateWithFontDescriptor(desc, size, NULL);
 	CFRelease(desc);
 	if (!aFont) return;
-
+    
 	[self removeAttribute:(__bridge NSString*)kCTFontAttributeName range:range]; // Work around for Apple leak
 	[self addAttribute:(__bridge NSString*)kCTFontAttributeName value:(__bridge id)aFont range:range];
 	CFRelease(aFont);
@@ -236,11 +236,15 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
     [self beginEditing];
 	do {
 		// Get font at startPoint
+        BOOL hadCurrentFont = YES;
+        
 		CTFontRef currentFont = (__bridge CTFontRef)[self attribute:(__bridge NSString*)kCTFontAttributeName atIndex:startPoint effectiveRange:&effectiveRange];
-        if (!currentFont)
-        {
+        
+        if (!currentFont) {
+            hadCurrentFont = NO;
             currentFont = CTFontCreateUIFontForLanguage(kCTFontLabelFontType, 0.0, NULL);
         }
+        
 		// The range for which this font is effective
 		NSRange fontRange = NSIntersectionRange(range, effectiveRange);
 		// Create the font variant for this font according to new traits
@@ -272,9 +276,12 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
             if (fontNameRef) CFRelease(fontNameRef);
         }
         
+        if (!hadCurrentFont) {
+            CFRelease(currentFont);
+        }
+        
         // Apply the new font with new traits
-		if (newFont)
-        {
+		if (newFont) {
 			[self removeAttribute:(__bridge NSString*)kCTFontAttributeName range:fontRange]; // Work around for Apple leak
 			[self addAttribute:(__bridge NSString*)kCTFontAttributeName value:(__bridge id)newFont range:fontRange];
 			CFRelease(newFont);
@@ -296,18 +303,18 @@ static NSString* const kHelveticaNeueUI_Bold_Italic = @".HelveticaNeueUI-BoldIta
 	[self changeFontWithTraits:(isBold?kCTFontTraitBold:0)
                           mask:kCTFontTraitBold
                          range:range newFontFinder:^NSString *(NSString *currentFontName)
-    {
-        if ([currentFontName isEqualToString:kHelveticaNeueUI_Italic] || [currentFontName isEqualToString:kHelveticaNeueUI_Bold_Italic])
-        {
-            // Italic private font
-            return isBold ? kHelveticaNeueUI_Bold_Italic : kHelveticaNeueUI_Italic;
-        } else if ([currentFontName isEqualToString:kHelveticaNeueUI] || [currentFontName isEqualToString:kHelveticaNeueUI_Bold]) {
-            // Non-Italic private font
-            return isBold ? kHelveticaNeueUI_Bold : kHelveticaNeueUI;
-        } else {
-            return nil;
-        }
-    }];
+     {
+         if ([currentFontName isEqualToString:kHelveticaNeueUI_Italic] || [currentFontName isEqualToString:kHelveticaNeueUI_Bold_Italic])
+         {
+             // Italic private font
+             return isBold ? kHelveticaNeueUI_Bold_Italic : kHelveticaNeueUI_Italic;
+         } else if ([currentFontName isEqualToString:kHelveticaNeueUI] || [currentFontName isEqualToString:kHelveticaNeueUI_Bold]) {
+             // Non-Italic private font
+             return isBold ? kHelveticaNeueUI_Bold : kHelveticaNeueUI;
+         } else {
+             return nil;
+         }
+     }];
 }
 
 -(void)setTextItalics:(BOOL)isItalics range:(NSRange)range
@@ -366,9 +373,9 @@ static NSString* const kHelveticaNeueUI_Bold_Italic = @".HelveticaNeueUI-BoldIta
     while (NSLocationInRange(loc, range))
     {
         CTParagraphStyleRef currentCTStyle = (__bridge CTParagraphStyleRef)[self attribute:(__bridge NSString*)kCTParagraphStyleAttributeName
-                                                     atIndex:loc longestEffectiveRange:rangePtr inRange:range];
+                                                                                   atIndex:loc longestEffectiveRange:rangePtr inRange:range];
         __block OHParagraphStyle* paraStyle = [OHParagraphStyle paragraphStyleWithCTParagraphStyle:currentCTStyle];
-        block(paraStyle);        
+        block(paraStyle);
         [self setParagraphStyle:paraStyle range:*rangePtr];
         
         loc = NSMaxRange(*rangePtr);
