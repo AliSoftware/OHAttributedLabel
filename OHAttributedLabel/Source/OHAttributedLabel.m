@@ -176,6 +176,8 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 
 -(void)dealloc
 {
+    _gestureRecogniser.delegate = nil;
+    [self removeGestureRecognizer:_gestureRecogniser];
 	[self resetTextFrame]; // CFRelease the text frame
 }
 
