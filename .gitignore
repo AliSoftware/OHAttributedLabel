@@ -11,7 +11,11 @@
 xcuserdata
 profile
 *.moved-aside
-
+DerivedData
+.idea/
+*.hmap
+*.xcuserstate
+*.xccheckout
 
 # old school
 .svn

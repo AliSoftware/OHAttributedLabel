@@ -1,3 +1,13 @@
+# Depreciation warning!
+
+Unfortunately, I **no longer have time to maintain this class**. Moreover, as since iOS6, `UILabel` now natively support `NSAttributedStrings`, **this class starts to be quite obsolete now**, and maintaining it requires a lot of work for little benefit with recent projects all supporting iOS6+.
+
+If you still need some advanced support for `NSAttributedString` and stuff that iOS does not support natively yet, **I strongly recommand the [`DTCoreText`](https://github.com/Cocoanetics/DTCoreText) library** by @Cocoanetics as a replacement — which is a way more complete framework that my own library and let you do much more stuff.
+
+_Note: If you are willing to take the lead and continue to make it evolve, feel free to contact me so I can give you some GIT access ton continue to maintain it._
+
+---
+
 _Table of Contents_
 
 * [About these classes](#about-these-classes)

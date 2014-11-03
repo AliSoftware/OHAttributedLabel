@@ -27,6 +27,8 @@
 
 #import "NSAttributedString+Attributes.h"
 
+#include <tgmath.h>
+
 #if ! defined(COCOAPODS) && ! defined(OHATTRIBUTEDLABEL_DEDICATED_PROJECT)
 // Copying files in your project and thus compiling OHAttributedLabel under different build settings
 // than the one provided is not recommended and increase risks of leaks (mixing ARC vs. MRC) or unwanted behaviors
@@ -71,7 +73,7 @@ NSString* kOHLinkAttributeName = @"NSLinkAttributeName"; // Use the same value a
     {
         CFRange fitCFRange = CFRangeMake(0,0);
         sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,maxSize,&fitCFRange);
-        sz = CGSizeMake( floorf(sz.width+1) , floorf(sz.height+1) ); // take 1pt of margin for security
+        sz = CGSizeMake( floor(sz.width+1) , floor(sz.height+1) ); // take 1pt of margin for security
         CFRelease(framesetter);
 
         if (fitRange)
@@ -348,7 +350,9 @@ static NSString* const kHelveticaNeueUI_Bold_Italic = @".HelveticaNeueUI-BoldIta
 }
 -(void)setCharacterSpacing:(CGFloat)chracterSpacing range:(NSRange)range
 {
-    [self addAttribute:(NSString *)kCTKernAttributeName value:[NSNumber numberWithFloat:chracterSpacing] range:range];
+    [self addAttribute:(NSString *)kCTKernAttributeName
+                 value:@(chracterSpacing) // http://stackoverflow.com/a/17067994
+                 range:range];
 }
 
 -(void)modifyParagraphStylesWithBlock:(void(^)(OHParagraphStyle* paragraphStyle))block

@@ -29,6 +29,8 @@
 
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
+#include <tgmath.h>
+
 @interface OHTouchesGestureRecognizer ()
 
 @property (nonatomic, assign) CGPoint startPoint;
@@ -49,7 +51,7 @@
     CGPoint currentPoint = [touch locationInView:self.view];
     CGFloat distanceX = (currentPoint.x - _startPoint.x);
     CGFloat distanceY = (currentPoint.y - _startPoint.y);
-    CGFloat distance = sqrtf(distanceX * distanceX + distanceY * distanceY);
+    CGFloat distance = sqrt(distanceX * distanceX + distanceY * distanceY);
     if (distance > 10.0f) {
         self.state = UIGestureRecognizerStateCancelled;
     } else {

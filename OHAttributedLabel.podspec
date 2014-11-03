@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'OHAttributedLabel'
-  s.version  = '3.5.3'
+  s.version  = '3.5.4'
   s.license  = { :type => 'MIT', :file => 'OHAttributedLabel/LICENSE'}
   s.platform = :ios
   s.summary  = 'UILabel that supports NSAttributedString.'
@@ -22,4 +22,6 @@ Pod::Spec.new do |s|
 
   s.framework = 'CoreText'
   s.requires_arc = true
+  
+  s.deprecated_in_favor_of = 'DTCoreText'
 end

@@ -29,6 +29,8 @@
 #import "CoreTextUtils.h"
 #import "OHTouchesGestureRecognizer.h"
 
+#include <tgmath.h>
+
 #ifndef OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES
 #define OHATTRIBUTEDLABEL_WARN_ABOUT_KNOWN_ISSUES 1
 #endif
@@ -556,7 +558,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
                     CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(drawingRect.size.width,CGFLOAT_MAX),NULL);
                     if (self.extendBottomToFit)
                     {
-                        CGFloat delta = MAX(0.f , ceilf(sz.height - drawingRect.size.height)) + 10 /* Security margin */;
+                        CGFloat delta = MAX(0.f , ceil(sz.height - drawingRect.size.height)) + 10 /* Security margin */;
                         drawingRect.origin.y -= delta;
                         drawingRect.size.height += delta;
                     }
