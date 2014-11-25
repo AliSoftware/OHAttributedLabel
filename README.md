@@ -1,8 +1,21 @@
 # Depreciation warning!
 
-Unfortunately, I **no longer have time to maintain this class**. Moreover, as since iOS6, `UILabel` now natively support `NSAttributedStrings`, **this class starts to be quite obsolete now**, and maintaining it requires a lot of work for little benefit with recent projects all supporting iOS6+.
+Unfortunately, I **no longer have time to maintain this class**. Moreover, as since iOS6, `UILabel` now natively support `NSAttributedStrings`, **this component is totally obsolete now** (and maintaining it requires a lot of work for little benefit with recent projects all supporting iOS6+).
 
-If you still need some advanced support for `NSAttributedString` and stuff that iOS does not support natively yet, **I strongly recommand the [`DTCoreText`](https://github.com/Cocoanetics/DTCoreText) library** by @Cocoanetics as a replacement — which is a way more complete framework that my own library and let you do much more stuff.
+### Migrating away from `OHAttributedLabel`
+
+#### For iOS6+ apps
+
+If you need only to support iOS6+, you can use `UILabel` and its native support for `NSAttributedString`, and use my new [`OHAttributedStringAdditions`](https://github.com/AliSoftware/OHAttributedStringAdditions) pod to build your `NSAttributedStrings` more easily.
+
+> Note that [`OHAttributedLabel`'s `NSAttributedString` categories](https://github.com/AliSoftware/OHAttributedLabel/blob/master/OHAttributedLabel/Source/NSAttributedString%2BAttributes.h) are building **CoreText-only compatible** strings and are **not compatible with `UILabel` and `UIKit`/`TextKit`'s handling of `NSAttributedString` introduced in iOS6. That's why you need to use `OHAttributedStringAdditions` instead.
+
+iOS6+'s `NSAttributedString` and TextKit now supports a wide range of possibilities (making `OHAttributedLabel` useless anyway), letting you parse safe HTML, include attachements (images) and links, etc. So **it even fits for advanced usages**.
+See [the example project in `OHAttributedStringAdditions` repository](https://github.com/AliSoftware/OHAttributedStringAdditions).
+
+#### For very advanced usages or apps supporting iOS5 or earlier
+
+If you still need to support iOS versions 5 or earlier, **I strongly recommand the [`DTCoreText`](https://github.com/Cocoanetics/DTCoreText) library** by @Cocoanetics as a replacement — which is a way more complete framework that my own library and let you do much more stuff.
 
 _Note: If you are willing to take the lead and continue to make it evolve, feel free to contact me so I can give you some GIT access ton continue to maintain it._
 
