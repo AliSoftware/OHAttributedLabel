@@ -8,7 +8,7 @@ Unfortunately, I **no longer have time to maintain this class**. Moreover, as si
 
 If you need only to support iOS6+, you can use `UILabel` and its native support for `NSAttributedString`, and use my new [`OHAttributedStringAdditions`](https://github.com/AliSoftware/OHAttributedStringAdditions) pod to build your `NSAttributedStrings` more easily.
 
-> Note that [`OHAttributedLabel`'s `NSAttributedString` categories](https://github.com/AliSoftware/OHAttributedLabel/blob/master/OHAttributedLabel/Source/NSAttributedString%2BAttributes.h) are building **CoreText-only compatible** strings and are **not compatible with `UILabel` and `UIKit`/`TextKit`'s handling of `NSAttributedString` introduced in iOS6. That's why you need to use `OHAttributedStringAdditions` instead.
+> Note that [`OHAttributedLabel`'s `NSAttributedString` categories](https://github.com/AliSoftware/OHAttributedLabel/blob/master/OHAttributedLabel/Source/NSAttributedString%2BAttributes.h) are building **CoreText-only compatible** strings and are **not compatible** with `UILabel` and `UIKit`/`TextKit`'s handling of `NSAttributedString` introduced in iOS6. That's why you need to use `OHAttributedStringAdditions` instead.
 
 iOS6+'s `NSAttributedString` and TextKit now supports a wide range of possibilities (making `OHAttributedLabel` useless anyway), letting you parse safe HTML, include attachements (images) and links, etc. So **it even fits for advanced usages**.
 See [the example project in `OHAttributedStringAdditions` repository](https://github.com/AliSoftware/OHAttributedStringAdditions).
