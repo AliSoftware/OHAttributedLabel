@@ -2,6 +2,8 @@
 
 Unfortunately, I **no longer have time to maintain this class**. Moreover, as since iOS6, `UILabel` now natively support `NSAttributedStrings`, **this component is totally obsolete now** (and maintaining it requires a lot of work for little benefit with recent projects all supporting iOS6+).
 
+> _Note: If you are willing to take the lead and continue to make it evolve, feel free to contact me so I can give you some GIT access ton continue to maintain it._
+
 ### Migrating away from `OHAttributedLabel`
 
 #### For iOS6+ apps
@@ -16,8 +18,6 @@ See [the example project in `OHAttributedStringAdditions` repository](https://gi
 #### For very advanced usages or apps supporting iOS5 or earlier
 
 If you still need to support iOS versions 5 or earlier, **I strongly recommand the [`DTCoreText`](https://github.com/Cocoanetics/DTCoreText) library** by @Cocoanetics as a replacement — which is a way more complete framework that my own library and let you do much more stuff.
-
-_Note: If you are willing to take the lead and continue to make it evolve, feel free to contact me so I can give you some GIT access ton continue to maintain it._
 
 ---
 
