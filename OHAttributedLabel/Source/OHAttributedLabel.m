@@ -552,7 +552,7 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
             {
                 CFAttributedStringRef cfAttrStrWithLinks = (__bridge CFAttributedStringRef)attributedStringToDisplay;
                 CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(cfAttrStrWithLinks);
-                drawingRect = self.bounds;
+                drawingRect = aRect;
                 if (self.centerVertically || self.extendBottomToFit)
                 {
                     CGSize sz = CTFramesetterSuggestFrameSizeWithConstraints(framesetter,CFRangeMake(0,0),NULL,CGSizeMake(drawingRect.size.width,CGFLOAT_MAX),NULL);
