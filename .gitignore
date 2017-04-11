@@ -22,3 +22,5 @@ DerivedData
 
 # osx noise
 .DS_Store
+
+*.xccheckout
