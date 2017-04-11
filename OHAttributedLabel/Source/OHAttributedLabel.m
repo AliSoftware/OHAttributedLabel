@@ -444,6 +444,11 @@ NSDataDetector* sharedReusableDataDetector(NSTextCheckingTypes types)
 	return hitResult;
 }
 
+-(BOOL)hasLinkAtPoint:(CGPoint)point
+{
+  return [self linkAtPoint:point] != nil ? YES : NO;
+}
+
 -(void)_gestureRecognised:(UIGestureRecognizer*)recogniser
 {
     CGPoint pt = [recogniser locationInView:self];
